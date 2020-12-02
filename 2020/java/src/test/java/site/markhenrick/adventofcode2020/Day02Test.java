@@ -43,7 +43,7 @@ class Day02Test {
 		"0, 0, a, a,			false",
 		"1, 1, a, a,			true",
 	})
-	void validatePasswordsPart1(int min, int max, char character, String password, boolean isValid) {
+	void validatePasswordsPart1(final int min, final int max, final char character, final String password, final boolean isValid) {
 		final var input = new Day02.PasswordAndPolicy(min, max, character, password);
 		assertThat(Day02.fastValidatePasswordPart1(input)).isEqualTo(isValid);
 	}
@@ -58,7 +58,7 @@ class Day02Test {
 
 	@ParameterizedTest
 	@MethodSource
-	void solvePart1(CharSequence input, int expected) {
+	void solvePart1(final CharSequence input, final int expected) {
 		assertThat(Day02.solvePart1(input)).isEqualTo(expected);
 	}
 
@@ -70,7 +70,7 @@ class Day02Test {
 		"1, 3, b, cdefg,		false",
 		"2, 9, c, ccccccccc,	false",
 	})
-	void validatePasswordsPart2(int min, int max, char character, String password, boolean isValid) {
+	void validatePasswordsPart2(final int min, final int max, final char character, final String password, final boolean isValid) {
 		final var input = new Day02.PasswordAndPolicy(min, max, character, password);
 		assertThat(Day02.validatePasswordPart2(input)).isEqualTo(isValid);
 	}
@@ -85,7 +85,7 @@ class Day02Test {
 
 	@ParameterizedTest
 	@MethodSource
-	void solvePart2(CharSequence input, int expected) {
+	void solvePart2(final CharSequence input, final int expected) {
 		assertThat(Day02.solvePart2(input)).isEqualTo(expected);
 	}
 }
