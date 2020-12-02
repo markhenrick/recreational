@@ -20,6 +20,12 @@ class Day02Test {
 			2-9 c: ccccccccc
 		""";
 
+	private static String getMyInput() throws Exception {
+		final var resource = Day02Test.class.getClassLoader().getResource("input/day01part1.txt");
+		assertThat(resource).isNotNull();
+		return Files.readString(Paths.get(resource.toURI()));
+	}
+
 	@Test
 	void parse() {
 		final var output = Day02.parse(SAMPLE_INPUT);
@@ -37,9 +43,9 @@ class Day02Test {
 		"0, 0, a, a,			false",
 		"1, 1, a, a,			true",
 	})
-	void validatePasswords(int min, int max, char character, String password, boolean isValid) {
+	void validatePasswordsPart1(int min, int max, char character, String password, boolean isValid) {
 		final var input = new Day02.PasswordAndPolicy(min, max, character, password);
-		assertThat(Day02.fastValidatePassword(input)).isEqualTo(isValid);
+		assertThat(Day02.fastValidatePasswordPart1(input)).isEqualTo(isValid);
 	}
 
 	@SuppressWarnings("unused")
@@ -56,9 +62,30 @@ class Day02Test {
 		assertThat(Day02.solvePart1(input)).isEqualTo(expected);
 	}
 
-	private static String getMyInput() throws Exception {
-		final var resource = Day02Test.class.getClassLoader().getResource("input/day01part1.txt");
-		assertThat(resource).isNotNull();
-		return Files.readString(Paths.get(resource.toURI()));
+	@SuppressWarnings("SpellCheckingInspection")
+	@ParameterizedTest
+	@CsvSource({
+		"1, 3, a, abcde,		true",
+		"1, 3, a, cbade,		true",
+		"1, 3, b, cdefg,		false",
+		"2, 9, c, ccccccccc,	false",
+	})
+	void validatePasswordsPart2(int min, int max, char character, String password, boolean isValid) {
+		final var input = new Day02.PasswordAndPolicy(min, max, character, password);
+		assertThat(Day02.validatePasswordPart2(input)).isEqualTo(isValid);
+	}
+
+	@SuppressWarnings("unused")
+	static Stream<Arguments> solvePart2() throws Exception {
+		return Stream.of(
+			arguments(SAMPLE_INPUT, 1),
+			arguments(getMyInput(), 489)
+		);
+	}
+
+	@ParameterizedTest
+	@MethodSource
+	void solvePart2(CharSequence input, int expected) {
+		assertThat(Day02.solvePart2(input)).isEqualTo(expected);
 	}
 }

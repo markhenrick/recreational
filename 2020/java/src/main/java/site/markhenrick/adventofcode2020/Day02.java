@@ -30,7 +30,7 @@ class Day02 {
 //		return count >= passwordAndPolicy.min && count <= passwordAndPolicy.max;
 //	}
 
-	static boolean fastValidatePassword(final PasswordAndPolicy passwordAndPolicy) {
+	static boolean fastValidatePasswordPart1(final PasswordAndPolicy passwordAndPolicy) {
 		var count = 0;
 		for (final var character : passwordAndPolicy.password.toCharArray()) {
 			if (character == passwordAndPolicy.character) {
@@ -45,7 +45,23 @@ class Day02 {
 
 	static long solvePart1(final CharSequence input) {
 		return parse(input).stream()
-			.filter(Day02::fastValidatePassword)
+			.filter(Day02::fastValidatePasswordPart1)
+			.count();
+	}
+
+	static boolean validatePasswordPart2(final PasswordAndPolicy passwordAndPolicy) {
+		return checkChar(passwordAndPolicy.password, passwordAndPolicy.character, passwordAndPolicy.min)
+			^ checkChar(passwordAndPolicy.password, passwordAndPolicy.character, passwordAndPolicy.max);
+	}
+
+	private static boolean checkChar(final CharSequence password, final char character, final int oneBasedIndex) {
+		assert oneBasedIndex > 0 && oneBasedIndex <= password.length();
+		return password.charAt(oneBasedIndex - 1) == character;
+	}
+
+	static long solvePart2(final CharSequence input) {
+		return parse(input).stream()
+			.filter(Day02::validatePasswordPart2)
 			.count();
 	}
 
