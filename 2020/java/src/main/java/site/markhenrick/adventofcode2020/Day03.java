@@ -35,8 +35,8 @@ class Day03 {
 		return character;
 	}
 
-	private int solveForDescentVector(final IntVector descentVector) {
-		return (int) Stream.iterate(
+	private long solveForDescentVector(final IntVector descentVector) {
+		return Stream.iterate(
 			IntVector.ORIGIN,
 			location -> location.x <= maxX,
 			location -> IntVector.add(location, descentVector)
