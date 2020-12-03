@@ -49,6 +49,7 @@ class Day03Test {
 		assertThat(day.getChar(new Day03.IntVector(x, y))).isEqualTo(expected);
 	}
 
+	@SuppressWarnings("unused")
 	static Stream<Arguments> solvePart1() {
 		return Stream.of(
 			arguments(SAMPLE_INPUT, 7),
@@ -61,5 +62,20 @@ class Day03Test {
 	void solvePart1(final String input, final int expected) {
 		final var day = new Day03(input);
 		assertThat(day.solvePart1()).isEqualTo(expected);
+	}
+
+	@SuppressWarnings("unused")
+	static Stream<Arguments> solvePart2() {
+		return Stream.of(
+			arguments(SAMPLE_INPUT, 336L),
+			arguments(MY_INPUT, 9354744432L)
+		);
+	}
+
+	@ParameterizedTest
+	@MethodSource
+	void solvePart2(final String input, final long expected) {
+		final var day = new Day03(input);
+		assertThat(day.solvePart2()).isEqualTo(expected);
 	}
 }
