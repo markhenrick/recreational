@@ -6,12 +6,11 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
+import static site.markhenrick.adventofcode2020.common.TestUtil.getResourceAsString;
 
 class Day02Test {
 	private static final String SAMPLE_INPUT = """
@@ -19,12 +18,7 @@ class Day02Test {
 			1-3 b: cdefg
 			2-9 c: ccccccccc
 		""";
-
-	private static String getMyInput() throws Exception {
-		final var resource = Day02Test.class.getClassLoader().getResource("input/day01part1.txt");
-		assertThat(resource).isNotNull();
-		return Files.readString(Paths.get(resource.toURI()));
-	}
+	private static final String MY_INPUT = getResourceAsString("input/day02.txt");
 
 	@Test
 	void parse() {
@@ -49,10 +43,10 @@ class Day02Test {
 	}
 
 	@SuppressWarnings("unused")
-	static Stream<Arguments> solvePart1() throws Exception {
+	static Stream<Arguments> solvePart1() {
 		return Stream.of(
 			arguments(SAMPLE_INPUT, 2),
-			arguments(getMyInput(), 538)
+			arguments(MY_INPUT, 538)
 		);
 	}
 
@@ -76,10 +70,10 @@ class Day02Test {
 	}
 
 	@SuppressWarnings("unused")
-	static Stream<Arguments> solvePart2() throws Exception {
+	static Stream<Arguments> solvePart2() {
 		return Stream.of(
 			arguments(SAMPLE_INPUT, 1),
-			arguments(getMyInput(), 489)
+			arguments(MY_INPUT, 489)
 		);
 	}
 
