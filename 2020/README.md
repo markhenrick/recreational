@@ -42,3 +42,9 @@ The initial generation of the map is O(n^2), iterating over the numbers again is
 Good thing 2020 isn't divisble by three or I'd have to solve the case where 673.3 appears twice, but my algorithm mistakes it for appearing thrice.
 
 One of my friends pointed out that this is a variant of the [3SUM](https://en.wikipedia.org/wiki/3SUM) problem
+
+# Day 4
+
+In my Java implementation I split the input string into records (i.e. on `\n\n`) beforehand. I wonder if the `split` method uses slices that reference the same memory, or if this ends up allocating double the memory that I really need.
+
+Either way, I'm loading the whole file into memory upfront, rather than reading lines on-demand, so that could be improved.
