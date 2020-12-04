@@ -1,4 +1,5 @@
-# Part 1
+# Day 1
+## Part 1
 
 In any case, all elements will need to be scanned, making this O(n) at best. I did wonder if there were any number tricks to pull (possibly involving logarithms), but addition and multiplication aren't exactly slow operations.
 
@@ -21,7 +22,7 @@ Possible ways to implement the set:
 * Sorted dynamic array with binary search - insertion is O(1) amortised, querying is O(log n), but real world performance may well beat the hash set
 * **Bit set** [Chosen] - the logical conclusion of the dynamic array with full population. 2020 is a rather small number, requiring just 253 bytes, so this solution is quite feasible even on constrained hardware
 
-# Part 2
+## Part 2
 
 Not sure that my algorithm is optimal
 
@@ -39,7 +40,5 @@ Not sure that my algorithm is optimal
 The initial generation of the map is O(n^2), iterating over the numbers again is O(n), with O(1) map lookups, giving an overall total time complexity of O(n^2).
 
 Good thing 2020 isn't divisble by three or I'd have to solve the case where 673.3 appears twice, but my algorithm mistakes it for appearing thrice.
-
-## Further reading
 
 One of my friends pointed out that this is a variant of the [3SUM](https://en.wikipedia.org/wiki/3SUM) problem
