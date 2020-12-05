@@ -1,9 +1,7 @@
 package site.markhenrick.adventofcode2020;
 
-import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Comparator;
-import java.util.List;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
@@ -16,15 +14,14 @@ class Day05 {
 	static final Comparator<String> SEAT_COMPARATOR = lexicographicComparator("FBLR");
 	private static final Function<String, Short> SEAT_DECODER = binaryShortDecoder("BR");
 
-	private static Comparator<String> lexicographicComparator(final String alphabetString) {
-		final var alphabet = asCharList(alphabetString);
+	private static Comparator<String> lexicographicComparator(final String alphabet) {
 		return (l, r) -> {
 			assert l.length() == r.length();
 			for (var i = 0; i < l.length(); i++) {
 				final var lVal = l.charAt(i);
 				final var rVal = r.charAt(i);
-				assert alphabet.contains(lVal);
-				assert alphabet.contains(rVal);
+				assert alphabet.indexOf(lVal) != -1;
+				assert alphabet.indexOf(rVal) != -1;
 				if (lVal != rVal) {
 					return alphabet.indexOf(lVal) - alphabet.indexOf(rVal);
 				}
@@ -33,12 +30,12 @@ class Day05 {
 		};
 	}
 
-	private static Function<String, Short> binaryShortDecoder(final String onesString) {
+	private static Function<String, Short> binaryShortDecoder(final String ones) {
 		return input -> {
 			assert input.length() <= 16;
 			return (short) IntStream
 				.range(0, input.length())
-				.filter(i -> onesString.indexOf(input.charAt(i)) != -1)
+				.filter(i -> ones.indexOf(input.charAt(i)) != -1)
 				.map(i -> (short) (1 << (input.length() - i - 1)))
 				.reduce(0, (a, b) -> a | b);
 		};
@@ -73,14 +70,5 @@ class Day05 {
 
 	static int solvePart2(final String input) {
 		return findMySeat(listSeats(input));
-	}
-
-	/** Because Arrays.asList doesn't work on primitives */
-	private static List<Character> asCharList(final String string) {
-		final List<Character> list = new ArrayList<>(string.length());
-		for (final var character : string.toCharArray()) {
-			list.add(character);
-		}
-		return list;
 	}
 }

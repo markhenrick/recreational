@@ -96,7 +96,7 @@ BBFFBBFRLL
 		assertThat(Day05.solvePart2(MY_INPUT)).isEqualTo(599);
 	}
 
-	static BitSet bitSetOf(final int... setBits) {
+	private static BitSet bitSetOf(final int... setBits) {
 		final var bitset = new BitSet();
 		Arrays.stream(setBits).forEach(bitset::set);
 		return bitset;
