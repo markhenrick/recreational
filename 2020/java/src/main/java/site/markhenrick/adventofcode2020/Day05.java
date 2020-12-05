@@ -1,11 +1,14 @@
 package site.markhenrick.adventofcode2020;
 
-import site.markhenrick.adventofcode2020.common.MiscUtil;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.Comparator;
+import java.util.List;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
+
+import static site.markhenrick.adventofcode2020.common.MiscUtil.lines;
 
 class Day05 {
 	private static final Pattern SEAT_PATTERN = Pattern.compile("^[FB]{7}[LR]{3}$");
@@ -45,10 +48,26 @@ class Day05 {
 
 	static int solvePart1(final String input) {
 		//noinspection OptionalGetWithoutIsPresent
-		return MiscUtil.lines(input).stream()
+		return lines(input).stream()
 			.max(SEAT_COMPARATOR)
 			.map(Day05::decodeSeat)
 			.get();
+	}
+
+	static BitSet listSeats(final String input) {
+		final var seats = new BitSet();
+		lines(input).stream()
+			.map(Day05::decodeSeat)
+			.forEach(seats::set);
+		return seats;
+	}
+
+	static int findMySeat(final BitSet seats) {
+		return seats.get(0) ? seats.nextClearBit(0) : seats.nextClearBit(seats.nextSetBit(0));
+	}
+
+	static int solvePart2(final String input) {
+		return findMySeat(listSeats(input));
 	}
 
 	/** Because Arrays.asList doesn't work on primitives */

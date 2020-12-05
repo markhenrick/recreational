@@ -1,10 +1,13 @@
 package site.markhenrick.adventofcode2020;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.Arrays;
+import java.util.BitSet;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
@@ -60,6 +63,43 @@ BBFFBBFRLL
 	@MethodSource
 	void solvePart1(final String input, final int expected) {
 		assertThat(Day05.solvePart1(input)).isEqualTo(expected);
+	}
+
+	@Test
+	void listSeats() {
+		final var expected = bitSetOf(567, 119, 820);
+		assertThat(Day05.listSeats(SAMPLE_INPUT)).isEqualTo(expected);
+	}
+
+	@SuppressWarnings("unused")
+	static Stream<Arguments> findMySeat() {
+		return Stream.of(
+			arguments(1, bitSetOf(0, 2)),
+			arguments(1, bitSetOf(0, 2, 3)),
+			arguments(2, bitSetOf(1, 3)),
+			arguments(2, bitSetOf(1, 3, 4)),
+			arguments(3, bitSetOf(1, 2, 4)),
+			arguments(3, bitSetOf(1, 2, 4, 5))
+		);
+	}
+
+	@ParameterizedTest
+	@MethodSource
+	void findMySeat(final int expected, final BitSet seats) {
+		assert expected != 0;
+		assert !seats.get(expected);
+		assertThat(Day05.findMySeat(seats)).isEqualTo(expected);
+	}
+
+	@Test
+	void solvePart2() {
+		assertThat(Day05.solvePart2(MY_INPUT)).isEqualTo(599);
+	}
+
+	static BitSet bitSetOf(final int... setBits) {
+		final var bitset = new BitSet();
+		Arrays.stream(setBits).forEach(bitset::set);
+		return bitset;
 	}
 
 	enum Ordering {
