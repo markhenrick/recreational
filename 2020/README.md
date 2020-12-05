@@ -51,10 +51,8 @@ Either way, I'm loading the whole file into memory upfront, rather than reading 
 
 # Day 5
 
-So basically this is just traversing a binary search tree, where the values are the indices of in-order traversal. Alternatively, it's replaying a binary search.
+Each seat is just a binary number under the non-injective mapping `{{F, L} -> 0, {B, R} -> 1}`. But just doing a string replacement would be boring.
 
-It's not necessary to actually find every seat and then find the minimum. The mapping from strings to seat co-ordinates is monotonic, so `min(map(decode, input)) = decode(min(input))`, using the lexicographic ordering on `<F, B, L, R>`. This probably doesn't actually save much (or any) computation, but it's more interesting.
-
-Now onto decoding the strings. It's obvious that each part can be decoded as binary strings, and since the way they are combined is by a bit shift of the length of the second half, that means we can just treat the whole thing as one binary string, with "B" or "R" representing 1's.
+The lexicographic ordering on `<F, B, L, R>` is isomorphic to the decoded ordering, i.e. `min(map(decode, input)) = decode(min(input))`. This probably isn't any faster, but it's more interesting.
 
 I found the instructions for part 2 a little hard to understand. My wording of it is that you need to find the gap in the ordered list of seats, which may be padded at both ends by empty seats.

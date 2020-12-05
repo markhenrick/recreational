@@ -8,6 +8,7 @@ import java.util.stream.IntStream;
 
 import static site.markhenrick.adventofcode2020.common.MiscUtil.lines;
 
+// NB: This day's solution in particular is deliberately more complicated than it needs to be, to make it more fun. See the README
 class Day05 {
 	private static final Pattern SEAT_PATTERN = Pattern.compile("^[FB]{7}[LR]{3}$");
 	@SuppressWarnings("SpellCheckingInspection")
