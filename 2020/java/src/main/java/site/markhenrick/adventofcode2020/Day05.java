@@ -63,9 +63,7 @@ class Day05 {
 	}
 
 	static int findMySeat(final BitSet seats) {
-		return seats.get(0)
-			? seats.nextClearBit(0)
-			: seats.nextClearBit(seats.nextSetBit(0));
+		return seats.nextClearBit(seats.nextSetBit(0));
 	}
 
 	static int solvePart2(final String input) {

@@ -79,7 +79,8 @@ BBFFBBFRLL
 			arguments(2, bitSetOf(1, 3)),
 			arguments(2, bitSetOf(1, 3, 4)),
 			arguments(3, bitSetOf(1, 2, 4)),
-			arguments(3, bitSetOf(1, 2, 4, 5))
+			arguments(3, bitSetOf(1, 2, 4, 5)),
+			arguments(3, bitSetOf(2, 4, 5))
 		);
 	}
 
