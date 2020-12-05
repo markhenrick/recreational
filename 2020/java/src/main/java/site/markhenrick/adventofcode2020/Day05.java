@@ -14,7 +14,7 @@ class Day05 {
 	private static final Pattern SEAT_PATTERN = Pattern.compile("^[FB]{7}[LR]{3}$");
 	@SuppressWarnings("SpellCheckingInspection")
 	static final Comparator<String> SEAT_COMPARATOR = lexicographicComparator("FBLR");
-	private static final Function<String, Integer> SEAT_DECODER = binaryDecoder("BR");
+	private static final Function<String, Short> SEAT_DECODER = binaryShortDecoder("BR");
 
 	private static Comparator<String> lexicographicComparator(final String alphabetString) {
 		final var alphabet = asCharList(alphabetString);
@@ -33,12 +33,15 @@ class Day05 {
 		};
 	}
 
-	private static Function<String, Integer> binaryDecoder(final String onesString) {
-		final var ones = asCharList(onesString);
-		return input -> IntStream.range(0, input.length())
-			.filter(i -> ones.contains(input.charAt(i)))
-			.map(i -> 1 << (input.length() - i - 1))
-			.sum();
+	private static Function<String, Short> binaryShortDecoder(final String onesString) {
+		return input -> {
+			assert input.length() <= 16;
+			return (short) IntStream
+				.range(0, input.length())
+				.filter(i -> onesString.indexOf(input.charAt(i)) != -1)
+				.map(i -> (short) (1 << (input.length() - i - 1)))
+				.reduce(0, (a, b) -> a | b);
+		};
 	}
 
 	static int decodeSeat(final String seat) {
@@ -63,7 +66,9 @@ class Day05 {
 	}
 
 	static int findMySeat(final BitSet seats) {
-		return seats.get(0) ? seats.nextClearBit(0) : seats.nextClearBit(seats.nextSetBit(0));
+		return seats.get(0)
+			? seats.nextClearBit(0)
+			: seats.nextClearBit(seats.nextSetBit(0));
 	}
 
 	static int solvePart2(final String input) {
