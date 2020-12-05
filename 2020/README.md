@@ -48,3 +48,11 @@ One of my friends pointed out that this is a variant of the [3SUM](https://en.wi
 In my Java implementation I split the input string into records (i.e. on `\n\n`) beforehand. I wonder if the `split` method uses slices that reference the same memory, or if this ends up allocating double the memory that I really need.
 
 Either way, I'm loading the whole file into memory upfront, rather than reading lines on-demand, so that could be improved.
+
+# Day 5
+
+So basically this is just traversing a binary search tree, where the values are the indices of in-order traversal. Alternatively, it's replaying a binary search.
+
+It's not necessary to actually find every seat and then find the minimum. The mapping from strings to seat co-ordinates is monotonic, so `min(map(decode, input)) = decode(min(input))`, using the lexicographic ordering on `<F, B, L, R>`. This probably doesn't actually save much (or any) computation, but it's more interesting.
+
+Now onto decoding the strings. It's obvious that each part can be decoded as binary strings, and since the way they are combined is by a bit shift of the length of the second half, that means we can just treat the whole thing as one binary string, with "B" or "R" representing 1's.
