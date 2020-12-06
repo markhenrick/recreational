@@ -56,3 +56,7 @@ Each seat is just a binary number under the non-injective mapping `{{F, L} -> 0,
 The lexicographic ordering on `<F, B, L, R>` is isomorphic to the decoded ordering, i.e. `min(map(decode, input)) = decode(min(input))`. This probably isn't any faster, but it's more interesting.
 
 I found the instructions for part 2 a little hard to understand. My wording of it is that you need to find the gap in the ordered list of seats, which may be padded at both ends by empty seats.
+
+# Day 6
+
+So the most intuitive way to do part 1 would be to map each person to a BitSet of answered questions, and reduce it with identity 0 and function OR, however a quicker way is to just treat each group as one person and ignore newlines.
