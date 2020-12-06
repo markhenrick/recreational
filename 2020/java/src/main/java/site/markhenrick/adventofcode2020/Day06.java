@@ -14,7 +14,7 @@ class Day06 {
 	private static BitSet decodePerson(final String input) {
 		final var answeredQuestions = new BitSet();
 		for (final var character : input.toCharArray()) {
-			answeredQuestions.set(character);
+			answeredQuestions.set(character - 'a');
 		}
 		return answeredQuestions;
 	}
