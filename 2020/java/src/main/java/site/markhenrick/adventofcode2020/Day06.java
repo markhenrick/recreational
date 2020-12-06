@@ -2,12 +2,10 @@ package site.markhenrick.adventofcode2020;
 
 import java.util.BitSet;
 import java.util.Optional;
-import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 
-import static site.markhenrick.adventofcode2020.common.MiscUtil.LINE_SPLITTER;
-import static site.markhenrick.adventofcode2020.common.MiscUtil.RECORD_SPLITTER;
+import static site.markhenrick.adventofcode2020.common.MiscUtil.*;
 
 class Day06 {
 	static final Function<String, Integer> SOLVE_PART_1 = reduceRecords(applyAndReturnLeft(BitSet::or));
@@ -31,10 +29,4 @@ class Day06 {
 			.sum();
 	}
 
-	private static <A> BinaryOperator<A> applyAndReturnLeft(final BiConsumer<? super A, ? super A> mutatingOperator) {
-		return (l, r) -> {
-			mutatingOperator.accept(l, r);
-			return l;
-		};
-	}
 }

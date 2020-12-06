@@ -6,6 +6,7 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 import static site.markhenrick.adventofcode2020.common.MiscUtil.RECORD_SPLITTER;
+import static site.markhenrick.adventofcode2020.common.MiscUtil.constantPredicate;
 
 class Day04 {
 	private static final Pattern PATTERN = Pattern.compile("(\\w+):([\\w#]+)");
@@ -64,11 +65,6 @@ class Day04 {
 			default -> constantPredicate(false);
 		};
 		return predicate.test(number);
-	}
-
-	// Probably in the stdlib somewhere
-	private static <A> Predicate<A> constantPredicate(final boolean value) {
-		return a -> value;
 	}
 
 	private static long countRecordsSatisfying(final Predicate<? super Map<String, String>> predicate, final String input) {
