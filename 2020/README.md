@@ -59,8 +59,6 @@ I found the instructions for part 2 a little hard to understand. My wording of i
 
 # Day 6
 
-So the most intuitive way to do part 1 would be to map each person to a BitSet of answered questions, and reduce it with identity 0 and function OR, however a quicker way is to just treat each group as one person and ignore newlines.
-
-However in the second part of the problem we are performing an AND reduction (with no identity, so there must be at least one input), so actually it is better to do it that way after all.
+There's two real ways to do this. Either you can create on BitSet per person, and reduce groups with OR/AND for each part respectively, or use one BitSet and do the reduction live, and ignore `\n`.
 
 As I get further through this I seem to be increasingle trying to curry functions in Java, which the language isn't exactly conducive to lol. Perhaps I should start on the Haskell solutions, and consider adding Typescript/JS to my list of targets.
