@@ -17,7 +17,7 @@ public class TestUtil {
 		assertThat(resource).isNotNull();
 		try {
 			return dos2unix(Files.readString(Paths.get(resource.toURI())));
-		} catch (IOException | URISyntaxException e) {
+		} catch (final IOException | URISyntaxException e) {
 			throw new RuntimeException(e);
 		}
 	}

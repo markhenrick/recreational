@@ -6,7 +6,7 @@ import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
-import static site.markhenrick.adventofcode.common.MiscUtil.LINE_SPLITTER;
+import static site.markhenrick.adventofcode.common.StringUtil.LINE_SPLITTER;
 
 // NB: This day's solution in particular is deliberately more complicated than it needs to be, to make it more fun. See the README
 class Day05 {

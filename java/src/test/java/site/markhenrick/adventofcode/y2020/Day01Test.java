@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
-import static site.markhenrick.adventofcode.common.MiscUtil.LINE_SPLITTER;
+import static site.markhenrick.adventofcode.common.StringUtil.LINE_SPLITTER;
 import static site.markhenrick.adventofcode.common.TestUtil.getResourceAsString;
 
 class Day01Test {

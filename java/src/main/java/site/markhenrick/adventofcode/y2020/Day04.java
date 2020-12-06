@@ -5,8 +5,8 @@ import java.util.Map;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
-import static site.markhenrick.adventofcode.common.MiscUtil.RECORD_SPLITTER;
-import static site.markhenrick.adventofcode.common.MiscUtil.constantPredicate;
+import static site.markhenrick.adventofcode.common.StringUtil.RECORD_SPLITTER;
+import static site.markhenrick.adventofcode.common.FunctionalUtil.constantPredicate;
 
 class Day04 {
 	private static final Pattern PATTERN = Pattern.compile("(\\w+):([\\w#]+)");

@@ -3,6 +3,8 @@ package site.markhenrick.adventofcode.y2020;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
+import static site.markhenrick.adventofcode.common.StringUtil.charStream;
+
 class Day02 {
 	private static final Pattern PATTERN = Pattern.compile("(\\d+)-(\\d+) (\\w): (\\w+)");
 
@@ -22,13 +24,12 @@ class Day02 {
 		return passwordsAndPolicies;
 	}
 
-	// Arrays.stream doesn't exist for char[], so commented out
-//	static boolean simpleValidatePassword(PasswordAndPolicy passwordAndPolicy) {
-//		final var count = Arrays.stream(passwordAndPolicy.password.toCharArray())
-//			.filter(character -> character == passwordAndPolicy.character)
-//			.count();
-//		return count >= passwordAndPolicy.min && count <= passwordAndPolicy.max;
-//	}
+	static boolean simpleValidatePasswordPart1(final PasswordAndPolicy passwordAndPolicy) {
+		final var count = charStream(passwordAndPolicy.password)
+			.filter(character -> character == passwordAndPolicy.character)
+			.count();
+		return count >= passwordAndPolicy.min && count <= passwordAndPolicy.max;
+	}
 
 	static boolean fastValidatePasswordPart1(final PasswordAndPolicy passwordAndPolicy) {
 		var count = 0;

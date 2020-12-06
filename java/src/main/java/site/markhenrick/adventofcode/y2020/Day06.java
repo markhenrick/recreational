@@ -1,15 +1,18 @@
 package site.markhenrick.adventofcode.y2020;
 
+import site.markhenrick.adventofcode.common.FunctionalUtil;
+
 import java.util.BitSet;
 import java.util.Optional;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 
-import static site.markhenrick.adventofcode.common.MiscUtil.*;
+import static site.markhenrick.adventofcode.common.StringUtil.*;
 
+@SuppressWarnings("CharUsedInArithmeticContext")
 class Day06 {
-	static final Function<String, Integer> SOLVE_PART_1 = reduceRecords(applyAndReturnLeft(BitSet::or));
-	static final Function<String, Integer> SOLVE_PART_2 = reduceRecords(applyAndReturnLeft(BitSet::and));
+	static final Function<String, Integer> SOLVE_PART_1 = reduceRecords(FunctionalUtil.applyAndReturnLeft(BitSet::or));
+	static final Function<String, Integer> SOLVE_PART_2 = reduceRecords(FunctionalUtil.applyAndReturnLeft(BitSet::and));
 
 	private static BitSet decodePerson(final String input) {
 		final var answeredQuestions = new BitSet();

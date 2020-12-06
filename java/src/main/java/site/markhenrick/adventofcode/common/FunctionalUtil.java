@@ -1,22 +1,11 @@
 package site.markhenrick.adventofcode.common;
 
-import java.util.Arrays;
 import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
-public class MiscUtil {
-	public static final Function<String, Stream<String>> LINE_SPLITTER = splitToStream("\n");
-	public static final Function<String, Stream<String>> RECORD_SPLITTER = splitToStream("\n\n");
-
-	static Function<String, Stream<String>> splitToStream(final String regex) {
-		final var pattern = Pattern.compile(regex);
-		return input -> Arrays.stream(pattern.split(input));
-	}
-
+public class FunctionalUtil {
 	// Probably in the stdlib somewhere
 	public static <A> Predicate<A> constantPredicate(final boolean value) {
 		return a -> value;
@@ -27,5 +16,19 @@ public class MiscUtil {
 			mutatingOperator.accept(l, r);
 			return l;
 		};
+	}
+
+	public static <A, B> Function<A, Pair<A, B>> zipApply(final Function<? super A, ? extends B> fn) {
+		return a -> new FunctionalUtil.Pair<>(a, fn.apply(a));
+	}
+
+	public static record Pair<L, R> (L l, R r) {
+		public <LPrime> Pair<LPrime, R> mapL(final Function<? super L, ? extends LPrime> fn) {
+			return new Pair<>(fn.apply(l), r);
+		}
+
+		public <RPrime> Pair<L, RPrime> mapR(final Function<? super R, ? extends RPrime> fn) {
+			return new Pair<>(l, fn.apply(r));
+		}
 	}
 }

@@ -40,6 +40,7 @@ class Day02Test {
 	void validatePasswordsPart1(final int min, final int max, final char character, final String password, final boolean isValid) {
 		final var input = new Day02.PasswordAndPolicy(min, max, character, password);
 		assertThat(Day02.fastValidatePasswordPart1(input)).isEqualTo(isValid);
+		assertThat(Day02.simpleValidatePasswordPart1(input)).isEqualTo(isValid);
 	}
 
 	@SuppressWarnings("unused")

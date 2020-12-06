@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-class MiscUtilTest {
+class StringUtilTest {
 	private static final String RECORDS = """
 eyr:1972 cid:100
 hcl:#18171d ecl:amb hgt:170 pid:186cm iyr:2018 byr:1926
@@ -37,12 +37,12 @@ ecl:brn hgt:182cm pid:021572410 eyr:2020 byr:1992 cid:277
 	@ParameterizedTest
 	@MethodSource
 	void splitLines(final String input, final List<String> expected) {
-		assertThat(MiscUtil.LINE_SPLITTER.apply(input).collect(Collectors.toList())).isEqualTo(expected);
+		assertThat(StringUtil.LINE_SPLITTER.apply(input).collect(Collectors.toList())).isEqualTo(expected);
 	}
 
 	@Test
 	void splitRecords() {
-		final var records = MiscUtil.RECORD_SPLITTER.apply(RECORDS).collect(Collectors.toList());
+		final var records = StringUtil.RECORD_SPLITTER.apply(RECORDS).collect(Collectors.toList());
 		assertThat(records).hasSize(3);
 		assertThat(records.get(1)).contains("ecl:grn");
 	}

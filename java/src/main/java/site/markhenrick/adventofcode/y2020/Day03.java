@@ -57,7 +57,7 @@ class Day03 {
 	}
 
 	static record IntVector(int x, int y) {
-		static IntVector ORIGIN = new IntVector(0, 0);
+		static final IntVector ORIGIN = new IntVector(0, 0);
 
 		static IntVector add(final IntVector l, final IntVector r) {
 			return new IntVector(l.x + r.x, l.y + r.y);

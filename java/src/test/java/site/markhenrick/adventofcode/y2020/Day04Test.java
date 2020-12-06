@@ -84,7 +84,7 @@ byr:1937 iyr:2017 cid:147 hgt:183cm
 		"true,  cid",
 		"false, hgt",
 	})
-	void validateRecordsPart1(final boolean expected, String keyToRemove) {
+	void validateRecordsPart1(final boolean expected, final String keyToRemove) {
 		final var input = derivedMap(VALID_RECORD, keyToRemove, null);
 		assertThat(Day04.validateRecordPart1(input)).isEqualTo(expected);
 	}

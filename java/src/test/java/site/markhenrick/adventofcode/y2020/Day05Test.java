@@ -115,7 +115,7 @@ BBFFBBFRLL
 			};
 		}
 
-		public Predicate<Integer> matcher() {
+		Predicate<Integer> matcher() {
 			return input -> switch (this) {
 				case LT -> input < 0;
 				case EQ -> input == 0;
