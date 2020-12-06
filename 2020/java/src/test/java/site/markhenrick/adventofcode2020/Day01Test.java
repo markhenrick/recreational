@@ -10,12 +10,12 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
-import static site.markhenrick.adventofcode2020.common.MiscUtil.lines;
+import static site.markhenrick.adventofcode2020.common.MiscUtil.LINE_SPLITTER;
 import static site.markhenrick.adventofcode2020.common.TestUtil.getResourceAsString;
 
 class Day01Test {
 	private static final List<Integer> SAMPLE_INPUT = List.of(1721, 979, 366, 299, 675, 1456);
-	private static final List<Integer> MY_INPUT = lines(getResourceAsString("input/day01.txt")).stream()
+	private static final List<Integer> MY_INPUT = LINE_SPLITTER.apply(getResourceAsString("input/day01.txt"))
 		.map(Integer::parseInt)
 		.collect(Collectors.toList());
 

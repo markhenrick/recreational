@@ -8,7 +8,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -69,13 +68,6 @@ byr:1937 iyr:2017 cid:147 hgt:183cm
 	private static final Map<String, String> VALID_RECORD = Day04.parseRecord(SINGLE_RECORD);
 
 	@Test
-	void splitRecords() {
-		final var records = Day04.splitRecords(SAMPLE_INPUT).collect(Collectors.toList());
-		assertThat(records).hasSize(4);
-		assertThat(records.get(1)).contains("ecl:amb");
-	}
-
-	@Test
 	void parseRecord() {
 		final var actual = Day04.parseRecord(SINGLE_RECORD);
 		assertThat(actual)
@@ -107,7 +99,7 @@ byr:1937 iyr:2017 cid:147 hgt:183cm
 
 	@ParameterizedTest
 	@MethodSource
-	void solvePart1(final CharSequence input, final int expected) {
+	void solvePart1(final String input, final int expected) {
 		assertThat(Day04.solvePart1(input)).isEqualTo(expected);
 	}
 
@@ -201,7 +193,7 @@ byr:1937 iyr:2017 cid:147 hgt:183cm
 
 	@ParameterizedTest
 	@MethodSource
-	void solvePart2(final CharSequence input, final int expected) {
+	void solvePart2(final String input, final int expected) {
 		assertThat(Day04.solvePart2(input)).isEqualTo(expected);
 	}
 

@@ -6,7 +6,7 @@ import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 
-import static site.markhenrick.adventofcode2020.common.MiscUtil.lines;
+import static site.markhenrick.adventofcode2020.common.MiscUtil.LINE_SPLITTER;
 
 // NB: This day's solution in particular is deliberately more complicated than it needs to be, to make it more fun. See the README
 class Day05 {
@@ -49,7 +49,7 @@ class Day05 {
 
 	static int solvePart1(final String input) {
 		//noinspection OptionalGetWithoutIsPresent
-		return lines(input).stream()
+		return LINE_SPLITTER.apply(input)
 			.max(SEAT_COMPARATOR)
 			.map(Day05::decodeSeat)
 			.get();
@@ -57,7 +57,7 @@ class Day05 {
 
 	static BitSet listSeats(final String input) {
 		final var seats = new BitSet();
-		lines(input).stream()
+		LINE_SPLITTER.apply(input)
 			.map(Day05::decodeSeat)
 			.forEach(seats::set);
 		return seats;

@@ -1,14 +1,13 @@
 package site.markhenrick.adventofcode2020;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
+
+import static site.markhenrick.adventofcode2020.common.MiscUtil.RECORD_SPLITTER;
 
 class Day04 {
-	private static final Pattern RECORD_DELIMITER = Pattern.compile("\n\n");
 	private static final Pattern PATTERN = Pattern.compile("(\\w+):([\\w#]+)");
 	private static final Pattern NUMERIC = Pattern.compile("^\\d+$");
 	private static final Pattern HAIR_COLOUR = Pattern.compile("^#[0-9a-f]{6}$");
@@ -23,10 +22,6 @@ class Day04 {
 		"ecl", EYE_COLOUR.asMatchPredicate(),
 		"pid", PASSPORT_ID.asMatchPredicate()
 	);
-
-	static Stream<String> splitRecords(final CharSequence input) {
-		return Arrays.stream(RECORD_DELIMITER.split(input));
-	}
 
 	static Map<String, String> parseRecord(final CharSequence record) {
 		final Map<String, String> keyvals = new HashMap<>();
@@ -76,18 +71,18 @@ class Day04 {
 		return a -> value;
 	}
 
-	private static long countRecordsSatisfying(final Predicate<? super Map<String, String>> predicate, final CharSequence input) {
-		return splitRecords(input)
+	private static long countRecordsSatisfying(final Predicate<? super Map<String, String>> predicate, final String input) {
+		return RECORD_SPLITTER.apply(input)
 			.map(Day04::parseRecord)
 			.filter(predicate)
 			.count();
 	}
 
-	static long solvePart1(final CharSequence input) {
+	static long solvePart1(final String input) {
 		return countRecordsSatisfying(Day04::validateRecordPart1, input);
 	}
 
-	static long solvePart2(final CharSequence input) {
+	static long solvePart2(final String input) {
 		return countRecordsSatisfying(Day04::validateRecordPart2, input);
 	}
 }
