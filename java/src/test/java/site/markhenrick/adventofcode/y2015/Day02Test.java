@@ -40,6 +40,29 @@ class Day02Test {
 	@ParameterizedTest
 	@MethodSource
 	void solvePart1(final CharSequence input, final int expected) {
-		assertThat(Day02.solvePart1(input)).isEqualTo(expected);
+		assertThat(Day02.SOLVE_PART_1.apply(input)).isEqualTo(expected);
+	}
+
+	@ParameterizedTest
+	@CsvSource({
+		"2, 3, 4, 34",
+		"1, 1, 10, 14",
+	})
+	void ribbonRequired(final int l, final int w, final int h, final int expected) {
+		final var input = List.of(l, w, h);
+		assertThat(Day02.ribbonRequired(input)).isEqualTo(expected);
+	}
+	@SuppressWarnings("unused")
+	static Stream<Arguments> solvePart2() {
+		return Stream.of(
+			arguments(SAMPLE_INPUT, 34 + 14),
+			arguments(MY_INPUT, 3812909)
+		);
+	}
+
+	@ParameterizedTest
+	@MethodSource
+	void solvePart2(final CharSequence input, final int expected) {
+		assertThat(Day02.SOLVE_PART_2.apply(input)).isEqualTo(expected);
 	}
 }
