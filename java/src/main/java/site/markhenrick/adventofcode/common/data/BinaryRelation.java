@@ -7,15 +7,17 @@ import java.util.Objects;
 
 public class BinaryRelation<A> {
 	private final Map<A, Integer> domain; // probably not the best solution tbh
+	private final int domainSize; // profile indicated HashMap::size was significant
 	private final BooleanMatrix adjacencyMatrix;
 
 	public BinaryRelation(final Collection<A> domain) {
-		this.domain = new LinkedHashMap<>(domain.size());
+		this.domainSize = domain.size();
+		this.domain = new LinkedHashMap<>(domainSize);
 		final var iterator = domain.iterator();
 		for (var i = 0; iterator.hasNext(); i++) {
 			this.domain.put(iterator.next(), i);
 		}
-		this.adjacencyMatrix = new BooleanMatrix(domain.size());
+		this.adjacencyMatrix = new BitSetBooleanMatrix(domainSize);
 	}
 
 	public boolean get(final A source, final A target) {
@@ -37,9 +39,9 @@ public class BinaryRelation<A> {
 
 	public void transitivelyClose() {
 		// Floyd-Warshall Al Gore Rhythm
-		for (var k = 0; k < domain.size(); k++) {
-			for (var i = 0; i < domain.size(); i++) {
-				for (var j = 0; j < domain.size(); j++) {
+		for (var k = 0; k < domainSize; k++) {
+			for (var i = 0; i < domainSize; i++) {
+				for (var j = 0; j < domainSize; j++) {
 					if (adjacencyMatrix.get(i, k) && adjacencyMatrix.get(k, j)) {
 						adjacencyMatrix.set(i, j);
 					}

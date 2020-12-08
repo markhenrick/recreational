@@ -6,12 +6,12 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-class BooleanMatrixTest {
+class BitSetBooleanMatrixTest {
 	private BooleanMatrix exampleMatrix;
 
 	@BeforeEach
 	void setUp() {
-		exampleMatrix = new BooleanMatrix(3);
+		exampleMatrix = new BitSetBooleanMatrix(3);
 		exampleMatrix.set(0, 1);
 		exampleMatrix.set(1, 0);
 		exampleMatrix.set(1, 2);
