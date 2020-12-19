@@ -1,3 +1,5 @@
+This is on hiatus until the new year, since I only have a laptop at the moment, and that's not a pleasant dev experience.
+
 # Advent of Code
 
 https://adventofcode.com/
