@@ -2,7 +2,11 @@
 
 https://adventofcode.com/
 
-I've deliberately written a lot of the code in a deliberately convoluted or unusual style to make it more interesting, so it's very far removed from code I'd ever write for production or for other people to work on. Most frequently, I've tried to force Java to look like Haskell, to varying degrees of success...
+I've deliberately written a lot of the code in a deliberately convoluted or unusual style to make it more interesting, so it's very far removed from code I'd ever write for production or for other people to work on. Most frequently, I've tried to force Java to look like Haskell, to varying degrees of success... But generally speaking you can expect to find
+
+* The most expressive code in Haskell
+* The most performant code in C
+* A general tend towards expressiveness over performance, except in C
 
 Commentary for each year is in YEAR.md
 
