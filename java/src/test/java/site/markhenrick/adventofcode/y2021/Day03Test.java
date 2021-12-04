@@ -37,4 +37,18 @@ class Day03Test {
 	void part1(final int expected, final String input) {
 		assertThat(Day03.part1(input)).isEqualTo(expected);
 	}
+
+	@SuppressWarnings("unused")
+	static Stream<Arguments> part2() {
+		return Stream.of(
+			Arguments.arguments(230, SAMPLE_INPUT),
+			arguments(5852595, getResourceAsString("input/2021/day03.txt"))
+		);
+	}
+
+	@ParameterizedTest
+	@MethodSource
+	void part2(final int expected, final String input) {
+		assertThat(Day03.part2(input)).isEqualTo(expected);
+	}
 }
