@@ -1,5 +1,3 @@
-This is on hiatus until the new year, since I only have a laptop at the moment, and that's not a pleasant dev experience.
-
 # Advent of Code
 
 https://adventofcode.com/
@@ -14,7 +12,7 @@ Each year has 50 stars available, two parts for each day of advent.
 
 |Language|2015|2016|2017|2018|2019|2020|2021|
 |:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-|Java|4|-|-|-|-|14|-|
+|Java|4|-|-|-|-|14|2|
 |Haskell|-|-|-|-|-|-|2|
 |Python|-|-|-|-|-|-|-|
 |Typescript|-|-|-|-|-|-|-|
