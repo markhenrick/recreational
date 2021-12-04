@@ -27,7 +27,7 @@ class Day03Test {
 	@SuppressWarnings("unused")
 	static Stream<Arguments> part1() {
 		return Stream.of(
-			Arguments.arguments(198, SAMPLE_INPUT),
+			arguments(198, SAMPLE_INPUT),
 			arguments(3923414, getResourceAsString("input/2021/day03.txt"))
 		);
 	}
@@ -41,7 +41,7 @@ class Day03Test {
 	@SuppressWarnings("unused")
 	static Stream<Arguments> part2() {
 		return Stream.of(
-			Arguments.arguments(230, SAMPLE_INPUT),
+			arguments(230, SAMPLE_INPUT),
 			arguments(5852595, getResourceAsString("input/2021/day03.txt"))
 		);
 	}

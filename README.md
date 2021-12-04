@@ -16,7 +16,7 @@ Each year has 50 stars available, two parts for each day of advent.
 
 |Language|2015|2016|2017|2018|2019|2020|2021|
 |:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-|Java|4|-|-|-|-|14|2|
+|Java|4|-|-|-|-|14|5|
 |Haskell|-|-|-|-|-|-|2|
 |Python|-|-|-|-|-|-|-|
 |Typescript|-|-|-|-|-|-|-|
