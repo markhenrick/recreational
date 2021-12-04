@@ -5,7 +5,7 @@ import java.util.function.BinaryOperator;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
-class Day03 {
+class Day02 {
 	// This implementation is more about being expressive than fast
 	// For that, see the C version
 
@@ -19,7 +19,7 @@ class Day03 {
 
 	static int part1(String input) {
 		var finalVector = PATTERN.matcher(input).results()
-			.map(Day03::parseLine)
+			.map(Day02::parseLine)
 			.reduce(new Vector(0, 0), (Vector::add));
 		return finalVector.x * finalVector.y;
 	}
@@ -27,7 +27,7 @@ class Day03 {
 	static int part2(String input) {
 		BinaryOperator<PositionWithAim> combinerWhichShouldNotActuallyBeCalled = (positionWithAim, positionWithAim2) -> { throw new AssertionError(); };
 		var finalData = PATTERN.matcher(input).results()
-			.map(Day03::parseLine)
+			.map(Day02::parseLine)
 			.reduce(new PositionWithAim(0, 0, 0), PositionWithAim::applyVector, combinerWhichShouldNotActuallyBeCalled);
 		return finalData.horizontal * finalData.depth;
 	}
