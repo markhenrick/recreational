@@ -1,6 +1,7 @@
 package site.markhenrick.adventofcode.y2021;
 
 import java.util.Map;
+import java.util.function.BinaryOperator;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
@@ -23,6 +24,14 @@ class Day03 {
 		return finalVector.x * finalVector.y;
 	}
 
+	static int part2(String input) {
+		BinaryOperator<PositionWithAim> combinerWhichShouldNotActuallyBeCalled = (positionWithAim, positionWithAim2) -> { throw new AssertionError(); };
+		var finalData = PATTERN.matcher(input).results()
+			.map(Day03::parseLine)
+			.reduce(new PositionWithAim(0, 0, 0), PositionWithAim::applyVector, combinerWhichShouldNotActuallyBeCalled);
+		return finalData.horizontal * finalData.depth;
+	}
+
 	static Vector parseLine(MatchResult matchResult) {
 		assert matchResult.groupCount() == 2;
 		var baseVector = BASE_VECTORS.get(matchResult.group(1));
@@ -38,6 +47,20 @@ class Day03 {
 
 		public Vector scale(int scalar) {
 			return new Vector(this.x * scalar, this.y * scalar);
+		}
+	}
+
+	// Not really correct to call it a "vector" any more since the axioms don't hold
+	private static record PositionWithAim(int horizontal, int depth, int aim) {
+		public PositionWithAim applyVector(Vector input) {
+			if (input.y != 0) {
+				assert input.x == 0;
+				return new PositionWithAim(this.horizontal, this.depth, this.aim + input.y);
+			}
+			if (input.x != 0) {
+				return new PositionWithAim(this.horizontal + input.x, this.depth + this.aim * input.x, this.aim);
+			}
+			return this;
 		}
 	}
 }
