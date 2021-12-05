@@ -3,10 +3,7 @@ package site.markhenrick.adventofcode.y2021;
 import org.javatuples.Pair;
 import site.markhenrick.adventofcode.common.StringUtil;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Day04 {
@@ -35,7 +32,7 @@ public class Day04 {
 			.toArray(new Integer[0][]);
 	}
 
-	static int part1(Integer[][][] boards, Iterator<Integer> draw) {
+	static List<Integer> getAllResults(Integer[][][] boards, Iterator<Integer> draw) {
 		validateAssumptions(boards);
 		var rowCol = initialiseMarginalCounts(boards);
 		var rowCounts = rowCol.getValue0();
@@ -43,25 +40,28 @@ public class Day04 {
 		var boardHeight = boards[0].length;
 		var boardWidth = boards[0][0].length;
 
-		Integer winner = null;
-		Integer number = 0;
-		while (winner == null) {
+		List<Integer> results = new ArrayList<>(boards.length);
+		while (results.size() < boards.length) {
 			assert draw.hasNext();
-			number = draw.next();
+			var number = draw.next();
 			for (int i = 0; i < boards.length; i++) {
 				var board = boards[i];
+				if (board == null) {
+					continue;
+				}
 				var coord = crossOutNumber(board, number);
 				if (coord != null) {
 					var rowCount = ++rowCounts[i][coord.getValue0()];
 					var colCount = ++colCounts[i][coord.getValue1()];
 					if (rowCount == boardWidth || colCount == boardHeight) {
-						winner = i;
+						results.add(score(board) * number);
+						boards[i] = null;
 					}
 				}
 			}
 		}
 
-		return score(boards[winner]) * number;
+		return results;
 	}
 
 	static void validateAssumptions(Integer[][][] boards) {

@@ -54,18 +54,19 @@ public class Day04Test {
 	}
 
 	@SuppressWarnings("unused")
-	static Stream<Arguments> part1() {
+	static Stream<Arguments> play() {
 		return Stream.of(
-			arguments(4512, SAMPLE_INPUT),
-			arguments(50008, getResourceAsString("input/2021/day04.txt"))
+			arguments(4512, 1924, SAMPLE_INPUT),
+			arguments(50008, 17408, getResourceAsString("input/2021/day04.txt"))
 		);
 	}
 
 	@ParameterizedTest
 	@MethodSource
-	void part1(int expected, String input) {
+	void play(int expectedFirstScore, int expectedLastScore, String input) {
 		var parseResult = Day04.parse(input);
-		assertThat(Day04.part1(parseResult.getValue1(), parseResult.getValue0().iterator()))
-			.isEqualTo(expected);
+		var results = Day04.getAllResults(parseResult.getValue1(), parseResult.getValue0().iterator());
+		assertThat(results.get(0)).isEqualTo(expectedFirstScore);
+		assertThat(results.get(results.size() - 1)).isEqualTo(expectedLastScore);
 	}
 }
