@@ -2,7 +2,7 @@ package site.markhenrick.adventofcode.y2015;
 
 import static site.markhenrick.adventofcode.common.StringUtil.charStream;
 
-@SuppressWarnings({"CharUsedInArithmeticContext", "ValueOfIncrementOrDecrementUsed", "StatementWithEmptyBody"})
+@SuppressWarnings({"CharUsedInArithmeticContext", "StatementWithEmptyBody"})
 class Day01 {
 
 	public static long solvePart1(final CharSequence input) {

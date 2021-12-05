@@ -15,7 +15,7 @@ class Day07 {
 	static int solveDay1(final String input) {
 		final var productions = LINE_SPLITTER.apply(input)
 			.map(Production::parse)
-			.collect(Collectors.toList());
+			.toList();
 		final var bagTypes = productions.stream().map(Production::lhs).collect(Collectors.toSet());
 		final var canContain = new BinaryRelation<>(bagTypes);
 		for (final var production : productions) {
@@ -27,10 +27,10 @@ class Day07 {
 		return canContain.targetSize(TARGET);
 	}
 
-	static record Production(String lhs, Map<String, Integer> branches) {
+	record Production(String lhs, Map<String, Integer> branches) {
 		static Production parse(final String input) {
 			// This is the worst code I've written so far for this year
-			@SuppressWarnings("ProblematicWhitespace") final var words = input.split(" ");
+			final var words = input.split(" ");
 			final var lhs = words[0] + ' ' + words[1];
 			if (input.endsWith("contain no other bags.")) {
 				return new Production(lhs, Collections.emptyMap());

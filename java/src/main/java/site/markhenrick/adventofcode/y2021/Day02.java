@@ -40,7 +40,7 @@ class Day02 {
 		return baseVector.scale(param);
 	}
 
-	private static record Vector(int x, int y) {
+	private record Vector(int x, int y) {
 		public Vector add(Vector addendum) {
 			return new Vector(this.x + addendum.x, this.y + addendum.y);
 		}
@@ -51,7 +51,7 @@ class Day02 {
 	}
 
 	// Not really correct to call it a "vector" any more since the axioms don't hold
-	private static record PositionWithAim(int horizontal, int depth, int aim) {
+	private record PositionWithAim(int horizontal, int depth, int aim) {
 		public PositionWithAim applyVector(Vector input) {
 			if (input.y != 0) {
 				assert input.x == 0;

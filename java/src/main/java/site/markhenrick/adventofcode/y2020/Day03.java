@@ -56,7 +56,7 @@ class Day03 {
 			.reduce(1, (l, r) -> l*r);
 	}
 
-	static record IntVector(int x, int y) {
+	record IntVector(int x, int y) {
 		static final IntVector ORIGIN = new IntVector(0, 0);
 
 		static IntVector add(final IntVector l, final IntVector r) {

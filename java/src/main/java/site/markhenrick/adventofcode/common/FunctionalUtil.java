@@ -22,7 +22,7 @@ public class FunctionalUtil {
 		return a -> new FunctionalUtil.Pair<>(a, fn.apply(a));
 	}
 
-	public static record Pair<L, R> (L l, R r) {
+	public record Pair<L, R> (L l, R r) {
 		public <LPrime> Pair<LPrime, R> mapL(final Function<? super L, ? extends LPrime> fn) {
 			return new Pair<>(fn.apply(l), r);
 		}

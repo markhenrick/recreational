@@ -66,6 +66,6 @@ class Day02 {
 			.count();
 	}
 
-	static record PasswordAndPolicy(int min, int max, char character, String password) {
+	record PasswordAndPolicy(int min, int max, char character, String password) {
 	}
 }
