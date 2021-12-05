@@ -29,16 +29,16 @@ public class Day05Test {
 		assertThat(parseResult).hasSize(10);
 
 		var firstLine = parseResult.get(0);
-		assertThat(firstLine.getValue0().getValue0()).isEqualTo(0);
-		assertThat(firstLine.getValue0().getValue1()).isEqualTo(9);
-		assertThat(firstLine.getValue1().getValue0()).isEqualTo(5);
-		assertThat(firstLine.getValue1().getValue1()).isEqualTo(9);
+		assertThat(firstLine.getValue0().x()).isEqualTo(0);
+		assertThat(firstLine.getValue0().y()).isEqualTo(9);
+		assertThat(firstLine.getValue1().x()).isEqualTo(5);
+		assertThat(firstLine.getValue1().y()).isEqualTo(9);
 
 		var lastLine = parseResult.get(9);
-		assertThat(lastLine.getValue0().getValue0()).isEqualTo(5);
-		assertThat(lastLine.getValue0().getValue1()).isEqualTo(5);
-		assertThat(lastLine.getValue1().getValue0()).isEqualTo(8);
-		assertThat(lastLine.getValue1().getValue1()).isEqualTo(2);
+		assertThat(lastLine.getValue0().x()).isEqualTo(5);
+		assertThat(lastLine.getValue0().y()).isEqualTo(5);
+		assertThat(lastLine.getValue1().x()).isEqualTo(8);
+		assertThat(lastLine.getValue1().y()).isEqualTo(2);
 	}
 
 	@SuppressWarnings("unused")
@@ -53,6 +53,21 @@ public class Day05Test {
 	@MethodSource
 	void part1(int expected, String input) {
 		var parseResult = Day05.parse(input);
-		assertThat(Day05.part1(parseResult)).isEqualTo(expected);
+		assertThat(Day05.part1And2(parseResult, false)).isEqualTo(expected);
+	}
+
+	@SuppressWarnings("unused")
+	static Stream<Arguments> part2() {
+		return Stream.of(
+			arguments(12, SAMPLE_INPUT),
+			arguments(17882, getResourceAsString("input/2021/day05.txt"))
+		);
+	}
+
+	@ParameterizedTest
+	@MethodSource
+	void part2(int expected, String input) {
+		var parseResult = Day05.parse(input);
+		assertThat(Day05.part1And2(parseResult, true)).isEqualTo(expected);
 	}
 }
