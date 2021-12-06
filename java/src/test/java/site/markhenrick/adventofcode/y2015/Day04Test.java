@@ -25,4 +25,17 @@ public class Day04Test {
 	void part1(int expected, String key) throws NoSuchAlgorithmException {
 		assertThat(Day04.part1(key)).isEqualTo(expected);
 	}
+
+	@SuppressWarnings("unused")
+	static Stream<Arguments> part2() {
+		return Stream.of(
+			arguments(9962624, "yzbqklnj")
+		);
+	}
+
+	@ParameterizedTest
+	@MethodSource
+	void part2(int expected, String key) throws NoSuchAlgorithmException {
+		assertThat(Day04.part2(key)).isEqualTo(expected);
+	}
 }
