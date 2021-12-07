@@ -2,8 +2,11 @@ package site.markhenrick.adventofcode.y2015;
 
 import com.codepoetics.protonpack.StreamUtils;
 
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import static site.markhenrick.adventofcode.common.FunctionalUtil.charStream;
 
@@ -20,6 +23,12 @@ public class Day05 {
 		return contains3Vowels(asCharArray) && containsDoubleLetter(asCharArray) && doesNotContainForbiddenDouble(asCharArray);
 	}
 
+	static boolean part2(String input) {
+		assert input.equals(input.trim().toLowerCase(Locale.ROOT));
+		var asCharArray = input.toCharArray();
+		return containsDoubleLetterWithBreak(asCharArray) && containsDoubleDouble(asCharArray);
+	}
+
 	static boolean contains3Vowels(char[] input) {
 		return charStream(input)
 			.filter(VOWELS::contains) // VOWELS is too small to be worth doing anything more complex than a linear search
@@ -28,12 +37,40 @@ public class Day05 {
 	}
 
 	static boolean containsDoubleLetter(char[] input) {
-		return StreamUtils.zip(charStream(input), charStream(input).skip(1), (a, b) -> a == b)
-			.anyMatch(x -> x);
+		return containsRepeatingElement(charStream(input), charStream(input).skip(1));
+	}
+
+	static boolean containsDoubleDouble(char[] input) {
+		// There must be a smarter way to do this
+		var doubles = splitIntoDoubles(input).toList();
+		String previous = null;
+		HashSet<String> seen = new HashSet<>(doubles.size());
+		for (var aDouble : doubles) {
+			if (!Objects.equals(previous, aDouble)) {
+				if (!seen.add(aDouble)) {
+					return true;
+				}
+			}
+			previous = aDouble;
+		}
+		return false;
+	}
+
+	static boolean containsDoubleLetterWithBreak(char[] input) {
+		return containsRepeatingElement(charStream(input), charStream(input).skip(2));
 	}
 
 	static boolean doesNotContainForbiddenDouble(char[] input) {
-		return StreamUtils.zip(charStream(input), charStream(input).skip(1), (a, b) -> "" + a + b)
+		return splitIntoDoubles(input)
 			.noneMatch(FORBIDDEN_DOUBLES::contains);
+	}
+
+	static Stream<String> splitIntoDoubles(char[] input) {
+		return StreamUtils.zip(charStream(input), charStream(input).skip(1), (a, b) -> "" + a + b);
+	}
+
+	static <T> boolean containsRepeatingElement(Stream<T> stream1, Stream<T> stream2) {
+		return StreamUtils.zip(stream1, stream2, Object::equals)
+			.anyMatch(x -> x);
 	}
 }

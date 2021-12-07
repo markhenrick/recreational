@@ -12,7 +12,7 @@ import static site.markhenrick.adventofcode.common.TestUtil.getResourceAsString;
 
 @SuppressWarnings("SpellCheckingInspection")
 public class Day05Test {
-	static Stream<String> fullyNice() {
+	static Stream<String> fullyNiceP1() {
 		return Stream.of(
 			"ugknbfddgicrmopn",
 			"aaa"
@@ -21,13 +21,13 @@ public class Day05Test {
 
 	@ParameterizedTest
 	@MethodSource
-	void fullyNice(String input) {
+	void fullyNiceP1(String input) {
 		assertThat(Day05.part1(input)).isTrue();
 	}
 
 	@SuppressWarnings("unused")
 	static Stream<String> contains3Vowels() {
-		return Stream.concat(fullyNice(), Stream.of(
+		return Stream.concat(fullyNiceP1(), Stream.of(
 			"aei",
 			"xazegov",
 			"aeiouaeiouaeiou"
@@ -56,7 +56,7 @@ public class Day05Test {
 
 	@SuppressWarnings("unused")
 	static Stream<String> containsDoubleLetter() {
-		return Stream.concat(fullyNice(), Stream.of(
+		return Stream.concat(fullyNiceP1(), Stream.of(
 			"abcdde",
 			"aabbccdd"
 		));
@@ -85,7 +85,7 @@ public class Day05Test {
 
 	@SuppressWarnings("unused")
 	static Stream<String> doesNotContainForbiddenDouble() {
-		return fullyNice();
+		return fullyNiceP1();
 	}
 
 	@ParameterizedTest
@@ -111,22 +111,109 @@ public class Day05Test {
 	}
 
 	@SuppressWarnings("unused")
-	static Stream<String> naughtyForAnyReason() {
+	static Stream<String> naughtyForAnyReasonP1() {
 		return Stream.concat(doesNotContain3Vowels(), Stream.concat(doesNotContainDoubleLetter(), containsForbiddenDouble()));
 	}
 
 	@ParameterizedTest
 	@MethodSource
-	void naughtyForAnyReason(String input) {
+	void naughtyForAnyReasonP1(String input) {
 		assertThat(Day05.part1(input)).isFalse();
 	}
 
 	@Test
-	void actualInput() {
+	void actualInputP1() {
 		var input = getResourceAsString("input/2015/day05.txt").trim();
 		var count = StringUtil.LINE_SPLITTER.apply(input)
 			.filter(Day05::part1)
 			.count();
 		assertThat(count).isEqualTo(258);
+	}
+
+	static Stream<String> fullyNiceP2() {
+		return Stream.of(
+			"qjhvhtzxzqqjkmpb",
+			"xxyxx"
+		);
+	}
+
+	@ParameterizedTest
+	@MethodSource
+	void fullyNiceP2(String input) {
+		assertThat(Day05.part2(input)).isTrue();
+	}
+
+	@SuppressWarnings("unused")
+	static Stream<String> containsDoubleDouble() {
+		return Stream.concat(fullyNiceP2(), Stream.of(
+			"xyxy",
+			"aabcdefgaa"
+		));
+	}
+
+	@ParameterizedTest
+	@MethodSource
+	void containsDoubleDouble(String input) {
+		assertThat(Day05.containsDoubleDouble(input.toCharArray())).isTrue();
+	}
+
+	static Stream<String> doesNotContainDoubleDouble() {
+		return Stream.of(
+			"aaa",
+			"abcd"
+		);
+	}
+
+	@ParameterizedTest
+	@MethodSource
+	void doesNotContainDoubleDouble(String input) {
+		assertThat(Day05.containsDoubleDouble(input.toCharArray())).isFalse();
+	}
+
+	@SuppressWarnings("unused")
+	static Stream<String> containsDoubleLetterWithBreak() {
+		return Stream.concat(fullyNiceP2(), Stream.of(
+			"xyx",
+			"abcdefeghi",
+			"aaa"
+		));
+	}
+
+	@ParameterizedTest
+	@MethodSource
+	void containsDoubleLetterWithBreak(String input) {
+		assertThat(Day05.containsDoubleLetterWithBreak(input.toCharArray())).isTrue();
+	}
+
+	static Stream<String> doesNotContainDoubleLetterWithBreak() {
+		return Stream.of(
+			"abc"
+		);
+	}
+
+	@ParameterizedTest
+	@MethodSource
+	void doesNotContainDoubleLetterWithBreak(String input) {
+		assertThat(Day05.containsDoubleLetterWithBreak(input.toCharArray())).isFalse();
+	}
+
+	@SuppressWarnings("unused")
+	static Stream<String> naughtyForAnyReasonP2() {
+		return Stream.concat(doesNotContainDoubleDouble(), doesNotContainDoubleLetterWithBreak());
+	}
+
+	@ParameterizedTest
+	@MethodSource
+	void naughtyForAnyReasonP2(String input) {
+		assertThat(Day05.part2(input)).isFalse();
+	}
+
+	@Test
+	void actualInputP2() {
+		var input = getResourceAsString("input/2015/day05.txt").trim();
+		var count = StringUtil.LINE_SPLITTER.apply(input)
+			.filter(Day05::part2)
+			.count();
+		assertThat(count).isEqualTo(53);
 	}
 }
