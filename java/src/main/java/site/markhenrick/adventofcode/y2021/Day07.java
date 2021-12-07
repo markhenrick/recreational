@@ -3,32 +3,19 @@ package site.markhenrick.adventofcode.y2021;
 import site.markhenrick.adventofcode.common.StringUtil;
 
 import java.util.Arrays;
-import java.util.function.IntBinaryOperator;
-import java.util.stream.IntStream;
 
 public class Day07 {
 	static int[] parse(String input) {
 		return StringUtil.COMMA_SPLITTER.apply(input.trim())
-				.mapToInt(Integer::parseInt)
-				.toArray();
-	}
-
-	static int exhaustiveSearch(int[] input, IntBinaryOperator crabCost) {
-		var max = Arrays.stream(input).max().orElseThrow();
-		return IntStream.range(0, max + 1)
-				.map(p -> Arrays.stream(input)
-						.map(x -> crabCost.applyAsInt(p, x))
-						.sum()
-				)
-				.min()
-				.orElseThrow();
+			.mapToInt(Integer::parseInt)
+			.toArray();
 	}
 
 	static int part1(int[] input) {
 		var optimalPosition = median(input);
 		return Arrays.stream(input)
-				.map(x -> distance(x, optimalPosition))
-				.sum();
+			.map(x -> distance(x, optimalPosition))
+			.sum();
 	}
 
 	static int part2(int[] input) {
@@ -40,9 +27,9 @@ public class Day07 {
 
 	static int totalCostP2(int[] input, int position) {
 		return Arrays.stream(input)
-				.map(x -> distance(x, position))
-				.map(Day07::intSummation)
-				.sum();
+			.map(x -> distance(x, position))
+			.map(Day07::intSummation)
+			.sum();
 	}
 
 	static int distance(int a, int b) {
