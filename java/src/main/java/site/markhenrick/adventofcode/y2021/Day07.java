@@ -26,11 +26,23 @@ public class Day07 {
 
 	static int part1(int[] input) {
 		var optimalPosition = median(input);
-		return Arrays.stream(input).map(x -> Math.abs(x - optimalPosition)).sum();
+		return Arrays.stream(input)
+				.map(x -> distance(x, optimalPosition))
+				.sum();
 	}
 
 	static int part2(int[] input) {
-		return exhaustiveSearch(input, (p, x) -> intSummation(distance(p, x)));
+		var optimalPosition = mean(input);
+		var floor = (int) Math.floor(optimalPosition);
+		var ceil = (int) Math.ceil(optimalPosition);
+		return floor != ceil ? Math.min(totalCostP2(input, floor), totalCostP2(input, ceil)) : totalCostP2(input, ceil);
+	}
+
+	static int totalCostP2(int[] input, int position) {
+		return Arrays.stream(input)
+				.map(x -> distance(x, position))
+				.map(Day07::intSummation)
+				.sum();
 	}
 
 	static int distance(int a, int b) {
@@ -41,26 +53,30 @@ public class Day07 {
 		return limitInclusive * (limitInclusive + 1) / 2;
 	}
 
+	static double mean(int[] numbers) {
+		return (double) Arrays.stream(numbers).sum() / numbers.length;
+	}
+
 	static int median(int[] numbers) {
-		int[] destructibleNumbers = new int[numbers.length];
-		System.arraycopy(numbers, 0, destructibleNumbers, 0, numbers.length);
-		return quickSelect(destructibleNumbers, destructibleNumbers.length / 2);
+		return quickSelect(numbers, numbers.length / 2);
 	}
 
 	// Thank you, Wikipedia
 	static int quickSelect(int[] numbers, int k) {
+		int[] destructibleNumbers = new int[numbers.length];
+		System.arraycopy(numbers, 0, destructibleNumbers, 0, numbers.length);
 		int start = 0;
-		int end = numbers.length - 1;
+		int end = destructibleNumbers.length - 1;
 		while (true) {
-			assert start >= 0 && end < numbers.length && start <= end;
+			assert start >= 0 && end < destructibleNumbers.length && start <= end;
 			if (start == end) {
-				return numbers[start];
+				return destructibleNumbers[start];
 			}
 			int pivotIndex = (start + end) / 2;
 			assert pivotIndex >= start && pivotIndex <= end;
-			pivotIndex = quickPartition(numbers, start, end, pivotIndex);
+			pivotIndex = quickPartition(destructibleNumbers, start, end, pivotIndex);
 			if (k == pivotIndex) {
-				return numbers[k];
+				return destructibleNumbers[k];
 			} else if (k < pivotIndex) {
 				end -= 1;
 			} else {
