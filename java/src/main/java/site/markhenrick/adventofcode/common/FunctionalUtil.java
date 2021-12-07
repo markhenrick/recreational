@@ -4,6 +4,8 @@ import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class FunctionalUtil {
 	// Probably in the stdlib somewhere
@@ -30,5 +32,10 @@ public class FunctionalUtil {
 		public <RPrime> Pair<L, RPrime> mapR(final Function<? super R, ? extends RPrime> fn) {
 			return new Pair<>(l, fn.apply(r));
 		}
+	}
+
+	public static Stream<Character> charStream(char[] source) {
+		return IntStream.rangeClosed(0, source.length - 1)
+			.mapToObj(i -> source[i]);
 	}
 }
