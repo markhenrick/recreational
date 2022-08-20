@@ -1,4 +1,4 @@
-This is again on partial hiatus due to Christmas. I'll try to remember to finish it before next xmas this time...
+This repository for little things I coded just for the sake of it
 
 # Advent of Code
 
@@ -10,7 +10,7 @@ I've deliberately written a lot of the code in a deliberately convoluted or unus
 * The most performant code in C
 * A general tend towards expressiveness over performance, except in C
 
-Commentary for each year is in YEAR.md
+Commentary for each year is in `docs/Advent of Code/YEAR.md`
 
 The table below shows my progress and the languages that I want to do this in. Lots of the problems lend themselves nicely to Haskell. The main holdup is that I don't know much about IO or QoL stuff like regex in Haskell.
 
