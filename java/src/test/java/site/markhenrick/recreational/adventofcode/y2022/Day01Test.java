@@ -42,4 +42,18 @@ public class Day01Test
 	{
 		assertThat(Day01.part1(input)).isEqualTo(expected);
 	}
+
+	static Stream<Arguments> part2() {
+		return Stream.of(
+				arguments(45000L, SAMPLE_INPUT),
+				arguments(209914L, TestUtil.getResourceAsString("AoC/input/2022/day01.txt"))
+		);
+	}
+
+	@ParameterizedTest
+	@MethodSource
+	void part2(long expected, String input)
+	{
+		assertThat(Day01.part2(input)).isEqualTo(expected);
+	}
 }
