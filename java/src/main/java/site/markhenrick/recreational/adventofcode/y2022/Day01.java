@@ -5,8 +5,7 @@ import static site.markhenrick.recreational.common.StringUtil.RECORD_SPLITTER;
 
 import java.util.stream.LongStream;
 
-public class Day01
-{
+public class Day01 {
 	private static LongStream parseElves(String input) {
 		return RECORD_SPLITTER.apply(input)
 				.mapToLong(elf -> LINE_SPLITTER.apply(elf)
