@@ -104,9 +104,7 @@ public class TopKCollector<T> implements Collector<T, List<T>, List<T>> {
 					list1i--;
 				}
 			}
-			for (var i = -1; i < resulti; i++) {
-				result.remove(0);
-			}
+			result.subList(0, resulti + 1).clear();
 			return result;
 		};
 	}
