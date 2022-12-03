@@ -1,31 +1,27 @@
 package site.markhenrick.recreational.adventofcode.y2022;
 
+import site.markhenrick.recreational.common.data.TopNCollector;
+
 import static site.markhenrick.recreational.common.StringUtil.LINE_SPLITTER;
 import static site.markhenrick.recreational.common.StringUtil.RECORD_SPLITTER;
 
-import java.util.stream.LongStream;
-
 public class Day01 {
-	private static LongStream parseElves(String input) {
+	private static int topNElfSum(String input, int n) {
 		return RECORD_SPLITTER.apply(input)
-				.mapToLong(elf -> LINE_SPLITTER.apply(elf)
-						.mapToInt(Integer::parseInt)
-						.sum()
-				);
+			.map(elf -> LINE_SPLITTER.apply(elf)
+				.mapToInt(Integer::parseInt)
+				.sum()
+			)
+			.collect(new TopNCollector<>(n, Integer::compareTo))
+			.stream()
+			.reduce(0, Integer::sum);
 	}
 
-	public static long part1(String input) {
-		return parseElves(input)
-				.max()
-				.orElse(0L);
+	public static int part1(String input) {
+		return topNElfSum(input, 1);
 	}
 
-	public static long part2(String input) {
-		// TODO write a custom Collector or reducer that doesn't do a full sort
-		return -parseElves(input)
-				.map(number -> -number) // Stupid hack to reverse sort. No method that lets me pass a custom Comparator, and this is probably faster than boxing then unboxing
-				.sorted()
-				.limit(3)
-				.sum();
+	public static int part2(String input) {
+		return topNElfSum(input, 3);
 	}
 }
