@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-public class TopNCollectorTest {
+public class TopKCollectorTest {
 	static Stream<Arguments> fullTest() {
 		return Stream.of(
 			arguments(0, List.of(), List.of()),
@@ -28,19 +28,19 @@ public class TopNCollectorTest {
 
 	@ParameterizedTest
 	@MethodSource("fullTest")
-	void fullTestSerial(int n, List<Integer> input, List<Integer> expected) {
+	void fullTestSerial(int k, List<Integer> input, List<Integer> expected) {
 		var result = input
 			.stream()
-			.collect(new TopNCollector<>(n, Integer::compareTo));
+			.collect(new TopKCollector<>(k, Integer::compareTo));
 		assertThat(result).isEqualTo(expected);
 	}
 
 	@ParameterizedTest
 	@MethodSource("fullTest")
-	void fullTestParallel(int n, List<Integer> input, List<Integer> expected) {
+	void fullTestParallel(int k, List<Integer> input, List<Integer> expected) {
 		var result = input
 			.parallelStream() // Though this doesn't necessarily guarantee it will fork. That's impossible to predict
-			.collect(new TopNCollector<>(n, Integer::compareTo));
+			.collect(new TopKCollector<>(k, Integer::compareTo));
 		assertThat(result).isEqualTo(expected);
 	}
 
@@ -80,8 +80,8 @@ public class TopNCollectorTest {
 
 	@ParameterizedTest
 	@MethodSource
-	void accumulatorTest(int n, List<Integer> list, int candidate, List<Integer> expected) {
-		var collector = new TopNCollector<>(n, Integer::compareTo);
+	void accumulatorTest(int k, List<Integer> list, int candidate, List<Integer> expected) {
+		var collector = new TopKCollector<>(k, Integer::compareTo);
 		var mutableList = new ArrayList<>(list);
 		collector.accumulator().accept(mutableList, candidate);
 		assertThat(mutableList).isEqualTo(expected);
@@ -102,16 +102,16 @@ public class TopNCollectorTest {
 
 	@ParameterizedTest
 	@MethodSource("combinerTest")
-	void combinerForwards(int n, List<Integer> list1, List<Integer> list2, List<Integer> expected) {
-		var collector = new TopNCollector<>(n, Integer::compareTo);
+	void combinerForwards(int k, List<Integer> list1, List<Integer> list2, List<Integer> expected) {
+		var collector = new TopKCollector<>(k, Integer::compareTo);
 		var result = collector.combiner().apply(list1, list2);
 		assertThat(result).isEqualTo(expected);
 	}
 
 	@ParameterizedTest
 	@MethodSource("combinerTest")
-	void combinerBackwards(int n, List<Integer> list1, List<Integer> list2, List<Integer> expected) {
-		var collector = new TopNCollector<>(n, Integer::compareTo);
+	void combinerBackwards(int k, List<Integer> list1, List<Integer> list2, List<Integer> expected) {
+		var collector = new TopKCollector<>(k, Integer::compareTo);
 		var result = collector.combiner().apply(list2, list1);
 		assertThat(result).isEqualTo(expected);
 	}
