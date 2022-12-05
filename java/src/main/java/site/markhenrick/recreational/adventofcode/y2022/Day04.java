@@ -2,6 +2,7 @@ package site.markhenrick.recreational.adventofcode.y2022;
 
 import org.javatuples.Pair;
 
+import java.util.function.BiFunction;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
@@ -9,13 +10,19 @@ public class Day04 {
 	private static final Pattern PATTERN = Pattern.compile("(\\d+)-(\\d+),(\\d+)-(\\d+)");
 
 	public static long part1(String input) {
-		return PATTERN.matcher(input).results()
-			.map(Day04::parseLine)
-			.filter(pair -> oneFullyContains(pair.getValue0(), pair.getValue1())) // uncurry
-			.count();
+		return count(Day04::oneFullyContains, input);
 	}
 
-	// Code here is quite similar to y2021.Day05, but not really worth the effort of generalising
+	public static long part2(String input) {
+		return count(Day04::overlap, input);
+	}
+
+	public static long count(BiFunction<Pair<Integer, Integer>, Pair<Integer, Integer>, Boolean> counter, String input) {
+		return PATTERN.matcher(input).results()
+			.map(Day04::parseLine)
+			.filter(pair -> counter.apply(pair.getValue0(), pair.getValue1())) // uncurry
+			.count();
+	}
 
 	static Pair<Pair<Integer, Integer>, Pair<Integer, Integer>> parseLine(MatchResult matchResult) {
 		assert matchResult.groupCount() == 4;
@@ -42,5 +49,11 @@ public class Day04 {
 		var first = left.getValue0() < right.getValue0() ? left : right;
 		var second = first == left ? right : left;
 		return first.getValue1() >= second.getValue1();
+	}
+
+	static boolean overlap(Pair<Integer, Integer> left, Pair<Integer, Integer> right) {
+		var first = left.getValue0() < right.getValue0() ? left : right;
+		var second = first == left ? right : left;
+		return first.getValue1() >= second.getValue0();
 	}
 }
