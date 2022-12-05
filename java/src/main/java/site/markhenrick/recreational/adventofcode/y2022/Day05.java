@@ -4,6 +4,7 @@ import site.markhenrick.recreational.common.StringUtil;
 
 import java.util.ArrayDeque;
 import java.util.List;
+import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -13,9 +14,17 @@ public class Day05 {
 	private static final Pattern MOVE_PATTERN = Pattern.compile("move (\\d+) from (\\d+) to (\\d+)");
 
 	public static String part1(String input) {
+		return executeScript(Day05::executeMove9000, input);
+	}
+
+	public static String part2(String input) {
+		return executeScript(Day05::executeMove9001, input);
+	}
+
+	public static String executeScript(BiConsumer<List<ArrayDeque<Character>>, Move> crane, String input) {
 		var stacks = parseSetup(input);
 		parseMoves(input)
-			.forEach(move -> executeMove(stacks, move));
+			.forEach(move -> crane.accept(stacks, move));
 		return readOffStacks(stacks);
 	}
 
@@ -69,10 +78,20 @@ public class Day05 {
 			});
 	}
 
-	static void executeMove(List<ArrayDeque<Character>> stacks, Move move) {
+	static <T> void executeMove9000(List<ArrayDeque<T>> stacks, Move move) {
+		stackMove(stacks.get(move.src()), stacks.get(move.dest()), move.count());
+	}
+
+	static <T> void executeMove9001(List<ArrayDeque<T>> stacks, Move move) {
 		var src = stacks.get(move.src());
 		var dest = stacks.get(move.dest());
-		for (var i = 0; i < move.count(); i++) {
+		var tempStack = new ArrayDeque<T>(move.count());
+		stackMove(src, tempStack, move.count());
+		stackMove(tempStack, dest, move.count());
+	}
+
+	static <T> void stackMove(ArrayDeque<T> src, ArrayDeque<T> dest, int count) {
+		for (var i = 0; i < count; i++) {
 			dest.push(src.pop());
 		}
 	}

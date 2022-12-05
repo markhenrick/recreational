@@ -74,4 +74,17 @@ move 1 from 1 to 2
 	public void part1(String input, String expectedTops) {
 		assertThat(Day05.part1(input)).isEqualTo(expectedTops);
 	}
+
+	static Stream<Arguments> part2() {
+		return Stream.of(
+			arguments(SAMPLE_INPUT, "MCD"),
+			arguments(TestUtil.getResourceAsString("AoC/input/2022/day05.txt"), "RGLVRCQSB")
+		);
+	}
+
+	@ParameterizedTest
+	@MethodSource
+	public void part2(String input, String expectedTops) {
+		assertThat(Day05.part2(input)).isEqualTo(expectedTops);
+	}
 }
