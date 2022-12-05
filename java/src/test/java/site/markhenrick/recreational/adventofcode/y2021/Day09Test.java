@@ -21,14 +21,27 @@ public class Day09Test {
 
 	static Stream<Arguments> part1() {
 		return Stream.of(
-			arguments(15L, SAMPLE_INPUT),
-			arguments(516L, TestUtil.getResourceAsString("AoC/input/2021/day09.txt"))
+			arguments(15, SAMPLE_INPUT),
+			arguments(516, TestUtil.getResourceAsString("AoC/input/2021/day09.txt"))
 		);
 	}
 
 	@ParameterizedTest
 	@MethodSource
 	void part1(long expected, String input) {
+		assertThat(Day09.part1(input)).isEqualTo(expected);
+	}
+
+	static Stream<Arguments> part2() {
+		return Stream.of(
+			arguments(1134, SAMPLE_INPUT),
+			arguments(0, TestUtil.getResourceAsString("AoC/input/2021/day09.txt"))
+		);
+	}
+
+	@ParameterizedTest
+	@MethodSource
+	void part2(long expected, String input) {
 		assertThat(Day09.part1(input)).isEqualTo(expected);
 	}
 }
