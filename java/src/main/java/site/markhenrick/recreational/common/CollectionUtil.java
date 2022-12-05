@@ -1,11 +1,12 @@
 package site.markhenrick.recreational.common;
 
+import static site.markhenrick.recreational.common.FunctionalUtil.applyAndReturnLeft;
+
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import static site.markhenrick.recreational.common.FunctionalUtil.applyAndReturnLeft;
 
 public final class CollectionUtil {
 	private CollectionUtil() {}
@@ -19,5 +20,10 @@ public final class CollectionUtil {
 			output.merge(entry.getValue(), singleton, applyAndReturnLeft(Set::addAll));
 		}
 		return output;
+	}
+
+	public static <T> T unwrapSingleton(Collection<T> collection) {
+		assert collection.size() == 1;
+		return collection.stream().findAny().get();
 	}
 }
