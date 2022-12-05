@@ -5,6 +5,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import site.markhenrick.recreational.common.TestUtil;
+import site.markhenrick.recreational.common.data.IntVector;
 
 import java.util.stream.Stream;
 
@@ -46,7 +47,7 @@ class Day03Test {
 	})
 	void getChar(final int x, final int y, final char expected) {
 		final var day = new Day03(SAMPLE_INPUT);
-		assertThat(day.getChar(new Day03.IntVector(x, y))).isEqualTo(expected);
+		assertThat(day.getChar(new IntVector(x, y))).isEqualTo(expected);
 	}
 
 	@SuppressWarnings("unused")

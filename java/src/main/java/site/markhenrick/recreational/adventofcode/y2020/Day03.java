@@ -1,5 +1,7 @@
 package site.markhenrick.recreational.adventofcode.y2020;
 
+import site.markhenrick.recreational.common.data.IntVector;
+
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -28,9 +30,9 @@ class Day03 {
 	}
 
 	char getChar(final IntVector coordinate) {
-		assert coordinate.x <= maxX;
+		assert coordinate.x() <= maxX;
 		// +1 due to the \n
-		final var character = input[(coordinate.x * (maxY + 1)) + (coordinate.y % maxY)];
+		final var character = input[(coordinate.x() * (maxY + 1)) + (coordinate.y() % maxY)];
 		assert character == BLANK || character == TREE;
 		return character;
 	}
@@ -38,8 +40,8 @@ class Day03 {
 	private long solveForDescentVector(final IntVector descentVector) {
 		return Stream.iterate(
 			IntVector.ORIGIN,
-			location -> location.x <= maxX,
-			location -> IntVector.add(location, descentVector)
+			location -> location.x() <= maxX,
+			location -> location.add(descentVector)
 		)
 			.map(this::getChar)
 			.filter(symbol -> symbol == TREE)
@@ -54,13 +56,5 @@ class Day03 {
 		return DESCENT_VECTORS_P2.stream()
 			.mapToLong(this::solveForDescentVector)
 			.reduce(1, (l, r) -> l*r);
-	}
-
-	record IntVector(int x, int y) {
-		static final IntVector ORIGIN = new IntVector(0, 0);
-
-		static IntVector add(final IntVector l, final IntVector r) {
-			return new IntVector(l.x + r.x, l.y + r.y);
-		}
 	}
 }
