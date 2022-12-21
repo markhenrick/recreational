@@ -72,6 +72,11 @@ $ ls
     }
 
     @Test
+    void findSmallestDir() {
+        assertThat(SAMPLE_TREE.findSmallestDir(8381165L)).isEqualTo(24933642L);
+    }
+
+    @Test
     void parse() {
         var result = Day07.Directory.parse(SAMPLE_INPUT);
         assertThat(result).isEqualTo(SAMPLE_TREE);
@@ -88,5 +93,18 @@ $ ls
     @MethodSource
     void part1(String input, long expected) {
         assertThat(Day07.part1(input)).isEqualTo(expected);
+    }
+
+    static Stream<Arguments> part2() {
+        return Stream.of(
+                arguments(SAMPLE_INPUT, 24933642L),
+                arguments(TestUtil.getResourceAsString("AoC/input/2022/day07.txt"), 2832508L)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void part2(String input, long expected) {
+        assertThat(Day07.part2(input)).isEqualTo(expected);
     }
 }

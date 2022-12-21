@@ -11,8 +11,13 @@ import java.util.regex.Pattern;
 
 public class Day07 {
     private static final long SIZE_THRESHOLD = 100000;
+    private static final long FS_SIZE = 70000000;
+    private static final long DESIRED_FREE_SPACE = 30000000;
+    private static final long MAX_USED_SPACE = FS_SIZE - DESIRED_FREE_SPACE;
+
     private static final String ROOT_STRING = "/";
     private static final String UP_STRING = "..";
+
     private static final Pattern PATTERN_CD = Pattern.compile("^\\$ cd (.*)$");
     private static final Pattern PATTERN_LS = Pattern.compile("^\\$ ls$");
     private static final Pattern PATTERN_DIR = Pattern.compile("^dir (.*)$");
@@ -23,6 +28,13 @@ public class Day07 {
         return tree.countSmallDirs();
     }
 
+    public static long part2(String input) {
+        var tree = Directory.parse(input);
+        var totalSize = tree.getSize();
+        var deficit = totalSize - MAX_USED_SPACE;
+        return deficit <= 0 ? 0 : tree.findSmallestDir(deficit);
+    }
+
     @Data
     @EqualsAndHashCode(exclude = "parent")
     public abstract static class Node {
@@ -31,6 +43,8 @@ public class Day07 {
         public abstract long getSize();
 
         public abstract long countSmallDirs();
+
+        public abstract long findSmallestDir(long minimumSize);
     }
 
     @EqualsAndHashCode(callSuper = true)
@@ -54,6 +68,12 @@ public class Day07 {
         public long countSmallDirs() {
             // Individual files never count
             return 0;
+        }
+
+        @Override
+        public long findSmallestDir(long minimumSize) {
+            // Individual files never count
+            return Long.MAX_VALUE;
         }
     }
 
@@ -129,6 +149,20 @@ public class Day07 {
             return (thisDirSize <= SIZE_THRESHOLD ? thisDirSize : 0) + children.values().stream()
                     .mapToLong(Node::countSmallDirs)
                     .sum();
+        }
+
+        @Override
+        public long findSmallestDir(long minimumSize) {
+            var ownSize = getSize();
+            if (ownSize >= minimumSize) {
+                var smallestChild = children.values().stream()
+                        .mapToLong(child -> child.findSmallestDir(minimumSize))
+                        .min()
+                        .orElse(Long.MAX_VALUE);
+                return smallestChild < ownSize ? smallestChild : ownSize;
+            } else {
+                return Long.MAX_VALUE;
+            }
         }
 
         public String toString() {
