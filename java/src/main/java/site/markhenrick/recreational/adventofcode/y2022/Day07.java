@@ -6,10 +6,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Map;
 
 public class Day07 {
+    private static final long SIZE_THRESHOLD = 100000;
+
     @Data
     public abstract static class Node {
 
         public abstract long getSize();
+
+        public abstract long countSmallDirs();
     }
 
     @EqualsAndHashCode(callSuper = true)
@@ -27,6 +31,12 @@ public class Day07 {
 
         public String toString() {
             return String.format("File {size=%s}", getSize());
+        }
+
+        @Override
+        public long countSmallDirs() {
+            // Individual files never count
+            return 0;
         }
     }
 
@@ -47,6 +57,14 @@ public class Day07 {
         public long getSize() {
             return children.values().stream()
                     .mapToLong(Node::getSize)
+                    .sum();
+        }
+
+        @Override
+        public long countSmallDirs() {
+            var thisDirSize = getSize();
+            return (thisDirSize <= SIZE_THRESHOLD ? thisDirSize : 0) + children.values().stream()
+                    .mapToLong(Node::countSmallDirs)
                     .sum();
         }
 

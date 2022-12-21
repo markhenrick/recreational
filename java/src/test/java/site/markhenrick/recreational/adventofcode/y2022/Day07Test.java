@@ -33,4 +33,9 @@ public class Day07Test {
         assertThat(new Day07.Directory(Collections.emptyMap()).getSize()).isEqualTo(0L);
         System.out.println(SAMPLE_TREE);
     }
+
+    @Test
+    void countSmallDirs() {
+        assertThat(SAMPLE_TREE.countSmallDirs()).isEqualTo(95437L);
+    }
 }
