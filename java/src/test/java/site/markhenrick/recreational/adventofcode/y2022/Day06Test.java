@@ -29,4 +29,21 @@ public class Day06Test {
     void part1(String input, int expected) {
         assertThat(Day06.part1(input)).isEqualTo(expected);
     }
+
+    static Stream<Arguments> part2() {
+        return Stream.of(
+                of("mjqjpqmgbljsphdztnvjfqwrcgsmlb", 19),
+                of("bvwbjplbgvbhsrlpgdmjqwftvncz", 23),
+                of("nppdvjthqldpwncqszvftbrmjlhg", 23),
+                of("nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg", 29),
+                of("zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw", 26),
+                of(TestUtil.getResourceAsString("AoC/input/2022/day06.txt"), 2803)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    void part2(String input, int expected) {
+        assertThat(Day06.part2(input)).isEqualTo(expected);
+    }
 }
