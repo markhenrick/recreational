@@ -35,6 +35,8 @@ public class Day07 {
         return deficit <= 0 ? 0 : tree.findSmallestDir(deficit);
     }
 
+    // TODO generally clean up classes here. Redundant methods, encapsulation etc.
+
     @Data
     @EqualsAndHashCode(exclude = "parent")
     public abstract static class Node {
@@ -138,6 +140,7 @@ public class Day07 {
 
         @Override
         public long getSize() {
+            // TODO, don't redundantly calculate this each time. Store and update it when children change
             return children.values().stream()
                     .mapToLong(Node::getSize)
                     .sum();
