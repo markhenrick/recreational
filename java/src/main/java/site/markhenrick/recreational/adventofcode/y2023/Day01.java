@@ -1,14 +1,14 @@
 package site.markhenrick.recreational.adventofcode.y2023;
 
 import lombok.val;
+import org.javatuples.Pair;
 import site.markhenrick.recreational.common.StringUtil;
 import site.markhenrick.recreational.common.data.FirstAndLastCollector;
 
+import java.util.Comparator;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.function.ToIntFunction;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 import static site.markhenrick.recreational.common.StringUtil.LINE_SPLITTER;
 
@@ -51,28 +51,36 @@ public class Day01 {
 		return processFile(input, Day01::p2Splitter);
 	}
 
-	private static int processFile(String input, Function<String, Stream<Integer>> splitter) {
+	private static int processFile(String input, Function<String, Pair<Integer, Integer>> splitter) {
 		return LINE_SPLITTER.apply(input)
-				.mapToInt(processLineWith(splitter))
+				.mapToInt(line -> {
+					val digits = splitter.apply(line);
+					return 10 * digits.getValue0() + digits.getValue1();
+				})
 				.sum();
 	}
 
-	static ToIntFunction<String> processLineWith(Function<String, Stream<Integer>> splitter) {
-		return line -> {
-			//noinspection OptionalGetWithoutIsPresent
-			val digits = splitter.apply(line)
-					.filter(digit -> digit >= 0 && digit <= 9)
-					.collect(new FirstAndLastCollector<>())
-					.get();
-			return 10 * digits.getValue0() + digits.getValue1();
-		};
+	static Pair<Integer, Integer> p1Splitter(String line) {
+		return StringUtil.charStream(line)
+				.map(character -> character - '0')
+				.filter(digit -> digit >= 0 && digit <= 9)
+				.collect(new FirstAndLastCollector<>())
+				.get();
 	}
 
-	static Stream<Integer> p1Splitter(String line) {
-		return StringUtil.charStream(line).map(character -> character - '0');
+	static Pair<Integer, Integer> p2Splitter(String line) {
+		// TODO not very satisfied with this. Probably a better way. But since the matches can overlap this might be about optimal
+		val first = DIGIT_MAP.entrySet().stream()
+				.min(Comparator.comparing(entry -> minusOneToMaxInstead(line.indexOf(entry.getKey()))))
+				.get();
+		val last = DIGIT_MAP.entrySet().stream()
+				.max(Comparator.comparing(entry -> line.lastIndexOf(entry.getKey())))
+				.get();
+		assert line.contains(first.getKey()) && line.contains(last.getKey());
+		return Pair.with(first.getValue(), last.getValue());
 	}
 
-	static Stream<Integer> p2Splitter(String line) {
-		return PART2_PATTERN.matcher(line).results().map(result -> DIGIT_MAP.get(result.group(1)));
+	private static int minusOneToMaxInstead(int x) {
+		return x == -1 ? Integer.MAX_VALUE : x;
 	}
 }
