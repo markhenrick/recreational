@@ -65,7 +65,8 @@ public class Day01 {
 	}
 
 	static Pair<Integer, Integer> p2Extractor(String line) {
-		// TODO not very satisfied with this. Probably a better way. But since the matches can overlap this might be about optimal
+		// TODO not very satisfied with this. Probably a better way. But since the matches can overlap this might be about optimal.
+		// one optimisation possible with a more manual solution would be only checking up until the current best match's index
 		val first = DIGIT_MAP.entrySet().stream()
 				.min(Comparator.comparing(entry -> minusOneToMaxInstead(line.indexOf(entry.getKey()))))
 				.get();
