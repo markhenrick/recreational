@@ -8,7 +8,6 @@ import site.markhenrick.recreational.common.data.FirstAndLastCollector;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.regex.Pattern;
 
 import static site.markhenrick.recreational.common.StringUtil.LINE_SPLITTER;
 
@@ -16,7 +15,6 @@ public class Day01 {
 	// Decided to go with a nice streams approach rather than a faster but ugly state machine
 	// time and space should only differ by a constant factor :)
 
-	private static final Pattern PART2_PATTERN = Pattern.compile("(\\d|one|two|three|four|five|six|seven|eight|nine)");
 	//<editor-fold desc="zero -> 0 etc." defaultstate="collapsed">
 	private static final Map<String, Integer> DIGIT_MAP = Map.ofEntries(
 			// The only part of this codebase where I used ChatGPT. Not typing all this myself lol
@@ -44,21 +42,21 @@ public class Day01 {
 	//</editor-fold>
 
 	public static int part1(String input) {
-		return processFile(input, Day01::p1Splitter);
+		return processFile(input, Day01::p1Extractor);
 	}
 
 	public static int part2(String input) {
-		return processFile(input, Day01::p2Splitter);
+		return processFile(input, Day01::p2Extractor);
 	}
 
-	private static int processFile(String input, Function<String, Pair<Integer, Integer>> splitter) {
+	private static int processFile(String input, Function<String, Pair<Integer, Integer>> extractor) {
 		return LINE_SPLITTER.apply(input)
-				.map(splitter)
+				.map(extractor)
 				.mapToInt(digits -> 10 * digits.getValue0() + digits.getValue1())
 				.sum();
 	}
 
-	static Pair<Integer, Integer> p1Splitter(String line) {
+	static Pair<Integer, Integer> p1Extractor(String line) {
 		return StringUtil.charStream(line)
 				.map(character -> character - '0')
 				.filter(digit -> digit >= 0 && digit <= 9)
@@ -66,7 +64,7 @@ public class Day01 {
 				.get();
 	}
 
-	static Pair<Integer, Integer> p2Splitter(String line) {
+	static Pair<Integer, Integer> p2Extractor(String line) {
 		// TODO not very satisfied with this. Probably a better way. But since the matches can overlap this might be about optimal
 		val first = DIGIT_MAP.entrySet().stream()
 				.min(Comparator.comparing(entry -> minusOneToMaxInstead(line.indexOf(entry.getKey()))))

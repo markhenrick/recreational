@@ -66,8 +66,8 @@ zoneight234
 			"a1b2c3d4e5f,1,5",
 			"treb7uchet,7,7",
 	})
-	void processLineP1(String line, int expectedFirst, int expectedSecond) {
-		val result = Day01.p1Splitter(line);
+	void p1Extractor(String line, int expectedFirst, int expectedSecond) {
+		val result = Day01.p1Extractor(line);
 		assertThat(result.getValue0()).isEqualTo(expectedFirst);
 		assertThat(result.getValue1()).isEqualTo(expectedSecond);
 	}
@@ -89,8 +89,8 @@ zoneight234
 			"eighteight,8,8",
 			"eight,8,8",
 	})
-	void processLineP2(String line, int expectedFirst, int expectedSecond) {
-		val result = Day01.p2Splitter(line);
+	void p2Extractor(String line, int expectedFirst, int expectedSecond) {
+		val result = Day01.p2Extractor(line);
 		assertThat(result.getValue0()).isEqualTo(expectedFirst);
 		assertThat(result.getValue1()).isEqualTo(expectedSecond);
 	}
