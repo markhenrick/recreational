@@ -1,10 +1,9 @@
 package site.markhenrick.recreational.adventofcode.y2023;
 
 import lombok.val;
-import org.javatuples.Pair;
 import site.markhenrick.recreational.common.StringUtil;
+import site.markhenrick.recreational.common.data.FirstAndLastCollector;
 
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.ToIntFunction;
@@ -60,9 +59,11 @@ public class Day01 {
 
 	static ToIntFunction<String> processLineWith(Function<String, Stream<Integer>> splitter) {
 		return line -> {
-			val digits = firstAndLast(splitter.apply(line)
+			//noinspection OptionalGetWithoutIsPresent
+			val digits = splitter.apply(line)
 					.filter(digit -> digit >= 0 && digit <= 9)
-					.toList());
+					.collect(new FirstAndLastCollector<>())
+					.get();
 			return 10 * digits.getValue0() + digits.getValue1();
 		};
 	}
@@ -73,11 +74,5 @@ public class Day01 {
 
 	static Stream<Integer> p2Splitter(String line) {
 		return PART2_PATTERN.matcher(line).results().map(result -> DIGIT_MAP.get(result.group(1)));
-	}
-
-	private static <T> Pair<T, T> firstAndLast(List<T> list) {
-		// TODO custom collector so I'm not allocating a whole list just to get [0] and [-1]
-		assert !list.isEmpty();
-		return Pair.with(list.get(0), list.get(list.size() - 1));
 	}
 }
