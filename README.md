@@ -16,12 +16,12 @@ The table below shows my progress and the languages that I want to do this in. L
 
 Each year has 50 stars available, two parts for each day of advent.
 
-|Language|2015|2016|2017|2018|2019|2020|2021|2022|
-|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-|
-|Java|10|-|-|-|-|14|16|14|
-|Haskell|-|-|-|-|-|-|2|-|
-|Python|-|-|-|-|-|-|-|-|
-|Typescript|-|-|-|-|-|-|-|-|
-|C|-|-|-|-|-|-|2|-|
+|Language|2015|2016|2017|2018|2019|2020|2021|2022|2023|
+|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+|Java|10|-|-|-|-|14|16|14|2|
+|Haskell|-|-|-|-|-|-|2|-|-|
+|Python|-|-|-|-|-|-|-|-|-|
+|Typescript|-|-|-|-|-|-|-|-|-|
+|C|-|-|-|-|-|-|2|-|-|
 
 I also did the 2017 event live, though never finished, and got 29 stars. I don't still have the source but I recall using both Haskell and Python
