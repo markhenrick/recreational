@@ -77,6 +77,7 @@ zoneight234
 			"treb7uchet,77",
 			"two1nine,29",
 			"eightwothree,83",
+			"eightwothreeeightwo,82",
 			"abcone2threexyz,13",
 			"xtwone3four,24",
 			"4nineeightseven2,42",
