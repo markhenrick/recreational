@@ -53,10 +53,8 @@ public class Day01 {
 
 	private static int processFile(String input, Function<String, Pair<Integer, Integer>> splitter) {
 		return LINE_SPLITTER.apply(input)
-				.mapToInt(line -> {
-					val digits = splitter.apply(line);
-					return 10 * digits.getValue0() + digits.getValue1();
-				})
+				.map(splitter)
+				.mapToInt(digits -> 10 * digits.getValue0() + digits.getValue1())
 				.sum();
 	}
 
