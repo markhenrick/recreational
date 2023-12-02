@@ -5,6 +5,7 @@ import site.markhenrick.recreational.common.StringUtil;
 
 import java.util.stream.Stream;
 
+import static site.markhenrick.recreational.common.StringUtil.LINE_SPLITTER;
 import static site.markhenrick.recreational.common.StringUtil.SEMICOLON_SPLITTER;
 
 public class Day02 {
@@ -15,6 +16,23 @@ public class Day02 {
 	private static final String RED = "red";
 	private static final String GREEN = "green";
 	private static final String BLUE = "blue";
+	private static final int RED_LIMIT = 12;
+	private static final int GREEN_LIMIT = 13;
+	private static final int BLUE_LIMIT = 14;
+
+	public static int part1(String input) {
+		return LINE_SPLITTER.apply(input)
+			.map(Day02::parseGame)
+			.filter(Day02::gameIsPossible)
+			.mapToInt(Game::id)
+			.sum();
+	}
+
+	private static boolean gameIsPossible(Game game) {
+		return game.hands.allMatch(
+			hand -> hand.red <= RED_LIMIT && hand.green <= GREEN_LIMIT && hand.blue <= BLUE_LIMIT
+		);
+	}
 
 	static Game parseGame(String line) {
 		assert StringUtil.substringMatches(line, 0, GAME_START);
@@ -30,7 +48,7 @@ public class Day02 {
 		);
 	}
 
-	static Hand parseHand(String input) {
+	private static Hand parseHand(String input) {
 		var red = 0;
 		var green = 0;
 		var blue = 0;
