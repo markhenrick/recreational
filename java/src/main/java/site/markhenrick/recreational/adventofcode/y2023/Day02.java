@@ -3,10 +3,15 @@ package site.markhenrick.recreational.adventofcode.y2023;
 import lombok.val;
 import site.markhenrick.recreational.common.StringUtil;
 
-import java.util.List;
-import java.util.function.ToIntFunction;
+import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collector;
 import java.util.stream.Stream;
 
+import static java.lang.Math.max;
 import static site.markhenrick.recreational.common.StringUtil.LINE_SPLITTER;
 import static site.markhenrick.recreational.common.StringUtil.SEMICOLON_SPLITTER;
 
@@ -45,20 +50,7 @@ public class Day02 {
 	}
 
 	static ColorTriple minimalTriple(Game game) {
-		// TODO could it be custom collector time again 👀
-		val savedStream = game.triples.toList();
-		return new ColorTriple(
-			maxOfColor(savedStream, ColorTriple::red),
-			maxOfColor(savedStream, ColorTriple::green),
-			maxOfColor(savedStream, ColorTriple::blue)
-		);
-	}
-
-	private static int maxOfColor(List<ColorTriple> triples, ToIntFunction<ColorTriple> extractor) {
-		return triples.stream()
-			.mapToInt(extractor)
-			.max()
-			.getAsInt();
+		return game.triples.collect(new MinimalTripleCollector());
 	}
 
 	private static int triplePower(ColorTriple triple) {
@@ -113,4 +105,41 @@ public class Day02 {
 
 	record Game(int id, Stream<ColorTriple> triples) {}
 	record ColorTriple(int red, int green, int blue) {}
+
+	private static class MinimalTripleCollector implements Collector<ColorTriple, int[], ColorTriple> {
+
+		@Override
+		public Supplier<int[]> supplier() {
+			return () -> new int[3];
+		}
+
+		@Override
+		public BiConsumer<int[], ColorTriple> accumulator() {
+			return (counts, triple) -> {
+				counts[0] = max(counts[0], triple.red);
+				counts[1] = max(counts[1], triple.green);
+				counts[2] = max(counts[2], triple.blue);
+			};
+		}
+
+		@Override
+		public BinaryOperator<int[]> combiner() {
+			return (counts0, counts1) -> {
+				counts0[0] = max(counts0[0], counts1[0]);
+				counts0[1] = max(counts0[1], counts1[1]);
+				counts0[2] = max(counts0[2], counts1[2]);
+				return counts0;
+			};
+		}
+
+		@Override
+		public Function<int[], ColorTriple> finisher() {
+			return counts -> new ColorTriple(counts[0], counts[1], counts[2]);
+		}
+
+		@Override
+		public Set<Characteristics> characteristics() {
+			return Set.of(Characteristics.UNORDERED);
+		}
+	}
 }
