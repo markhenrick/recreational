@@ -30,7 +30,7 @@ public class Day02 {
 
 	private static boolean gameIsPossible(Game game) {
 		return game.hands.allMatch(
-			hand -> hand.red <= RED_LIMIT && hand.green <= GREEN_LIMIT && hand.blue <= BLUE_LIMIT
+			colorTriple -> colorTriple.red <= RED_LIMIT && colorTriple.green <= GREEN_LIMIT && colorTriple.blue <= BLUE_LIMIT
 		);
 	}
 
@@ -48,7 +48,7 @@ public class Day02 {
 		);
 	}
 
-	private static Hand parseHand(String input) {
+	private static ColorTriple parseHand(String input) {
 		var red = 0;
 		var green = 0;
 		var blue = 0;
@@ -77,9 +77,9 @@ public class Day02 {
 					assert false;
 			}
 		}
-		return new Hand(red, green, blue);
+		return new ColorTriple(red, green, blue);
 	}
 
-	record Game(int id, Stream<Hand> hands) {}
-	record Hand(int red, int green, int blue) {}
+	record Game(int id, Stream<ColorTriple> hands) {}
+	record ColorTriple(int red, int green, int blue) {}
 }

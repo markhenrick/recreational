@@ -41,9 +41,9 @@ Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green
 		val input = "Game 34: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red";
 		val expectedId = 34;
 		val expectedHands = List.of(
-			new Day02.Hand(3, 1, 6),
-			new Day02.Hand(6, 3, 0),
-			new Day02.Hand(14, 3, 15)
+			new Day02.ColorTriple(3, 1, 6),
+			new Day02.ColorTriple(6, 3, 0),
+			new Day02.ColorTriple(14, 3, 15)
 		);
 
 		val result = Day02.parseGame(input);
