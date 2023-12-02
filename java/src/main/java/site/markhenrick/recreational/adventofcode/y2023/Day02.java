@@ -8,14 +8,12 @@ import java.util.List;
 import static site.markhenrick.recreational.common.StringUtil.*;
 
 public class Day02 {
-	// Yes I am using AmE for "color" because everything else in programming does
+	// So this solution is an inconsistent mix of microoptimising to avoid allocation in the low methods combined with
+	// flippant use of streams and string splitting in the high methods. Might refactor in one direction or the other later
+	// PS. Yes I am using AmE for "color" because everything else in programming does
 	private static final String GAME_START = "Game ";
 
 	static Game parseGame(String line) {
-		// Originally had a zero-allocation index-arithmetic version, but it was getting too complex to understand
-		// I'll save that for the C version if I get round to it. Streams and regex are just too convenient
-
-		// But I'll at least do the game ID part vaguely efficiently
 		assert StringUtil.substringMatches(line, 0, GAME_START);
 		val semicolonIndex = line.indexOf(':');
 		assert semicolonIndex != -1;
@@ -54,6 +52,7 @@ public class Day02 {
 
 
 	// Decided we're not just going to use generic Pair<>s today
+	// TODO consider if this is actually better or not
 	record Game(int id, List<Hand> hands) {}
 	record Hand(List<HandPart> parts) {}
 	// Can't think of a better name for this
