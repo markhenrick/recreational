@@ -3,9 +3,10 @@ package site.markhenrick.recreational.adventofcode.y2023;
 import lombok.val;
 import site.markhenrick.recreational.common.StringUtil;
 
-import java.util.List;
+import java.util.stream.Stream;
 
-import static site.markhenrick.recreational.common.StringUtil.*;
+import static site.markhenrick.recreational.common.StringUtil.COMMA_SPLITTER;
+import static site.markhenrick.recreational.common.StringUtil.SEMICOLON_SPLITTER;
 
 public class Day02 {
 	// So this solution is an inconsistent mix of microoptimising to avoid allocation in the low methods combined with
@@ -24,16 +25,7 @@ public class Day02 {
 		return new Game(
 			gameId,
 			SEMICOLON_SPLITTER.apply(remainder)
-				.map(Day02::parseHand)
-				.toList() // TODO no list
-		);
-	}
-
-	static Hand parseHand(String input) {
-		return new Hand(
-			COMMA_SPLITTER.apply(input)
-				.map(Day02::parseHandPart)
-				.toList() // TODO no list
+				.map(input -> new Hand(COMMA_SPLITTER.apply(input).map(Day02::parseHandPart)))
 		);
 	}
 
@@ -53,8 +45,8 @@ public class Day02 {
 
 	// Decided we're not just going to use generic Pair<>s today
 	// TODO consider if this is actually better or not
-	record Game(int id, List<Hand> hands) {}
-	record Hand(List<HandPart> parts) {}
+	record Game(int id, Stream<Hand> hands) {}
+	record Hand(Stream<HandPart> parts) {}
 	// Can't think of a better name for this
 	record HandPart(int count, Color color) { }
 	// lowercase because the input is
