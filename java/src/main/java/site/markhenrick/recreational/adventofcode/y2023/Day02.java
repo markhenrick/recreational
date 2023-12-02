@@ -46,7 +46,9 @@ public class Day02 {
 		assert input.lastIndexOf(' ') == spaceIndex;
 		return new HandPart(
 			Integer.parseInt(input, leadingSpace ? 1 : 0, spaceIndex, 10),
-			input.substring(spaceIndex + 1)
+			// So technically this still results in an allocation, but it will be eligible for collection almost instantly
+			// a more efficient method using StringUtil.substringMatches would be possible
+			Color.valueOf(input.substring(spaceIndex + 1))
 		);
 	}
 
@@ -55,6 +57,7 @@ public class Day02 {
 	record Game(int id, List<Hand> hands) {}
 	record Hand(List<HandPart> parts) {}
 	// Can't think of a better name for this
-	record HandPart(int count, String color) { }
-	// TODO enum for color
+	record HandPart(int count, Color color) { }
+	// lowercase because the input is
+	enum Color {red, green, blue}
 }
