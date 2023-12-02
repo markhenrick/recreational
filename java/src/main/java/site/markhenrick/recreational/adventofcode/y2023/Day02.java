@@ -25,7 +25,7 @@ public class Day02 {
 		return new Game(
 			gameId,
 			SEMICOLON_SPLITTER.apply(remainder)
-				.map(input -> new Hand(COMMA_SPLITTER.apply(input).map(Day02::parseHandPart)))
+				.map(input -> COMMA_SPLITTER.apply(input).map(Day02::parseHandPart))
 		);
 	}
 
@@ -45,8 +45,7 @@ public class Day02 {
 
 	// Decided we're not just going to use generic Pair<>s today
 	// TODO consider if this is actually better or not
-	record Game(int id, Stream<Hand> hands) {}
-	record Hand(Stream<HandPart> parts) {}
+	record Game(int id, Stream<Stream<HandPart>> hands) {}
 	// Can't think of a better name for this
 	record HandPart(int count, Color color) { }
 	// lowercase because the input is
