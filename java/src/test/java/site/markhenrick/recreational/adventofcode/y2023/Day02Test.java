@@ -4,7 +4,6 @@ import lombok.val;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static site.markhenrick.recreational.adventofcode.y2023.Day02.Color.*;
@@ -22,7 +21,7 @@ public class Day02Test {
 
 		val result = Day02.parseGame(input);
 		val hands = result.hands()
-			.map(Stream::toList)
+			.map(hand -> hand.parts().toList())
 			.toList();
 
 		assertThat(result.id()).isEqualTo(expectedId);
