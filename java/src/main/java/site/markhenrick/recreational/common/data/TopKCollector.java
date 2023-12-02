@@ -21,6 +21,8 @@ import java.util.stream.Collector;
  * @param <T> The type of the elements
  */
 public class TopKCollector<T> implements Collector<T, List<T>, List<T>> {
+	private static final Set<Characteristics> CHARACTERISTICS = Set.of(Characteristics.UNORDERED, Characteristics.IDENTITY_FINISH);
+
 	// Invariants:
 	// Collecting list ascends
 	// Collecting list never contains nulls as valid values
@@ -116,6 +118,6 @@ public class TopKCollector<T> implements Collector<T, List<T>, List<T>> {
 
 	@Override
 	public Set<Characteristics> characteristics() {
-		return Set.of(Characteristics.UNORDERED, Characteristics.IDENTITY_FINISH);
+		return CHARACTERISTICS;
 	}
 }

@@ -107,6 +107,7 @@ public class Day02 {
 	record ColorTriple(int red, int green, int blue) {}
 
 	private static class MinimalTripleCollector implements Collector<ColorTriple, int[], ColorTriple> {
+		private static final Set<Characteristics> CHARACTERISTICS = Set.of(Characteristics.UNORDERED);
 
 		@Override
 		public Supplier<int[]> supplier() {
@@ -139,7 +140,7 @@ public class Day02 {
 
 		@Override
 		public Set<Characteristics> characteristics() {
-			return Set.of(Characteristics.UNORDERED);
+			return CHARACTERISTICS;
 		}
 	}
 }
