@@ -36,11 +36,25 @@ Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green
 		assertThat(Day02.part1(input)).isEqualTo(expected);
 	}
 
+	static Stream<Arguments> part2() {
+		return Stream.of(
+			arguments(2286, SAMPLE_INPUT),
+			arguments(78375, TestUtil.getResourceAsString("AoC/input/2023/day02.txt"))
+		);
+	}
+
+	@ParameterizedTest
+	@MethodSource
+	void part2(int expected, String input)
+	{
+		assertThat(Day02.part2(input)).isEqualTo(expected);
+	}
+
 	@Test
 	void parseGame() {
 		val input = "Game 34: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red";
 		val expectedId = 34;
-		val expectedHands = List.of(
+		val expectedTriples = List.of(
 			new Day02.ColorTriple(3, 1, 6),
 			new Day02.ColorTriple(6, 3, 0),
 			new Day02.ColorTriple(14, 3, 15)
@@ -49,6 +63,20 @@ Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green
 		val result = Day02.parseGame(input);
 
 		assertThat(result.id()).isEqualTo(expectedId);
-		assertThat(result.hands().toList()).isEqualTo(expectedHands);
+		assertThat(result.triples().toList()).isEqualTo(expectedTriples);
+	}
+
+	@Test
+	void minimalTriple() {
+		val game = new Day02.Game(
+			2,
+			Stream.of(
+				new Day02.ColorTriple(0, 2, 1),
+				new Day02.ColorTriple(1, 3, 4),
+				new Day02.ColorTriple(0, 1, 1)
+			)
+		);
+		val expected = new Day02.ColorTriple(1, 3, 4);
+		assertThat(Day02.minimalTriple(game)).isEqualTo(expected);
 	}
 }

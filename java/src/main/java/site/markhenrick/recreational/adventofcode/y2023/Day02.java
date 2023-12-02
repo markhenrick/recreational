@@ -3,6 +3,8 @@ package site.markhenrick.recreational.adventofcode.y2023;
 import lombok.val;
 import site.markhenrick.recreational.common.StringUtil;
 
+import java.util.List;
+import java.util.function.ToIntFunction;
 import java.util.stream.Stream;
 
 import static site.markhenrick.recreational.common.StringUtil.LINE_SPLITTER;
@@ -28,10 +30,39 @@ public class Day02 {
 			.sum();
 	}
 
+	public static int part2(String input) {
+		return LINE_SPLITTER.apply(input)
+			.map(Day02::parseGame)
+			.map(Day02::minimalTriple)
+			.mapToInt(Day02::triplePower)
+			.sum();
+	}
+
 	private static boolean gameIsPossible(Game game) {
-		return game.hands.allMatch(
+		return game.triples.allMatch(
 			colorTriple -> colorTriple.red <= RED_LIMIT && colorTriple.green <= GREEN_LIMIT && colorTriple.blue <= BLUE_LIMIT
 		);
+	}
+
+	static ColorTriple minimalTriple(Game game) {
+		// TODO could it be custom collector time again 👀
+		val savedStream = game.triples.toList();
+		return new ColorTriple(
+			maxOfColor(savedStream, ColorTriple::red),
+			maxOfColor(savedStream, ColorTriple::green),
+			maxOfColor(savedStream, ColorTriple::blue)
+		);
+	}
+
+	private static int maxOfColor(List<ColorTriple> triples, ToIntFunction<ColorTriple> extractor) {
+		return triples.stream()
+			.mapToInt(extractor)
+			.max()
+			.getAsInt();
+	}
+
+	private static int triplePower(ColorTriple triple) {
+		return triple.red * triple.green * triple.blue;
 	}
 
 	static Game parseGame(String line) {
@@ -44,11 +75,11 @@ public class Day02 {
 		val remainder = line.substring(semicolonIndex + 1);
 		return new Game(
 			gameId,
-			SEMICOLON_SPLITTER.apply(remainder).map(Day02::parseHand)
+			SEMICOLON_SPLITTER.apply(remainder).map(Day02::parseTriple)
 		);
 	}
 
-	private static ColorTriple parseHand(String input) {
+	private static ColorTriple parseTriple(String input) {
 		var red = 0;
 		var green = 0;
 		var blue = 0;
@@ -80,6 +111,6 @@ public class Day02 {
 		return new ColorTriple(red, green, blue);
 	}
 
-	record Game(int id, Stream<ColorTriple> hands) {}
+	record Game(int id, Stream<ColorTriple> triples) {}
 	record ColorTriple(int red, int green, int blue) {}
 }
