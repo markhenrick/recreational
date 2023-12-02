@@ -22,4 +22,18 @@ public class StringUtil {
 			.mapToObj(input::charAt);
 	}
 
+	// like String.substring().equals() but without all the allocation
+	public static boolean substringMatches(String input, int offset, String expected) {
+		if (input.length() - offset < expected.length()) {
+			return false;
+		}
+		// Also not using streams to avoid allocation
+		for (int i = 0; i < expected.length(); i++) {
+			if (input.charAt(i + offset) != expected.charAt(i)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 }

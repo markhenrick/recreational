@@ -4,8 +4,8 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
-import site.markhenrick.recreational.common.StringUtil;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,5 +47,21 @@ ecl:brn hgt:182cm pid:021572410 eyr:2020 byr:1992 cid:277
 		final var records = StringUtil.RECORD_SPLITTER.apply(RECORDS).collect(Collectors.toList());
 		assertThat(records).hasSize(3);
 		assertThat(records.get(1)).contains("ecl:grn");
+	}
+
+	@ParameterizedTest
+	@CsvSource({
+		"'',0,'',true",
+		"'',1,'',false",
+		"'',0,a,false",
+		"a,0,a,true",
+		"a,0,b,false",
+		"a,1,a,false",
+		"aa,1,a,true",
+		"Game 1: 3 blue,0,Game,true",
+		"Game 1: 3 blue,6,:,true",
+	})
+	void substringMatches(String input, int offset, String expectedString, boolean expectedResult) {
+		assertThat(StringUtil.substringMatches(input, offset, expectedString)).isEqualTo(expectedResult);
 	}
 }
