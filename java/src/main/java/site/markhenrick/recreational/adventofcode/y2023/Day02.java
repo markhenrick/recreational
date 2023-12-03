@@ -67,11 +67,7 @@ public class Day02 {
 	private static IntVec3 parseVec(String input) {
 		return COMMA_SPLITTER.apply(input)
 			.map(String::trim)
-			.map(colorSpec -> {
-				val parts = colorSpec.split(" ");
-				assert parts.length == 2;
-				return new FunctionalUtil.Pair<>(parts[0], parts[1]);
-			})
+			.map(colorSpec -> FunctionalUtil.Pair.fromArray(colorSpec.split(" ")))
 			.map(pair -> pair.mapL(Integer::parseInt))
 			.map(pair -> pair.mapR(UNITS::get))
 			.map(pair -> pair.r().scale(pair.l()))

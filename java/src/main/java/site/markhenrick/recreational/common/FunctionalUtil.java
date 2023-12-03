@@ -32,6 +32,11 @@ public class FunctionalUtil {
 		public <RPrime> Pair<L, RPrime> mapR(final Function<? super R, ? extends RPrime> fn) {
 			return new Pair<>(l, fn.apply(r));
 		}
+
+		public static <T> Pair<T, T> fromArray(T[] array) {
+			assert array.length == 2; // should be a hard assert in prod code
+			return new Pair<>(array[0], array[1]);
+		}
 	}
 
 	public static Stream<Character> charStream(char[] source) {
