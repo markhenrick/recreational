@@ -21,13 +21,10 @@ public class Day02 {
 	// Decided to go with an allocation-happy functional solution. The index arithmetic state machine version can go in C
 	// PS. Yes I am using AmE for "color" because everything else in programming does
 	private static final String GAME_START = "Game ";
-	private static final String RED = "red";
-	private static final String GREEN = "green";
-	private static final String BLUE = "blue";
 	private static final Map<String, IntVec3> UNITS = Map.of(
-		RED, IntVec3.UNIT_X,
-		GREEN, IntVec3.UNIT_Y,
-		BLUE, IntVec3.UNIT_Z
+		"red", IntVec3.UNIT_X,
+		"green", IntVec3.UNIT_Y,
+		"blue", IntVec3.UNIT_Z
 	);
 	private static final int RED_LIMIT = 12;
 	private static final int GREEN_LIMIT = 13;
