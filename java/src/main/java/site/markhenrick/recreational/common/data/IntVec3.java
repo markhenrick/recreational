@@ -12,6 +12,8 @@ public record IntVec3(int x, int y, int z) {
 	public static final IntVec3 UNIT_Y = new IntVec3(0, 1, 0);
 	public static final IntVec3 UNIT_Z = new IntVec3(0, 0, 1);
 
+	// TODO consider long version of int methods
+
 	public IntVec3 map(IntUnaryOperator fn) {
 		return new IntVec3(fn.applyAsInt(x), fn.applyAsInt(y), fn.applyAsInt(z));
 	}
@@ -37,12 +39,18 @@ public record IntVec3(int x, int y, int z) {
 		return fn.apply(this.x, other.x) || fn.apply(this.y, other.y) || fn.apply(this.z, other.z);
 	}
 
+	/** Left associative: (x + y) + z for given + */
+	public int reduceComponents(IntBinaryOperator fn) {
+		//noinspection SuspiciousNameCombination
+		return fn.applyAsInt(fn.applyAsInt(x, y), z);
+	}
+
 	public int componentSum() {
-		return x + y + z;
+		return reduceComponents(Integer::sum);
 	}
 
 	public int componentProduct() {
-		return x * y * z;
+		return reduceComponents((x, y) -> x * y);
 	}
 
 	public IntVec3 add(IntVec3 addendum) {
