@@ -1,6 +1,6 @@
 package site.markhenrick.recreational.adventofcode.y2021;
 
-import site.markhenrick.recreational.common.data.IntVector;
+import site.markhenrick.recreational.common.data.IntVec2;
 
 import java.util.Map;
 import java.util.function.BinaryOperator;
@@ -11,10 +11,10 @@ class Day02 {
 	// This implementation is more about being expressive than fast
 	// For that, see the C version
 
-	private static final Map<String, IntVector> BASE_VECTORS = Map.of(
-		"forward", new IntVector(1, 0),
-		"up", new IntVector(0, -1),
-		"down", new IntVector(0, 1)
+	private static final Map<String, IntVec2> BASE_VECTORS = Map.of(
+		"forward", new IntVec2(1, 0),
+		"up", new IntVec2(0, -1),
+		"down", new IntVec2(0, 1)
 	);
 
 	private static final Pattern PATTERN = Pattern.compile("(\\S+) (\\d+)");
@@ -22,7 +22,7 @@ class Day02 {
 	static int part1(String input) {
 		var finalVector = PATTERN.matcher(input).results()
 			.map(Day02::parseLine)
-			.reduce(new IntVector(0, 0), (IntVector::add));
+			.reduce(new IntVec2(0, 0), (IntVec2::add));
 		return finalVector.x() * finalVector.y();
 	}
 
@@ -34,7 +34,7 @@ class Day02 {
 		return finalData.horizontal * finalData.depth;
 	}
 
-	static IntVector parseLine(MatchResult matchResult) {
+	static IntVec2 parseLine(MatchResult matchResult) {
 		assert matchResult.groupCount() == 2;
 		var baseVector = BASE_VECTORS.get(matchResult.group(1));
 		assert baseVector != null;
@@ -44,7 +44,7 @@ class Day02 {
 
 	// Not really correct to call it a "vector" any more since the axioms don't hold
 	private record PositionWithAim(int horizontal, int depth, int aim) {
-		public PositionWithAim applyVector(IntVector input) {
+		public PositionWithAim applyVector(IntVec2 input) {
 			if (input.y() != 0) {
 				assert input.x() == 0;
 				return new PositionWithAim(this.horizontal, this.depth, this.aim + input.y());

@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import site.markhenrick.recreational.common.IntVec3;
 import site.markhenrick.recreational.common.TestUtil;
 
 import java.util.List;
@@ -54,29 +55,29 @@ Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green
 	void parseGame() {
 		val input = "Game 34: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red";
 		val expectedId = 34;
-		val expectedTriples = List.of(
-			new Day02.ColorTriple(3, 1, 6),
-			new Day02.ColorTriple(6, 3, 0),
-			new Day02.ColorTriple(14, 3, 15)
+		val expectedVecs = List.of(
+			new IntVec3(3, 1, 6),
+			new IntVec3(6, 3, 0),
+			new IntVec3(14, 3, 15)
 		);
 
 		val result = Day02.parseGame(input);
 
 		assertThat(result.id()).isEqualTo(expectedId);
-		assertThat(result.triples().toList()).isEqualTo(expectedTriples);
+		assertThat(result.vecs().toList()).isEqualTo(expectedVecs);
 	}
 
 	@Test
-	void minimalTriple() {
+	void minimalVec() {
 		val game = new Day02.Game(
 			2,
 			Stream.of(
-				new Day02.ColorTriple(0, 2, 1),
-				new Day02.ColorTriple(1, 3, 4),
-				new Day02.ColorTriple(0, 1, 1)
+				new IntVec3(0, 2, 1),
+				new IntVec3(1, 3, 4),
+				new IntVec3(0, 1, 1)
 			)
 		);
-		val expected = new Day02.ColorTriple(1, 3, 4);
-		assertThat(Day02.minimalTriple(game)).isEqualTo(expected);
+		val expected = new IntVec3(1, 3, 4);
+		assertThat(Day02.minimalVec(game)).isEqualTo(expected);
 	}
 }

@@ -1,6 +1,7 @@
 package site.markhenrick.recreational.adventofcode.y2023;
 
 import lombok.val;
+import site.markhenrick.recreational.common.IntVec3;
 import site.markhenrick.recreational.common.StringUtil;
 
 import java.util.Set;
@@ -38,23 +39,23 @@ public class Day02 {
 	public static int part2(String input) {
 		return LINE_SPLITTER.apply(input)
 			.map(Day02::parseGame)
-			.map(Day02::minimalTriple)
-			.mapToInt(Day02::triplePower)
+			.map(Day02::minimalVec)
+			.mapToInt(Day02::vecPower)
 			.sum();
 	}
 
 	private static boolean gameIsPossible(Game game) {
-		return game.triples.allMatch(
-			colorTriple -> colorTriple.red <= RED_LIMIT && colorTriple.green <= GREEN_LIMIT && colorTriple.blue <= BLUE_LIMIT
+		return game.vecs.allMatch(
+			IntVec3 -> IntVec3.x() <= RED_LIMIT && IntVec3.y() <= GREEN_LIMIT && IntVec3.z() <= BLUE_LIMIT
 		);
 	}
 
-	static ColorTriple minimalTriple(Game game) {
-		return game.triples.collect(new MinimalTripleCollector());
+	static IntVec3 minimalVec(Game game) {
+		return game.vecs.collect(new MinimalVecCollector());
 	}
 
-	private static int triplePower(ColorTriple triple) {
-		return triple.red * triple.green * triple.blue;
+	private static int vecPower(IntVec3 vec) {
+		return vec.x() * vec.y() * vec.z();
 	}
 
 	static Game parseGame(String line) {
@@ -67,11 +68,11 @@ public class Day02 {
 		val remainder = line.substring(semicolonIndex + 1);
 		return new Game(
 			gameId,
-			SEMICOLON_SPLITTER.apply(remainder).map(Day02::parseTriple)
+			SEMICOLON_SPLITTER.apply(remainder).map(Day02::parseVec)
 		);
 	}
 
-	private static ColorTriple parseTriple(String input) {
+	private static IntVec3 parseVec(String input) {
 		var red = 0;
 		var green = 0;
 		var blue = 0;
@@ -100,13 +101,12 @@ public class Day02 {
 					assert false;
 			}
 		}
-		return new ColorTriple(red, green, blue);
+		return new IntVec3(red, green, blue);
 	}
 
-	record Game(int id, Stream<ColorTriple> triples) {}
-	record ColorTriple(int red, int green, int blue) {}
+	record Game(int id, Stream<IntVec3> vecs) {}
 
-	private static class MinimalTripleCollector implements Collector<ColorTriple, int[], ColorTriple> {
+	private static class MinimalVecCollector implements Collector<IntVec3, int[], IntVec3> {
 		private static final Set<Characteristics> CHARACTERISTICS = Set.of(Characteristics.UNORDERED);
 
 		@Override
@@ -115,11 +115,11 @@ public class Day02 {
 		}
 
 		@Override
-		public BiConsumer<int[], ColorTriple> accumulator() {
-			return (counts, triple) -> {
-				counts[0] = max(counts[0], triple.red);
-				counts[1] = max(counts[1], triple.green);
-				counts[2] = max(counts[2], triple.blue);
+		public BiConsumer<int[], IntVec3> accumulator() {
+			return (counts, vec) -> {
+				counts[0] = max(counts[0], vec.x());
+				counts[1] = max(counts[1], vec.y());
+				counts[2] = max(counts[2], vec.z());
 			};
 		}
 
@@ -134,8 +134,8 @@ public class Day02 {
 		}
 
 		@Override
-		public Function<int[], ColorTriple> finisher() {
-			return counts -> new ColorTriple(counts[0], counts[1], counts[2]);
+		public Function<int[], IntVec3> finisher() {
+			return counts -> new IntVec3(counts[0], counts[1], counts[2]);
 		}
 
 		@Override

@@ -1,6 +1,6 @@
 package site.markhenrick.recreational.adventofcode.y2020;
 
-import site.markhenrick.recreational.common.data.IntVector;
+import site.markhenrick.recreational.common.data.IntVec2;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -8,13 +8,13 @@ import java.util.stream.Stream;
 class Day03 {
 	// Co-ordinates are 0-based, with x going down and y going across
 
-	private static final IntVector DESCENT_VECTOR_P1 = new IntVector(1, 3);
-	private static final List<IntVector> DESCENT_VECTORS_P2 = List.of(
-		new IntVector(1, 1),
-		new IntVector(1, 3),
-		new IntVector(1, 5),
-		new IntVector(1, 7),
-		new IntVector(2, 1)
+	private static final IntVec2 DESCENT_VECTOR_P1 = new IntVec2(1, 3);
+	private static final List<IntVec2> DESCENT_VECTORS_P2 = List.of(
+		new IntVec2(1, 1),
+		new IntVec2(1, 3),
+		new IntVec2(1, 5),
+		new IntVec2(1, 7),
+		new IntVec2(2, 1)
 	);
 	private static final char BLANK = '.';
 	private static final char TREE = '#';
@@ -29,7 +29,7 @@ class Day03 {
 		this.maxX = (input.length() / (maxY + 1)) - 1;
 	}
 
-	char getChar(final IntVector coordinate) {
+	char getChar(final IntVec2 coordinate) {
 		assert coordinate.x() <= maxX;
 		// +1 due to the \n
 		final var character = input[(coordinate.x() * (maxY + 1)) + (coordinate.y() % maxY)];
@@ -37,9 +37,9 @@ class Day03 {
 		return character;
 	}
 
-	private long solveForDescentVector(final IntVector descentVector) {
+	private long solveForDescentVector(final IntVec2 descentVector) {
 		return Stream.iterate(
-			IntVector.ORIGIN,
+			IntVec2.ORIGIN,
 			location -> location.x() <= maxX,
 			location -> location.add(descentVector)
 		)
