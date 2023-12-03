@@ -1,9 +1,11 @@
 package site.markhenrick.recreational.adventofcode.y2023;
 
 import lombok.val;
+import site.markhenrick.recreational.common.FunctionalUtil;
 import site.markhenrick.recreational.common.IntVec3;
 import site.markhenrick.recreational.common.StringUtil;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
@@ -13,17 +15,20 @@ import java.util.stream.Collector;
 import java.util.stream.Stream;
 
 import static java.lang.Math.max;
-import static site.markhenrick.recreational.common.StringUtil.LINE_SPLITTER;
-import static site.markhenrick.recreational.common.StringUtil.SEMICOLON_SPLITTER;
+import static site.markhenrick.recreational.common.StringUtil.*;
 
 public class Day02 {
-	// So this solution is an inconsistent mix of microoptimising to avoid allocation in the low methods combined with
-	// flippant use of streams and string splitting in the high methods. Might refactor in one direction or the other later
+	// Decided to go with an allocation-happy functional solution. The index arithmetic state machine version can go in C
 	// PS. Yes I am using AmE for "color" because everything else in programming does
 	private static final String GAME_START = "Game ";
 	private static final String RED = "red";
 	private static final String GREEN = "green";
 	private static final String BLUE = "blue";
+	private static final Map<String, IntVec3> UNITS = Map.of(
+		RED, IntVec3.UNIT_X,
+		GREEN, IntVec3.UNIT_Y,
+		BLUE, IntVec3.UNIT_Z
+	);
 	private static final int RED_LIMIT = 12;
 	private static final int GREEN_LIMIT = 13;
 	private static final int BLUE_LIMIT = 14;
@@ -59,6 +64,7 @@ public class Day02 {
 	}
 
 	static Game parseGame(String line) {
+		// For some reason I have decided in this bit and this bit only to microoptimise to avoid allocations
 		assert StringUtil.substringMatches(line, 0, GAME_START);
 		val semicolonIndex = line.indexOf(':');
 		assert semicolonIndex != -1;
@@ -73,35 +79,17 @@ public class Day02 {
 	}
 
 	private static IntVec3 parseVec(String input) {
-		var red = 0;
-		var green = 0;
-		var blue = 0;
-		val parts = input.split(",");
-		for (val part : parts) {
-			val leadingSpace = part.charAt(0) == ' ';
-			val spaceIndex = part.indexOf(' ', leadingSpace ? 1 : 0);
-			assert spaceIndex != -1;
-			assert part.lastIndexOf(' ') == spaceIndex;
-			val count = Integer.parseInt(part, leadingSpace ? 1 : 0, spaceIndex, 10);
-			val color = part.substring(spaceIndex + 1);
-			switch (color) {
-				case RED:
-					assert red == 0;
-					red += count;
-					break;
-				case GREEN:
-					assert green == 0;
-					green += count;
-					break;
-				case BLUE:
-					assert blue == 0;
-					blue += count;
-					break;
-				default:
-					assert false;
-			}
-		}
-		return new IntVec3(red, green, blue);
+		return COMMA_SPLITTER.apply(input)
+			.map(String::trim)
+			.map(colorSpec -> {
+				val parts = colorSpec.split(" ");
+				assert parts.length == 2;
+				return new FunctionalUtil.Pair<>(parts[0], parts[1]);
+			})
+			.map(pair -> pair.mapL(Integer::parseInt))
+			.map(pair -> pair.mapR(UNITS::get))
+			.map(pair -> pair.r().scale(pair.l()))
+			.reduce(IntVec3.ORIGIN, IntVec3::add);
 	}
 
 	record Game(int id, Stream<IntVec3> vecs) {}
