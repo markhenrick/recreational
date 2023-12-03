@@ -32,6 +32,7 @@ public class Day02 {
 	public static int part2(String input) {
 		return LINE_SPLITTER.apply(input)
 			.map(Day02::parseGame)
+			.map(Game::vecs)
 			.map(Day02::minimalVec)
 			.mapToInt(IntVec3::componentProduct)
 			.sum();
@@ -41,9 +42,9 @@ public class Day02 {
 		return game.vecs.allMatch(vec -> vec.boundedBy(P1_LIMIT));
 	}
 
-	static IntVec3 minimalVec(Game game) {
+	static IntVec3 minimalVec(Stream<IntVec3> vecs) {
 		// Originally had a custom collector that used an intermediate mutable int[], still in git history
-		return game.vecs
+		return vecs
 			.reduce((l, r) -> l.reduce(Math::max, r))
 			.get();
 	}

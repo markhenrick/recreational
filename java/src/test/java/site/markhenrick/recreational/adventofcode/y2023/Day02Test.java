@@ -69,15 +69,12 @@ Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green
 
 	@Test
 	void minimalVec() {
-		val game = new Day02.Game(
-			2,
-			Stream.of(
-				new IntVec3(0, 2, 1),
-				new IntVec3(1, 3, 4),
-				new IntVec3(0, 1, 1)
-			)
+		val vecs = Stream.of(
+			new IntVec3(0, 2, 1),
+			new IntVec3(1, 3, 4),
+			new IntVec3(0, 1, 1)
 		);
 		val expected = new IntVec3(1, 3, 4);
-		assertThat(Day02.minimalVec(game)).isEqualTo(expected);
+		assertThat(Day02.minimalVec(vecs)).isEqualTo(expected);
 	}
 }
