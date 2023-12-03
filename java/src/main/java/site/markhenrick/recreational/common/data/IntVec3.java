@@ -1,4 +1,4 @@
-package site.markhenrick.recreational.common;
+package site.markhenrick.recreational.common.data;
 
 public record IntVec3(int x, int y, int z) {
 	// TODO perhaps an IntVec wrapping an arbitrarily sized int[] is called for. Just assert matching size
@@ -12,6 +12,22 @@ public record IntVec3(int x, int y, int z) {
 	}
 
 	public IntVec3 scale(int scalar) {
-		return new IntVec3(this.x * scalar, this.y * scalar, this.z * scalar);
+		return new IntVec3(x * scalar, y * scalar, z * scalar);
+	}
+
+	public int componentSum() {
+		return x + y + z;
+	}
+
+	public int componentProduct() {
+		return x * y * z;
+	}
+
+	public boolean boundedBy(IntVec3 other) {
+		return this.x <= other.x && this.y <= other.y && this.z <= other.z;
+	}
+
+	public boolean strictlyBoundedBy(IntVec3 other) {
+		return this.x < other.x && this.y < other.y && this.z < other.z;
 	}
 }

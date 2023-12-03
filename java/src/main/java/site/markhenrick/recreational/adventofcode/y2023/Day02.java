@@ -2,7 +2,7 @@ package site.markhenrick.recreational.adventofcode.y2023;
 
 import lombok.val;
 import site.markhenrick.recreational.common.FunctionalUtil;
-import site.markhenrick.recreational.common.IntVec3;
+import site.markhenrick.recreational.common.data.IntVec3;
 import site.markhenrick.recreational.common.StringUtil;
 
 import java.util.Map;
@@ -26,9 +26,7 @@ public class Day02 {
 		"green", IntVec3.UNIT_Y,
 		"blue", IntVec3.UNIT_Z
 	);
-	private static final int RED_LIMIT = 12;
-	private static final int GREEN_LIMIT = 13;
-	private static final int BLUE_LIMIT = 14;
+	private static final IntVec3 P1_LIMIT = new IntVec3(12, 13, 14);
 
 	public static int part1(String input) {
 		return LINE_SPLITTER.apply(input)
@@ -42,22 +40,16 @@ public class Day02 {
 		return LINE_SPLITTER.apply(input)
 			.map(Day02::parseGame)
 			.map(Day02::minimalVec)
-			.mapToInt(Day02::vecPower)
+			.mapToInt(IntVec3::componentProduct)
 			.sum();
 	}
 
 	private static boolean gameIsPossible(Game game) {
-		return game.vecs.allMatch(
-			IntVec3 -> IntVec3.x() <= RED_LIMIT && IntVec3.y() <= GREEN_LIMIT && IntVec3.z() <= BLUE_LIMIT
-		);
+		return game.vecs.allMatch(vec -> vec.boundedBy(P1_LIMIT));
 	}
 
 	static IntVec3 minimalVec(Game game) {
 		return game.vecs.collect(new MinimalVecCollector());
-	}
-
-	private static int vecPower(IntVec3 vec) {
-		return vec.x() * vec.y() * vec.z();
 	}
 
 	static Game parseGame(String line) {
