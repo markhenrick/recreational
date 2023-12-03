@@ -1,5 +1,7 @@
 package site.markhenrick.recreational.common.data;
 
+import java.util.function.IntBinaryOperator;
+
 public record IntVec3(int x, int y, int z) {
 	// TODO perhaps an IntVec wrapping an arbitrarily sized int[] is called for. Just assert matching size
 	public static final IntVec3 ORIGIN = new IntVec3(0, 0, 0);
@@ -13,6 +15,10 @@ public record IntVec3(int x, int y, int z) {
 
 	public IntVec3 scale(int scalar) {
 		return new IntVec3(x * scalar, y * scalar, z * scalar);
+	}
+
+	public IntVec3 reduce(IntBinaryOperator fn, IntVec3 other) {
+		return new IntVec3(fn.applyAsInt(this.x, other.x), fn.applyAsInt(this.y, other.y), fn.applyAsInt(this.z, other.z));
 	}
 
 	public int componentSum() {

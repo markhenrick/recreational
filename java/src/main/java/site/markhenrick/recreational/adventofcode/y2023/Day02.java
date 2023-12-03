@@ -2,19 +2,12 @@ package site.markhenrick.recreational.adventofcode.y2023;
 
 import lombok.val;
 import site.markhenrick.recreational.common.FunctionalUtil;
-import site.markhenrick.recreational.common.data.IntVec3;
 import site.markhenrick.recreational.common.StringUtil;
+import site.markhenrick.recreational.common.data.IntVec3;
 
 import java.util.Map;
-import java.util.Set;
-import java.util.function.BiConsumer;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.stream.Collector;
 import java.util.stream.Stream;
 
-import static java.lang.Math.max;
 import static site.markhenrick.recreational.common.StringUtil.*;
 
 public class Day02 {
@@ -49,7 +42,10 @@ public class Day02 {
 	}
 
 	static IntVec3 minimalVec(Game game) {
-		return game.vecs.collect(new MinimalVecCollector());
+		// Originally had a custom collector that used an intermediate mutable int[], still in git history
+		return game.vecs
+			.reduce((l, r) -> l.reduce(Math::max, r))
+			.get();
 	}
 
 	static Game parseGame(String line) {
@@ -82,42 +78,4 @@ public class Day02 {
 	}
 
 	record Game(int id, Stream<IntVec3> vecs) {}
-
-	private static class MinimalVecCollector implements Collector<IntVec3, int[], IntVec3> {
-		private static final Set<Characteristics> CHARACTERISTICS = Set.of(Characteristics.UNORDERED);
-
-		@Override
-		public Supplier<int[]> supplier() {
-			return () -> new int[3];
-		}
-
-		@Override
-		public BiConsumer<int[], IntVec3> accumulator() {
-			return (counts, vec) -> {
-				counts[0] = max(counts[0], vec.x());
-				counts[1] = max(counts[1], vec.y());
-				counts[2] = max(counts[2], vec.z());
-			};
-		}
-
-		@Override
-		public BinaryOperator<int[]> combiner() {
-			return (counts0, counts1) -> {
-				counts0[0] = max(counts0[0], counts1[0]);
-				counts0[1] = max(counts0[1], counts1[1]);
-				counts0[2] = max(counts0[2], counts1[2]);
-				return counts0;
-			};
-		}
-
-		@Override
-		public Function<int[], IntVec3> finisher() {
-			return counts -> new IntVec3(counts[0], counts[1], counts[2]);
-		}
-
-		@Override
-		public Set<Characteristics> characteristics() {
-			return CHARACTERISTICS;
-		}
-	}
 }
