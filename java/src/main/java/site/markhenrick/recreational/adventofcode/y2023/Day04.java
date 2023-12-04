@@ -21,19 +21,19 @@ public class Day04 {
 
 	public static int part2(String input) {
 		val cards = matchCounts(input)
-				.map(card -> new int[] {1, card } )
+				.map(count -> new int[] { 1, count })
 				.toList();
+		var total = 0;
 		for (var i = 0; i < cards.size(); i++) {
 			var cardPair = cards.get(i);
 			val factor = cardPair[0];
-			val score = cardPair[1];
-			for (var j = i + 1; j <= i + score && j < cards.size(); j++) {
+			val count = cardPair[1];
+			total += factor;
+			for (var j = i + 1; j <= i + count && j < cards.size(); j++) {
 				cards.get(j)[0] += factor;
 			}
 		}
-		return cards.stream()
-				.mapToInt(card -> card[0])
-				.sum();
+		return total;
 	}
 
 	private static Stream<Integer> matchCounts(String input) {
@@ -43,6 +43,8 @@ public class Day04 {
 				.map(BitSet::cardinality);
 	}
 
+	// Debatable if using BitSets is even any better given it requires parsing the numbers.
+	// Since they aren't actually used for anything but eq, a Set<String> could be usef
 	static Pair<BitSet, BitSet> parseCard(String card) {
 		val colonIndex = getSingleIndexOf(card, ':');
 		val pipeIndex = getSingleIndexOf(card, '|');
