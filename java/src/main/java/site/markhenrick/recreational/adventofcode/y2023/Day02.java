@@ -67,7 +67,8 @@ public class Day02 {
 	private static IntVec3 parseVec(String input) {
 		return COMMA_SPLITTER.apply(input)
 			.map(String::trim)
-			.map(colorSpec -> FunctionalUtil.Pair.fromArray(colorSpec.split(" ")))
+			.map(colorSpec -> colorSpec.split(" "))
+			.map(FunctionalUtil.Pair::fromArray)
 			.map(pair -> pair.mapL(Integer::parseInt))
 			.map(pair -> pair.mapR(UNITS::get))
 			.map(pair -> pair.r().scale(pair.l()))
