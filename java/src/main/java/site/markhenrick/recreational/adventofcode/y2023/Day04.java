@@ -3,9 +3,7 @@ package site.markhenrick.recreational.adventofcode.y2023;
 import lombok.val;
 import site.markhenrick.recreational.common.FunctionalUtil.Pair;
 
-import java.util.ArrayList;
 import java.util.BitSet;
-import java.util.List;
 import java.util.stream.Stream;
 
 import static site.markhenrick.recreational.common.FunctionalUtil.Pair.curry;
@@ -22,22 +20,19 @@ public class Day04 {
 	}
 
 	public static int part2(String input) {
-		// TODO just use int[][]
-		// type inference was just giving me List<Object> here
-		List<Pair<Integer, Integer>> cards = matchCounts(input)
-				.map(card -> new Pair<>(1, card))
-				.collect(ArrayList::new, ArrayList::add, ArrayList::addAll); // can't use normal one since we need mutability
+		val cards = matchCounts(input)
+				.map(card -> new int[] {1, card } )
+				.toList();
 		for (var i = 0; i < cards.size(); i++) {
 			var cardPair = cards.get(i);
-			val factor = cardPair.l();
-			val score = cardPair.r();
+			val factor = cardPair[0];
+			val score = cardPair[1];
 			for (var j = i + 1; j <= i + score && j < cards.size(); j++) {
-				val otherCard = cards.get(j);
-				cards.set(j, new Pair<>(otherCard.l() + factor, otherCard.r()));
+				cards.get(j)[0] += factor;
 			}
 		}
 		return cards.stream()
-				.mapToInt(Pair::l)
+				.mapToInt(card -> card[0])
 				.sum();
 	}
 
