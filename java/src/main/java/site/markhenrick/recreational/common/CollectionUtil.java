@@ -1,12 +1,10 @@
 package site.markhenrick.recreational.common;
 
-import static site.markhenrick.recreational.common.FunctionalUtil.applyAndReturnLeft;
+import lombok.val;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+
+import static site.markhenrick.recreational.common.FunctionalUtil.applyAndReturnLeft;
 
 public final class CollectionUtil {
 	private CollectionUtil() {}
@@ -25,5 +23,13 @@ public final class CollectionUtil {
 	public static <T> T unwrapSingleton(Collection<T> collection) {
 		assert collection.size() == 1;
 		return collection.stream().findAny().get();
+	}
+
+	public static BitSet bitSetOf(int... ints) {
+		val set = new BitSet();
+		for (val integer : ints) {
+			set.set(integer);
+		}
+		return set;
 	}
 }

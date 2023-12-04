@@ -9,11 +9,11 @@ import org.junit.jupiter.params.provider.MethodSource;
 import site.markhenrick.recreational.common.FunctionalUtil;
 import site.markhenrick.recreational.common.TestUtil;
 
-import java.util.Set;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
+import static site.markhenrick.recreational.common.CollectionUtil.bitSetOf;
 
 public class Day04Test {
 	private static final String SAMPLE_INPUT = """
@@ -42,8 +42,8 @@ Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11
 	@Test
 	void parseCard() {
 		val input = "Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53";
-		val expectedLeft = Set.of(41, 48, 83, 86, 17);
-		val expectedRight = Set.of(83, 86, 6, 31, 17, 9, 48, 53);
+		val expectedLeft = bitSetOf(41, 48, 83, 86, 17);
+		val expectedRight = bitSetOf(83, 86, 6, 31, 17, 9, 48, 53);
 
 		val actual = Day04.parseCard(input);
 
@@ -53,7 +53,7 @@ Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11
 
 	@Test
 	void scoreCard() {
-		val input = new FunctionalUtil.Pair<>(Set.of(41, 48, 83, 86, 17), Set.of(83, 86, 6, 31, 17, 9, 48, 53));
+		val input = new FunctionalUtil.Pair<>(bitSetOf(41, 48, 83, 86, 17), bitSetOf(83, 86, 6, 31, 17, 9, 48, 53));
 		val expected = 8;
 
 		val actual = Day04.scoreCard(input);

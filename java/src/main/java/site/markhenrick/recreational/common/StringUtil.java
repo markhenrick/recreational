@@ -1,5 +1,7 @@
 package site.markhenrick.recreational.common;
 
+import lombok.val;
+
 import java.util.Arrays;
 import java.util.function.Function;
 import java.util.regex.Pattern;
@@ -35,6 +37,13 @@ public class StringUtil {
 			}
 		}
 		return true;
+	}
+
+	public static int getSingleIndexOf(String input, char character) {
+		val index = input.indexOf(character);
+		assert index != -1;
+		assert input.lastIndexOf(character) == index;
+		return index;
 	}
 
 }

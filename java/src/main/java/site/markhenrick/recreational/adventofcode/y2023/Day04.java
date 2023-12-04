@@ -3,14 +3,13 @@ package site.markhenrick.recreational.adventofcode.y2023;
 import lombok.val;
 import site.markhenrick.recreational.common.FunctionalUtil.Pair;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.BitSet;
 
-import static site.markhenrick.recreational.common.StringUtil.LINE_SPLITTER;
-import static site.markhenrick.recreational.common.StringUtil.WORD_SPLITTER;
+import static site.markhenrick.recreational.common.StringUtil.*;
 
 public class Day04 {
+	// As usual the parsing code is somewhat inefficient, producing lots of new Strings
+
 	public static int part1(String input) {
 		return LINE_SPLITTER.apply(input)
 				.map(Day04::parseCard)
@@ -18,34 +17,31 @@ public class Day04 {
 				.sum();
 	}
 
-	static Pair<Set<Integer>, Set<Integer>> parseCard(String card) {
-		val colonIndex = card.indexOf(':');
-		assert colonIndex != -1;
-		assert card.lastIndexOf(':') == colonIndex;
-		val parts = card.substring(colonIndex + 2).split("\\|");
-		assert parts.length == 2;
-		return new Pair<>(parseNumberList(parts[0]), parseNumberList(parts[1]));
+	static Pair<BitSet, BitSet> parseCard(String card) {
+		val colonIndex = getSingleIndexOf(card, ':');
+		val pipeIndex = getSingleIndexOf(card, '|');
+		val winning = card.substring(colonIndex + 2, pipeIndex);
+		val have = card.substring(pipeIndex + 2);
+		return new Pair<>(parseNumberList(winning), parseNumberList(have));
 	}
 
-	// TODO the fact that the score *is* the binary intersection is too perfect. Replace this with BitSets later
-
-	private static Set<Integer> parseNumberList(String input) {
+	private static BitSet parseNumberList(String input) {
 		return WORD_SPLITTER.apply(input)
 				.filter(string -> !string.isBlank())
-				.map(Integer::parseInt)
-				.collect(Collectors.toSet());
+				.mapToInt(Integer::parseInt)
+				.collect(BitSet::new, BitSet::set, BitSet::or);
 	}
 
-	static int scoreCard(Pair<Set<Integer>, Set<Integer>> card) {
-		// Can't do this in place since the collected set is immutable. Plus destroying the input isn't great anyway
-		val intersection = new HashSet<>(card.l());
-		intersection.retainAll(card.r());
-		return scoreIntersection(intersection.size());
+	// TODO split this into intersection, map size, map score
+
+	/** Destroys card.l */
+	static int scoreCard(Pair<BitSet, BitSet> card) {
+		val intersection = card.l(); // Another thing to not do in prod code
+		intersection.and(card.r());
+		return scoreIntersection(intersection.cardinality());
 	}
 
 	static int scoreIntersection(int size) {
-		// TODO int pow
-		// Actually don't need a special case for size=0 since 0.5 truncates to 0
-		return (int) Math.pow(2, size - 1);
+		return size == 0 ? 0 : 1 << (size - 1);
 	}
 }
