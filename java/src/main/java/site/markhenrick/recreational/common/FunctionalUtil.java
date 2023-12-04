@@ -39,8 +39,16 @@ public class FunctionalUtil {
 			return new Pair<>(array[0], array[1]);
 		}
 
-		public static  <A, B, X> Function<Pair<A, B>, X> curry(BiFunction<A, B, X> fn) {
+		public static <L, R, T> Function<Pair<L, R>, T> curry(BiFunction<L, R, T> fn) {
 			return pair -> fn.apply(pair.l(), pair.r());
+		}
+
+		public static <L, R, LPrime> Function<Pair<L, R>, Pair<LPrime, R>> leftMapper(Function<L, LPrime> fn) {
+			return pair -> pair.mapL(fn);
+		}
+
+		public static <L, R, RPrime> Function<Pair<L, R>, Pair<L, RPrime>> rightMapper(Function<R, RPrime> fn) {
+			return pair -> pair.mapR(fn);
 		}
 	}
 

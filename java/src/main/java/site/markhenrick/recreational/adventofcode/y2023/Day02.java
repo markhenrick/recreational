@@ -1,7 +1,7 @@
 package site.markhenrick.recreational.adventofcode.y2023;
 
 import lombok.val;
-import site.markhenrick.recreational.common.FunctionalUtil;
+import site.markhenrick.recreational.common.FunctionalUtil.Pair;
 import site.markhenrick.recreational.common.StringUtil;
 import site.markhenrick.recreational.common.data.IntVec3;
 
@@ -69,9 +69,9 @@ public class Day02 {
 		return COMMA_SPLITTER.apply(input)
 			.map(String::trim)
 			.map(colorSpec -> colorSpec.split(" "))
-			.map(FunctionalUtil.Pair::fromArray)
-			.map(pair -> pair.mapL(Integer::parseInt))
-			.map(pair -> pair.mapR(UNITS::get))
+			.map(Pair::fromArray)
+			.map(Pair.leftMapper(Integer::parseInt))
+			.map(Pair.rightMapper(UNITS::get))
 			.map(pair -> pair.r().scale(pair.l()))
 			.reduce(IntVec3.ORIGIN, IntVec3::add);
 	}
