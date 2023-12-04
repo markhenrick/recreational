@@ -6,7 +6,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
-import site.markhenrick.recreational.common.FunctionalUtil;
 import site.markhenrick.recreational.common.TestUtil;
 
 import java.util.stream.Stream;
@@ -49,16 +48,6 @@ Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11
 
 		assertThat(actual.l()).isEqualTo(expectedLeft);
 		assertThat(actual.r()).isEqualTo(expectedRight);
-	}
-
-	@Test
-	void scoreCard() {
-		val input = new FunctionalUtil.Pair<>(bitSetOf(41, 48, 83, 86, 17), bitSetOf(83, 86, 6, 31, 17, 9, 48, 53));
-		val expected = 8;
-
-		val actual = Day04.scoreCard(input);
-
-		assertThat(actual).isEqualTo(expected);
 	}
 
 	@ParameterizedTest

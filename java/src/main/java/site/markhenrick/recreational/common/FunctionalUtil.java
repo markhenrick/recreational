@@ -1,12 +1,12 @@
 package site.markhenrick.recreational.common;
 
-import java.util.function.BiConsumer;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.function.Predicate;
+import lombok.experimental.UtilityClass;
+
+import java.util.function.*;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+@UtilityClass
 public class FunctionalUtil {
 	// Probably in the stdlib somewhere
 	public static <A> Predicate<A> constantPredicate(final boolean value) {
@@ -24,6 +24,7 @@ public class FunctionalUtil {
 		return a -> new FunctionalUtil.Pair<>(a, fn.apply(a));
 	}
 
+	// TODO move this to its own file
 	public record Pair<L, R> (L l, R r) {
 		public <LPrime> Pair<LPrime, R> mapL(final Function<? super L, ? extends LPrime> fn) {
 			return new Pair<>(fn.apply(l), r);
@@ -36,6 +37,10 @@ public class FunctionalUtil {
 		public static <T> Pair<T, T> fromArray(T[] array) {
 			assert array.length == 2; // should be a hard assert in prod code
 			return new Pair<>(array[0], array[1]);
+		}
+
+		public static  <A, B, X> Function<Pair<A, B>, X> curry(BiFunction<A, B, X> fn) {
+			return pair -> fn.apply(pair.l(), pair.r());
 		}
 	}
 

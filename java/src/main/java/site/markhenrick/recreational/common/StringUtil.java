@@ -1,5 +1,6 @@
 package site.markhenrick.recreational.common;
 
+import lombok.experimental.UtilityClass;
 import lombok.val;
 
 import java.util.Arrays;
@@ -8,6 +9,7 @@ import java.util.regex.Pattern;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+@UtilityClass
 public class StringUtil {
 	public static final Function<String, Stream<String>> LINE_SPLITTER = splitToStream("\n");
 	public static final Function<String, Stream<String>> RECORD_SPLITTER = splitToStream("\n\n");

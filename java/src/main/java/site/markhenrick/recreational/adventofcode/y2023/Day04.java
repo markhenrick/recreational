@@ -5,6 +5,8 @@ import site.markhenrick.recreational.common.FunctionalUtil.Pair;
 
 import java.util.BitSet;
 
+import static site.markhenrick.recreational.common.FunctionalUtil.Pair.curry;
+import static site.markhenrick.recreational.common.FunctionalUtil.applyAndReturnLeft;
 import static site.markhenrick.recreational.common.StringUtil.*;
 
 public class Day04 {
@@ -13,7 +15,9 @@ public class Day04 {
 	public static int part1(String input) {
 		return LINE_SPLITTER.apply(input)
 				.map(Day04::parseCard)
-				.mapToInt(Day04::scoreCard)
+				.map(curry(applyAndReturnLeft(BitSet::and))) // Don't mutate in prod guys
+				.mapToInt(BitSet::cardinality)
+				.map(Day04::scoreIntersection)
 				.sum();
 	}
 
@@ -30,15 +34,6 @@ public class Day04 {
 				.filter(string -> !string.isBlank())
 				.mapToInt(Integer::parseInt)
 				.collect(BitSet::new, BitSet::set, BitSet::or);
-	}
-
-	// TODO split this into intersection, map size, map score
-
-	/** Destroys card.l */
-	static int scoreCard(Pair<BitSet, BitSet> card) {
-		val intersection = card.l(); // Another thing to not do in prod code
-		intersection.and(card.r());
-		return scoreIntersection(intersection.cardinality());
 	}
 
 	static int scoreIntersection(int size) {

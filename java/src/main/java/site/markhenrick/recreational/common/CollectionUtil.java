@@ -1,13 +1,14 @@
 package site.markhenrick.recreational.common;
 
+import lombok.experimental.UtilityClass;
 import lombok.val;
 
 import java.util.*;
 
 import static site.markhenrick.recreational.common.FunctionalUtil.applyAndReturnLeft;
 
+@UtilityClass
 public final class CollectionUtil {
-	private CollectionUtil() {}
 
 	// Remind me to check out Guava sometime
 	public static <K, V> Map<V, Set<K>> invertMap(Map<K, V> input) {

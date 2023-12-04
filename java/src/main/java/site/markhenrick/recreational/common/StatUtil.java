@@ -1,7 +1,10 @@
 package site.markhenrick.recreational.common;
 
+import lombok.experimental.UtilityClass;
+
 import java.util.Arrays;
 
+@UtilityClass
 public class StatUtil {
 	public static long distance(long a, long b) {
 		return Math.abs(a - b);
