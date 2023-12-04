@@ -38,6 +38,20 @@ Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11
 		assertThat(Day04.part1(input)).isEqualTo(expected);
 	}
 
+	static Stream<Arguments> part2() {
+		return Stream.of(
+				arguments(30, SAMPLE_INPUT),
+				arguments(7185540, TestUtil.getResourceAsString("AoC/input/2023/day04.txt"))
+		);
+	}
+
+	@ParameterizedTest
+	@MethodSource
+	void part2(int expected, String input)
+	{
+		assertThat(Day04.part2(input)).isEqualTo(expected);
+	}
+
 	@Test
 	void parseCard() {
 		val input = "Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53";
