@@ -50,6 +50,7 @@ public class Day02 {
 	}
 
 	static Game parseGame(String line) {
+		// TODO why am I parsing the game ID when they're always contiguous? I guess the spec doesn't *guarantee* that
 		// For some reason I have decided in this bit and this bit only to microoptimise to avoid allocations
 		assert StringUtil.substringMatches(line, 0, GAME_START);
 		val semicolonIndex = line.indexOf(':');
