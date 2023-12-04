@@ -33,4 +33,10 @@ public final class CollectionUtil {
 		}
 		return set;
 	}
+
+	public static  <T> List<T> mutableListOf(T... values) {
+		val list = new ArrayList<T>(values.length);
+		list.addAll(Arrays.asList(values));
+		return list;
+	}
 }

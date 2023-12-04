@@ -38,7 +38,22 @@ public class Day03Test {
 		assertThat(Day03.part1(input)).isEqualTo(expected);
 	}
 
+	static Stream<Arguments> part2() {
+		return Stream.of(
+			arguments(467835, SAMPLE_INPUT),
+			arguments(77509019, TestUtil.getResourceAsString("AoC/input/2023/day03.txt"))
+		);
+	}
+
+	@ParameterizedTest
+	@MethodSource
+	void part2(int expected, String input)
+	{
+		assertThat(Day03.part2(input)).isEqualTo(expected);
+	}
+
 	// TODO unit tests for symbolAround
 	// TODO unit tests for safeIndex
 	// TODO unit tests for isSymbol
+	// TODO unit tests for findSurroundingStars
 }
