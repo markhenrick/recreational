@@ -2,6 +2,8 @@ package site.markhenrick.recreational.adventofcode.y2023;
 
 import lombok.val;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.util.List;
 
@@ -44,11 +46,34 @@ humidity-to-location map:
 56 93 4
 """;
 
-	private static final String SINGLE_FUNCTION = """
+	private static final String SEED_SOIL_FUNCTION = """
 seed-to-soil map:
 50 98 2
 52 50 48
 """;
+
+	@ParameterizedTest
+	@CsvSource({
+			// soil, seed
+			"0,0",
+			"1,1",
+			"48,48",
+			"49,49",
+			"52,50",
+			"53,51",
+			"98,96",
+			"99,97",
+			"50,98",
+			"51,99",
+			"81,79",
+			"14,14",
+			"57,55",
+			"13,13",
+	})
+	void mapBackwards(int input, int expected) {
+		val fn = Day05.parseFunction(SEED_SOIL_FUNCTION);
+		assertThat(Day05.mapBackwards(fn, input)).isEqualTo(expected);
+	}
 
 	@Test
 	void parseInput() {
@@ -71,6 +96,6 @@ seed-to-soil map:
 						new Day05.FunctionPiece(52, 50, 48)
 				)
 		);
-		assertThat(Day05.parseFunction(SINGLE_FUNCTION)).isEqualTo(expected);
+		assertThat(Day05.parseFunction(SEED_SOIL_FUNCTION)).isEqualTo(expected);
 	}
 }

@@ -13,6 +13,17 @@ public class Day05 {
 	private static final String SEEDS_PREFIX = "seeds: ";
 	private static final Pattern SET_NAMES_PATTERN = Pattern.compile("^([a-z]*)-to-([a-z]*) map:$");
 
+	static int mapBackwards(PiecewiseFunction function, int input) {
+		// Imperative for now. May convert to streams later, performance permitting
+		for (val piece : function.pieces) {
+			val offset = input - piece.destStart;
+			if (offset >= 0 && offset < piece.length) {
+				return piece.srcStart + offset;
+			}
+		}
+		return input;
+	}
+
 	/*
 	 * Parsing code
 	 */
@@ -59,6 +70,7 @@ public class Day05 {
 		return new FunctionPiece(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
 	}
 
+	// TODO I'm not gonna need these names am I
 	record PiecewiseFunction(String srcName, String destName, List<FunctionPiece> pieces) {}
 	record FunctionPiece(int destStart, int srcStart, int length) {}
 }
