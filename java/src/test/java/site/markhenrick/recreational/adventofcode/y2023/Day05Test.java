@@ -66,9 +66,23 @@ seed-to-soil map:
 
 	@ParameterizedTest
 	@MethodSource
-	void part1(int expected, String input)
+	void part1(long expected, String input)
 	{
 		assertThat(Day05.part1(input)).isEqualTo(expected);
+	}
+
+	static Stream<Arguments> part2() {
+		return Stream.of(
+				arguments(46L, SAMPLE_INPUT),
+				arguments(15880236L, TestUtil.getResourceAsString("AoC/input/2023/day05.txt"))
+		);
+	}
+
+	@ParameterizedTest
+	@MethodSource
+	void part2(long expected, String input)
+	{
+		assertThat(Day05.part2(input)).isEqualTo(expected);
 	}
 
 	@ParameterizedTest
@@ -80,7 +94,7 @@ seed-to-soil map:
 			"13,35",
 	})
 	void applyFns(int input, int expected) {
-		val parsed = Day05.parseInput(SAMPLE_INPUT);
+		val parsed = Day05.parseInputP1(SAMPLE_INPUT);
 		assertThat(Day05.applyFns(parsed.r(), input)).isEqualTo(expected);
 	}
 
@@ -107,9 +121,11 @@ seed-to-soil map:
 		assertThat(Day05.applyFn(fn, input)).isEqualTo(expected);
 	}
 
+	// TODO tests for P2 parsing
+
 	@Test
-	void parseInput() {
-		val actual = Day05.parseInput(SAMPLE_INPUT);
+	void parseInputP1() {
+		val actual = Day05.parseInputP1(SAMPLE_INPUT);
 		assertThat(actual.l()).isEqualTo(List.of(79L, 14L, 55L, 13L));
 		assertThat(actual.r()).hasSize(7);
 		assertThat(actual.r().get(0).srcName()).isEqualTo("seed");
