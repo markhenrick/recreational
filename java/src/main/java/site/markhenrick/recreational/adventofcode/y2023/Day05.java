@@ -13,12 +13,32 @@ public class Day05 {
 	private static final String SEEDS_PREFIX = "seeds: ";
 	private static final Pattern SET_NAMES_PATTERN = Pattern.compile("^([a-z]*)-to-([a-z]*) map:$");
 
-	static int mapBackwards(PiecewiseFunction function, int input) {
+	public static long part1(String input) {
+		val parsed = parseInput(input);
+		val seeds = parsed.l();
+		val fns = parsed.r();
+		return seeds.stream()
+				.mapToLong(seed -> applyFns(fns, seed))
+				.min()
+				.getAsLong();
+	}
+
+	// TODO this is just iterate() right?
+	static long applyFns(List<PiecewiseFunction> fns, long input) {
+		var current = input;
+		for (val fn : fns) {
+			current = applyFn(fn, current);
+		}
+		return current;
+	}
+
+	// TODO this should be a method of PiecewiseFunction
+	static long applyFn(PiecewiseFunction fn, long input) {
 		// Imperative for now. May convert to streams later, performance permitting
-		for (val piece : function.pieces) {
-			val offset = input - piece.destStart;
+		for (val piece : fn.pieces) {
+			val offset = input - piece.srcStart;
 			if (offset >= 0 && offset < piece.length) {
-				return piece.srcStart + offset;
+				return piece.destStart + offset;
 			}
 		}
 		return input;
@@ -28,12 +48,12 @@ public class Day05 {
 	 * Parsing code
 	 */
 
-	static Pair<List<Integer>, List<PiecewiseFunction>> parseInput(String input) {
+	static Pair<List<Long>, List<PiecewiseFunction>> parseInput(String input) {
 		val records = input.split("\n\n");
 		assert records.length > 1;
 		assert records[0].startsWith(SEEDS_PREFIX);
 		val seeds = WORD_SPLITTER.apply(records[0].substring(SEEDS_PREFIX.length()))
-				.map(Integer::parseInt)
+				.map(Long::parseLong)
 				.toList();
 
 		val functions = Arrays.stream(records, 1, records.length)
@@ -67,10 +87,10 @@ public class Day05 {
 	private static FunctionPiece parseFunctionPiece(String input) {
 		val parts = input.split(" ");
 		assert parts.length == 3;
-		return new FunctionPiece(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]));
+		return new FunctionPiece(Long.parseLong(parts[0]), Long.parseLong(parts[1]), Long.parseLong(parts[2]));
 	}
 
 	// TODO I'm not gonna need these names am I
 	record PiecewiseFunction(String srcName, String destName, List<FunctionPiece> pieces) {}
-	record FunctionPiece(int destStart, int srcStart, int length) {}
+	record FunctionPiece(long destStart, long srcStart, long length) {}
 }
