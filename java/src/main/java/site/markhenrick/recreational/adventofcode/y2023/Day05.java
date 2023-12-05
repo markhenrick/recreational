@@ -5,12 +5,17 @@ import site.markhenrick.recreational.common.FunctionalUtil.Pair;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.LongStream;
 
 import static site.markhenrick.recreational.common.StringUtil.WORD_SPLITTER;
 
 public class Day05 {
 	private static final String SEEDS_PREFIX = "seeds: ";
+
+	// TODO compose all the functions *first*, then apply
+	// And/or do interval arithmetic
 
 	public static long part1(String input) {
 		val parsed = parseInputP1(input);
@@ -26,26 +31,25 @@ public class Day05 {
 		val parsed = parseInputP2(input);
 		val ranges = parsed.l();
 		val fns = parsed.r();
-		// TODO decide on whether we're doing loops or streams today
-		var lowest = Long.MAX_VALUE;
-		for (val range : ranges) {
-			for (var i = 0; i < range.length; i++) {
-				lowest = Math.min(lowest, applyFns(fns, range.start + i));
-			}
-		}
-
-		return lowest;
+		return LongStream.range(0, Long.MAX_VALUE)
+				.filter(i -> inRange(ranges, applyFns(fns, i)))
+				.findFirst()
+				.getAsLong();
 	}
 
-	// TODO compose all the functions *first*, then apply
-
-	// TODO this is just iterate() right?
+	// TODO instance method?
+	// TODO this is just iterate() right? Or foldl1 <*> or something
 	static long applyFns(List<PiecewiseFunction> fns, long input) {
 		var current = input;
 		for (val fn : fns) {
 			current = fn.apply(current);
 		}
 		return current;
+	}
+
+	// TODO instance method?
+	static boolean inRange(List<SeedRange> ranges, long input) {
+		return ranges.stream().anyMatch(range -> input >= range.start && input < range.start + range.length);
 	}
 
 	/*
@@ -73,10 +77,13 @@ public class Day05 {
 		assert records[0].startsWith(SEEDS_PREFIX);
 		val seeds = parseSeedRanges(records[0].substring(SEEDS_PREFIX.length()));
 
-		val functions = Arrays.stream(records, 1, records.length)
+		// need explicit type
+		List<PiecewiseFunction> inverseFunctions = Arrays.stream(records, 1, records.length)
 				.map(Day05::parseFunction)
-				.toList();
-		return new Pair<>(seeds, functions);
+				.map(PiecewiseFunction::inverse)
+				.collect(ArrayList::new, ArrayList::add, ArrayList::addAll); // need mutation
+		Collections.reverse(inverseFunctions);
+		return new Pair<>(seeds, inverseFunctions);
 	}
 
 	static List<SeedRange> parseSeedRanges(String input) {
@@ -116,6 +123,14 @@ public class Day05 {
 				}
 			}
 			return input;
+		}
+
+		PiecewiseFunction inverse() {
+			return new PiecewiseFunction(
+					pieces.stream()
+							.map(piece -> new FunctionPiece(piece.srcStart, piece.destStart, piece.length))
+							.toList()
+			);
 		}
 	}
 
