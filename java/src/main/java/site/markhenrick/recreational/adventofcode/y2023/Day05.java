@@ -6,13 +6,11 @@ import site.markhenrick.recreational.common.FunctionalUtil.Pair;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import static site.markhenrick.recreational.common.StringUtil.WORD_SPLITTER;
 
 public class Day05 {
 	private static final String SEEDS_PREFIX = "seeds: ";
-	private static final Pattern SET_NAMES_PATTERN = Pattern.compile("^([a-z]*)-to-([a-z]*) map:$");
 
 	public static long part1(String input) {
 		val parsed = parseInputP1(input);
@@ -24,7 +22,6 @@ public class Day05 {
 				.getAsLong();
 	}
 
-	// TODO more clever solution in general
 	public static long part2(String input) {
 		val parsed = parseInputP2(input);
 		val ranges = parsed.l();
@@ -46,21 +43,9 @@ public class Day05 {
 	static long applyFns(List<PiecewiseFunction> fns, long input) {
 		var current = input;
 		for (val fn : fns) {
-			current = applyFn(fn, current);
+			current = fn.apply(current);
 		}
 		return current;
-	}
-
-	// TODO this should be a method of PiecewiseFunction
-	static long applyFn(PiecewiseFunction fn, long input) {
-		// Imperative for now. May convert to streams later, performance permitting
-		for (val piece : fn.pieces) {
-			val offset = input - piece.srcStart;
-			if (offset >= 0 && offset < piece.length) {
-				return piece.destStart + offset;
-			}
-		}
-		return input;
 	}
 
 	/*
@@ -107,23 +92,10 @@ public class Day05 {
 	static PiecewiseFunction parseFunction(String input) {
 		val lines = input.split("\n");
 		assert lines.length > 1;
-		val setNames = parseSetNames(lines[0]);
 		val pieces = Arrays.stream(lines, 1, lines.length)
 				.map(Day05::parseFunctionPiece)
 				.toList();
-		return new PiecewiseFunction(setNames.l(), setNames.r(), pieces);
-	}
-
-	private static Pair<String, String> parseSetNames(String input) {
-		val matcher = SET_NAMES_PATTERN.matcher(input);
-		var matched = matcher.find();
-		assert matched;
-		assert matcher.groupCount() == 2;
-		val srcName = matcher.group(1);
-		val destName = matcher.group(2);
-		matched = matcher.find();
-		assert !matched;
-		return new Pair<>(srcName, destName);
+		return new PiecewiseFunction(pieces);
 	}
 
 	private static FunctionPiece parseFunctionPiece(String input) {
@@ -133,7 +105,19 @@ public class Day05 {
 	}
 
 	record SeedRange(long start, long length) {}
-	// TODO I'm not gonna need these names am I
-	record PiecewiseFunction(String srcName, String destName, List<FunctionPiece> pieces) {}
+
+	record PiecewiseFunction(List<FunctionPiece> pieces) {
+		long apply(long input) {
+			// Imperative for now. May convert to streams later, performance permitting
+			for (val piece : pieces) {
+				val offset = input - piece.srcStart;
+				if (offset >= 0 && offset < piece.length) {
+					return piece.destStart + offset;
+				}
+			}
+			return input;
+		}
+	}
+
 	record FunctionPiece(long destStart, long srcStart, long length) {}
 }

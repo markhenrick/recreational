@@ -118,7 +118,7 @@ seed-to-soil map:
 	})
 	void applyFn(int input, int expected) {
 		val fn = Day05.parseFunction(SEED_SOIL_FUNCTION);
-		assertThat(Day05.applyFn(fn, input)).isEqualTo(expected);
+		assertThat(fn.apply(input)).isEqualTo(expected);
 	}
 
 	// TODO tests for P2 parsing
@@ -128,17 +128,11 @@ seed-to-soil map:
 		val actual = Day05.parseInputP1(SAMPLE_INPUT);
 		assertThat(actual.l()).isEqualTo(List.of(79L, 14L, 55L, 13L));
 		assertThat(actual.r()).hasSize(7);
-		assertThat(actual.r().get(0).srcName()).isEqualTo("seed");
-		assertThat(actual.r().get(1).srcName()).isEqualTo("soil");
-		assertThat(actual.r().get(1).destName()).isEqualTo("fertilizer");
-		assertThat(actual.r().get(6).destName()).isEqualTo("location");
 	}
 
 	@Test
 	void parseFunction() {
 		val expected = new Day05.PiecewiseFunction(
-				"seed",
-				"soil",
 				List.of(
 						new Day05.FunctionPiece(50, 98, 2),
 						new Day05.FunctionPiece(52, 50, 48)
