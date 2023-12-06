@@ -32,11 +32,26 @@ Distance:  9  40  200
 		assertThat(Day06.part1(input)).isEqualTo(expected);
 	}
 
+	static Stream<Arguments> part2() {
+		return Stream.of(
+				arguments(71503L, SAMPLE_INPUT),
+				arguments(26499773L, TestUtil.getResourceAsString("AoC/input/2023/day06.txt"))
+		);
+	}
+
+	@ParameterizedTest
+	@MethodSource
+	void part2(long expected, String input)
+	{
+		assertThat(Day06.part2(input)).isEqualTo(expected);
+	}
+
 	@ParameterizedTest
 	@CsvSource({
 			"7,		9,		4",
 			"15,	40,		8",
 			"30,	200,	9",
+			"71530,	940200,	71503",
 	})
 	void countValids(long duration, long record, long expected) {
 		assertThat(Day06.countValids(duration, record)).isEqualTo(expected);
