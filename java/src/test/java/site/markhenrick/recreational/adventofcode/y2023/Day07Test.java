@@ -30,7 +30,7 @@ QQQJA 483
 	static Stream<Arguments> part1() {
 		return Stream.of(
 			arguments(6440, SAMPLE_INPUT),
-			arguments(1, TestUtil.getResourceAsString("AoC/input/2023/day07.txt"))
+			arguments(249390788, TestUtil.getResourceAsString("AoC/input/2023/day07.txt"))
 		);
 	}
 

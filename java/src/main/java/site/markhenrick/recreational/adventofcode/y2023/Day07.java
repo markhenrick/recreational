@@ -59,6 +59,9 @@ public class Day07 {
 				if (countOfOneType == 1) {
 					countOfOneType = cardCounts.get(hand.charAt(1));
 				}
+				if (countOfOneType == 1) {
+					countOfOneType = cardCounts.get(hand.charAt(2));
+				}
 				return countOfOneType == 3 ? HandType.THREE : HandType.TWO_PAIR;
 			}
 			case 4:
