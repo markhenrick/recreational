@@ -6,14 +6,38 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
+import site.markhenrick.recreational.common.TestUtil;
 
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static site.markhenrick.recreational.common.CollectionUtil.mutableListOf;
 
 public class Day07Test {
+	private static final String SAMPLE_INPUT = """
+32T3K 765
+T55J5 684
+KK677 28
+KTJJT 220
+QQQJA 483
+""";
+
+	static Stream<Arguments> part1() {
+		return Stream.of(
+			arguments(6440, SAMPLE_INPUT),
+			arguments(1, TestUtil.getResourceAsString("AoC/input/2023/day07.txt"))
+		);
+	}
+
+	@ParameterizedTest
+	@MethodSource
+	void part1(int expected, String input)
+	{
+		assertThat(Day07.part1(input)).isEqualTo(expected);
+	}
+
 	@Test
 	void handComparator() {
 		val hands = mutableListOf("32T3K", "T55J5", "KK677", "KTJJT", "QQQJA");
@@ -23,6 +47,7 @@ public class Day07Test {
 
 	// TODO With a small enough alphabet it is probably feasible to generate an exhaustive test parameter stream
 	// will probably need to write and test a permutations function first though (no libraries allowed!)
+	// cases << |HandType| * HAND_SIZE! = 7 * 120 = 840
 	@ParameterizedTest
 	@CsvSource({
 			"11111,FIVE",
@@ -72,7 +97,7 @@ public class Day07Test {
 	@ParameterizedTest
 	@MethodSource
 	void compareCard(char card0, char card1, int expectedComparison) {
-		assertComparisonsEqual(Day07.compareCard(card0, card1), expectedComparison);
+		assertComparisonsEqual(Day07.CARD_COMPARATOR.compare(card0, card1), expectedComparison);
 	}
 
 	private void assertComparisonsEqual(int actual, int expected) {

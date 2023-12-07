@@ -1,17 +1,39 @@
 package site.markhenrick.recreational.adventofcode.y2023;
 
 import lombok.val;
+import site.markhenrick.recreational.common.FunctionalUtil;
 
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.stream.IntStream;
 
+import static site.markhenrick.recreational.common.StringUtil.LINE_SPLITTER;
+
 public class Day07 {
 	private static final int HAND_SIZE = 5;
 	@SuppressWarnings("SpellCheckingInspection")
 	public static final String CARD_STRENGTH_ASC = "23456789TJQKA";
+	// String is too small for anything other than a linear search to be worth it
+	public static Comparator<Character> CARD_COMPARATOR = Comparator.comparing(CARD_STRENGTH_ASC::indexOf);
 	public static Comparator<String> HAND_COMPARATOR = Comparator.comparing(Day07::getHandType)
 			.thenComparing(Day07::compareHandsLexicographically);
+
+	static long part1(String input) {
+		// really need that zip/enumerate now
+		// TODO rewrite with streams when it exists
+		// just like .map((i, rank) -> i * rank).sum()
+		val hands = LINE_SPLITTER.apply(input)
+			.map(Day07::parseLine)
+			.sorted(Comparator.comparing(FunctionalUtil.Pair::l, HAND_COMPARATOR))
+			.map(FunctionalUtil.Pair::r)
+			.toList();
+		long total = 0;
+		for (var i = 0; i < hands.size(); i++) {
+			// explicit cast to suppress warning
+			total += (long) (i + 1) * hands.get(i);
+		}
+		return total;
+	}
 
 	// So the invariant that x.uniqueCardCount() > y.uniqueCardCount() <=> x > y does hold, meaning it would be possible
 	// to have a comparator chain that does that first, and only looks deeper for FOUR/FULL and THREE/TWO_PAIR, but the
@@ -53,15 +75,16 @@ public class Day07 {
 		// This is a really stupid way to do it versus just a for loop
 		// TODO still need that zip(with) function
 		return IntStream.range(0, hand0.length())
-				.map(i -> compareCard(hand0.charAt(i), hand1.charAt(i)))
+				.map(i -> CARD_COMPARATOR.compare(hand0.charAt(i), hand1.charAt(i)))
 				.filter(x -> x != 0)
 				.findFirst()
 				.getAsInt();
 	}
 
-	static int compareCard(char card0, char card1) {
-		// String is too small for anything other than a linear search to be worth it
-		return CARD_STRENGTH_ASC.indexOf(card0) - CARD_STRENGTH_ASC.indexOf(card1);
+	private static FunctionalUtil.Pair<String, Integer> parseLine(String line) {
+		var parts = line.split(" ");
+		assert parts.length == 2;
+		return new FunctionalUtil.Pair<>(parts[0], Integer.parseInt(parts[1]));
 	}
 
 	enum HandType {
