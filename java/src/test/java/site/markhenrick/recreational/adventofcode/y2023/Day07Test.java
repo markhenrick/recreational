@@ -1,7 +1,13 @@
 package site.markhenrick.recreational.adventofcode.y2023;
 
+import lombok.val;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -28,5 +34,45 @@ public class Day07Test {
 	})
 	void getHandType(String input, Day07.HandType expected) {
 		assertThat(Day07.getHandType(input.toCharArray())).isEqualTo(expected);
+	}
+
+	@ParameterizedTest
+	@CsvSource({
+			"33332,	2AAAA,	1",
+			"2AAAA,	33332,	-1",
+			"77888,	77788,	1",
+			"77788,	77888,	-1",
+			"KK677,	KTJJT,	1",
+			"KTJJT,	KK677,	-1",
+			"T55J5,	QQQJA,	-1",
+			"QQQJA,	T55J5,	1",
+	})
+	void compareHandsLexicographically(String hand0, String hand1, int expectedComparison) {
+		assertComparisonsEqual(Day07.compareHandsLexicographically(hand0, hand1), expectedComparison);
+	}
+
+	static Stream<Arguments> compareCard() {
+		val numberOfCards = Day07.CARD_STRENGTH_ASC.length();
+		return IntStream.range(0, numberOfCards)
+				.boxed()
+				.flatMap(i -> IntStream.range(0, numberOfCards)
+						.mapToObj(j -> Arguments.of(Day07.CARD_STRENGTH_ASC.charAt(i), Day07.CARD_STRENGTH_ASC.charAt(j), Integer.compare(i, j)))
+				);
+	}
+
+	@ParameterizedTest
+	@MethodSource
+	void compareCard(char card0, char card1, int expectedComparison) {
+		assertComparisonsEqual(Day07.compareCard(card0, card1), expectedComparison);
+	}
+
+	private void assertComparisonsEqual(int actual, int expected) {
+		if (expected == 0) {
+			assertThat(actual).isEqualTo(0);
+		} else if (expected < 0) {
+			assertThat(actual).isLessThan(0);
+		} else {
+			assertThat(actual).isGreaterThan(0);
+		}
 	}
 }

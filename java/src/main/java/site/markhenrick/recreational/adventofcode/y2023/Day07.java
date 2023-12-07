@@ -3,9 +3,12 @@ package site.markhenrick.recreational.adventofcode.y2023;
 import lombok.val;
 
 import java.util.HashMap;
+import java.util.stream.IntStream;
 
 public class Day07 {
 	private static final int HAND_SIZE = 5;
+	@SuppressWarnings("SpellCheckingInspection")
+	public static final String CARD_STRENGTH_ASC = "23456789TJQKA";
 
 	// So the invariant that x.uniqueCardCount() > y.uniqueCardCount() <=> x > y does hold, meaning it would be possible
 	// to have a comparator chain that does that first, and only looks deeper for FOUR/FULL and THREE/TWO_PAIR, but the
@@ -40,6 +43,23 @@ public class Day07 {
 			default:
 				throw new AssertionError("Unexpected uniqueCardCount = " + uniqueCardCount);
 		}
+	}
+
+	static int compareHandsLexicographically(String hand0, String hand1) {
+		assert hand0.length() == hand1.length();
+		// This is a really stupid way to do it versus just a for loop
+		// TODO still need that zip(with) function
+		return IntStream.range(0, hand0.length())
+				.map(i -> compareCard(hand0.charAt(i), hand1.charAt(i)))
+				.peek(System.out::println)
+				.filter(x -> x != 0)
+				.findFirst()
+				.getAsInt();
+	}
+
+	static int compareCard(char card0, char card1) {
+		// String is too small for anything other than a linear search to be worth it
+		return CARD_STRENGTH_ASC.indexOf(card0) - CARD_STRENGTH_ASC.indexOf(card1);
 	}
 
 	enum HandType {
