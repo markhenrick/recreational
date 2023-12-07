@@ -1,6 +1,7 @@
 package site.markhenrick.recreational.adventofcode.y2023;
 
 import lombok.val;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -9,9 +10,17 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+import static site.markhenrick.recreational.common.CollectionUtil.mutableListOf;
 
 public class Day07Test {
+	@Test
+	void handComparator() {
+		val hands = mutableListOf("32T3K", "T55J5", "KK677", "KTJJT", "QQQJA");
+		hands.sort(Day07.HAND_COMPARATOR);
+		assertThat(hands).containsExactly("32T3K", "KTJJT", "KK677", "T55J5", "QQQJA");
+	}
+
 	// TODO With a small enough alphabet it is probably feasible to generate an exhaustive test parameter stream
 	// will probably need to write and test a permutations function first though (no libraries allowed!)
 	@ParameterizedTest
@@ -33,7 +42,7 @@ public class Day07Test {
 			"54321,HIGH",
 	})
 	void getHandType(String input, Day07.HandType expected) {
-		assertThat(Day07.getHandType(input.toCharArray())).isEqualTo(expected);
+		assertThat(Day07.getHandType(input)).isEqualTo(expected);
 	}
 
 	@ParameterizedTest
