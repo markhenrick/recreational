@@ -6,8 +6,11 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
+import site.markhenrick.recreational.common.FunctionalUtil;
+import site.markhenrick.recreational.common.Permutator;
 import site.markhenrick.recreational.common.TestUtil;
 
+import java.util.Map;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -45,27 +48,29 @@ QQQJA 483
 		assertThat(hands).containsExactly("32T3K", "KTJJT", "KK677", "T55J5", "QQQJA");
 	}
 
-	// TODO With a small enough alphabet it is probably feasible to generate an exhaustive test parameter stream
-	// will probably need to write and test a permutations function first though (no libraries allowed!)
-	// cases << |HandType| * HAND_SIZE! = 7 * 120 = 840
+	// Using String instead of Character to make joining easier
+	private static Stream<Arguments> argumentsForType(Day07.HandType expectedType, Map<String, Integer> cards) {
+		assert cards.keySet().stream().allMatch(string -> string.length() == 1);
+		assert cards.values().stream().mapToInt(x -> x).sum() == 5;
+		return Permutator.uniquePermutations(cards)
+			.map(list -> String.join("", list))
+			.map(permutation -> Arguments.of(permutation, expectedType));
+	}
+
+	static Stream<Arguments> getHandType() {
+		return FunctionalUtil.concat(
+			argumentsForType(Day07.HandType.FIVE, Map.of("A", 5)),
+			argumentsForType(Day07.HandType.FOUR, Map.of("A", 4, "K", 1)),
+			argumentsForType(Day07.HandType.FULL, Map.of("A", 3, "K", 2)),
+			argumentsForType(Day07.HandType.THREE, Map.of("A", 3, "K", 1, "Q", 1)),
+			argumentsForType(Day07.HandType.TWO_PAIR, Map.of("A", 2, "K", 2, "Q", 1)),
+			argumentsForType(Day07.HandType.ONE_PAIR, Map.of("A", 2, "K", 1, "Q", 1, "J", 1)),
+			argumentsForType(Day07.HandType.HIGH, Map.of("A", 1, "K", 1, "Q", 1, "J", 1, "T", 1))
+		);
+	}
+
 	@ParameterizedTest
-	@CsvSource({
-			"11111,FIVE",
-			"11112,FOUR",
-			"11211,FOUR",
-			"11112,FOUR",
-			"11222,FULL",
-			"11122,FULL",
-			"11212,FULL",
-			"11123,THREE",
-			"12232,THREE",
-			"11223,TWO_PAIR",
-			"12332,TWO_PAIR",
-			"11234,ONE_PAIR",
-			"12334,ONE_PAIR",
-			"12345,HIGH",
-			"54321,HIGH",
-	})
+	@MethodSource
 	void getHandType(String input, Day07.HandType expected) {
 		assertThat(Day07.getHandType(input)).isEqualTo(expected);
 	}

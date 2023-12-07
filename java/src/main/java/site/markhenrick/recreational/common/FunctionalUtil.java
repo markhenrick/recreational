@@ -2,6 +2,7 @@ package site.markhenrick.recreational.common;
 
 import lombok.experimental.UtilityClass;
 
+import java.util.Arrays;
 import java.util.function.*;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -55,5 +56,11 @@ public class FunctionalUtil {
 	public static Stream<Character> charStream(char[] source) {
 		return IntStream.rangeClosed(0, source.length - 1)
 			.mapToObj(i -> source[i]);
+	}
+
+	public static <T> Stream<T> concat(Stream<T>... streams) {
+		return Arrays.stream(streams)
+			.reduce(Stream::concat)
+			.get();
 	}
 }
