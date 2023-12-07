@@ -5,6 +5,8 @@ import lombok.val;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -17,6 +19,16 @@ public class Permutator {
 		return IntStream.range(0, list.size())
 			.boxed()
 			.flatMap(i -> permutations(listWithout(list, i)).map(subPermutation -> append(subPermutation, list.get(i))));
+	}
+
+	public static <T> Stream<List<T>> uniquePermutations(Map<T, Integer> frequencies) {
+		// TODO placeholder implementation. More efficient version should be possible
+		val bigList = frequencies.entrySet().stream()
+			.flatMap(entry -> IntStream.range(0, entry.getValue()).mapToObj(i -> entry.getKey()))
+			.toList();
+		return permutations(bigList)
+			.collect(Collectors.toSet())
+			.stream();
 	}
 
 	// TODO implement a List<T> view that does this without creating a new list
