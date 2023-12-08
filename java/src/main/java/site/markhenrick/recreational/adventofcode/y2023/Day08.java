@@ -12,6 +12,25 @@ import static site.markhenrick.recreational.common.StringUtil.LINE_SPLITTER;
 
 public class Day08 {
 	// true = right, false = left
+	// this also contains some satisfyingly literal use of Pair.l/r
+	public static final String AAA = "AAA";
+	public static final String ZZZ = "ZZZ";
+
+	public static int part1(String input) {
+		val parsed = parseInput(input);
+		return countSteps(parsed.r(), parsed.l(), AAA, ZZZ);
+	}
+
+	private static int countSteps(Map<String, Pair<String, String>> graph, List<Boolean> walk, String start, String end) {
+		int i;
+		var cursor = start;
+		for (i = 0; !cursor.equals(end) && i < Integer.MAX_VALUE; i++) {
+			// Could probably go full K&R and stick everything in the for() but let's not
+			val edge = graph.get(cursor);
+			cursor = walk.get(i % walk.size()) ? edge.r() : edge.l();
+		}
+		return i;
+	}
 
 	static Pair<List<Boolean>, Map<String, Pair<String, String>>> parseInput(String input) {
 		val records = input.split("\n\n");
