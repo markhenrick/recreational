@@ -10,7 +10,8 @@ import java.util.stream.IntStream;
 import static site.markhenrick.recreational.common.StringUtil.LINE_SPLITTER;
 
 public class Day07 {
-	private static final int HAND_SIZE = 5;
+	public static final int HAND_SIZE = 5;
+	public static final Character JOKER = 'J';
 	@SuppressWarnings("SpellCheckingInspection")
 	public static final String CARD_STRENGTH_ASC = "23456789TJQKA";
 	// String is too small for anything other than a linear search to be worth it

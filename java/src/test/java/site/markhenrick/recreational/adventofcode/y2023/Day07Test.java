@@ -8,8 +8,11 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import site.markhenrick.recreational.common.FunctionalUtil;
 import site.markhenrick.recreational.common.Permutator;
+import site.markhenrick.recreational.common.StringUtil;
 import site.markhenrick.recreational.common.TestUtil;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -51,7 +54,7 @@ QQQJA 483
 	// Using String instead of Character to make joining easier
 	private static Stream<Arguments> argumentsForType(Day07.HandType expectedType, Map<String, Integer> cards) {
 		assert cards.keySet().stream().allMatch(string -> string.length() == 1);
-		assert cards.values().stream().mapToInt(x -> x).sum() == 5;
+		assert cards.values().stream().mapToInt(x -> x).sum() == Day07.HAND_SIZE;
 		return Permutator.uniquePermutations(cards)
 			.map(list -> String.join("", list))
 			.map(permutation -> Arguments.of(permutation, expectedType));
@@ -113,5 +116,42 @@ QQQJA 483
 		} else {
 			assertThat(actual).isGreaterThan(0);
 		}
+	}
+
+	private static Stream<List<Character>> putJokersIn(List<Character> hand) {
+		// TODO stream-based version
+		assert !hand.contains(Day07.JOKER);
+		val handSize = hand.size();
+		val handCount = 1 << handSize;
+		val hands = new ArrayList<List<Character>>(handCount);
+		for (var i = 0; i < handCount; i++) {
+			val newHand = new ArrayList<>(hand);
+			for (var j = 0; j < handSize; j++) {
+				if ((i & (1 << j)) != 0) {
+					newHand.set(j, Day07.JOKER);
+				}
+			}
+			hands.add(newHand);
+		}
+		return hands.stream();
+	}
+
+	@Test
+	void putJokersInMetaTest() {
+		val input = StringUtil.charStream("AAB").toList();
+		val expected = Stream.of(
+			"AAB",
+			"AAJ",
+			"AJB",
+			"AJJ",
+			"JAB",
+			"JAJ",
+			"JJB",
+			"JJJ"
+		)
+			.map(string -> StringUtil.charStream(string).toList())
+			.toList();
+		val actual = putJokersIn(input).toList();
+		assertThat(actual).containsExactlyInAnyOrderElementsOf(expected);
 	}
 }
