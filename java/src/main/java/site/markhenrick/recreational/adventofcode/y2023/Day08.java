@@ -16,6 +16,16 @@ public class Day08 {
 	public static final String AAA = "AAA";
 	public static final String ZZZ = "ZZZ";
 
+	/*
+	TODO notes for part 2:
+	Basically a DFS
+	The "all nodes ending with A" thing is only at the start, so just do a full map scan once. No data structure changes
+	val frontier: Queue<String>
+	Any chance of infinite loops?
+
+	Also look at other graph search algorithms. Perhaps it Dijkstra's not BFS that I need to write
+	 */
+
 	public static int part1(String input) {
 		val parsed = parseInput(input);
 		return countSteps(parsed.r(), parsed.l(), AAA, ZZZ);
