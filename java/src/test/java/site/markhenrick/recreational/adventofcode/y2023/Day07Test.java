@@ -8,11 +8,8 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import site.markhenrick.recreational.common.FunctionalUtil;
 import site.markhenrick.recreational.common.Permutator;
-import site.markhenrick.recreational.common.StringUtil;
 import site.markhenrick.recreational.common.TestUtil;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -52,67 +49,84 @@ QQQJA 483
 	}
 
 	// Using String instead of Character to make joining easier
-	private static Stream<Arguments> argumentsForType(Day07.HandType expectedType, Map<String, Integer> cards, boolean withJokers) {
-		assert cards.keySet().stream().allMatch(string -> string.length() == 1);
-		assert cards.values().stream().mapToInt(x -> x).sum() == Day07.HAND_SIZE;
-		var stream = Permutator.uniquePermutations(cards);
-		if (withJokers) {
-			stream = stream.flatMap(Day07Test::putJokersIn);
-		}
-		return stream
+	private static Stream<Arguments> argumentsForType(Day07.HandType expectedType, Map<String, Integer> cards) {
+		return Permutator.uniquePermutations(cards)
 			.map(list -> String.join("", list))
 			.map(permutation -> Arguments.of(permutation, expectedType));
 	}
 
-
-	private static Stream<Arguments> argumentsForTypeP1(Day07.HandType expectedType, Map<String, Integer> cards) {
-		return argumentsForType(expectedType, cards, false);
+	// TODO merge these with a big method of (hand, p1type, p2type) and map as needed
+	private static Stream<Arguments> jokerlessHands() {
+		// could do pairs and map at the end...
+		//noinspection unchecked
+		return FunctionalUtil.concat(
+			argumentsForType(Day07.HandType.FIVE, Map.of("A", 5)),
+			argumentsForType(Day07.HandType.FOUR, Map.of("A", 4, "K", 1)),
+			argumentsForType(Day07.HandType.FULL, Map.of("A", 3, "K", 2)),
+			argumentsForType(Day07.HandType.THREE, Map.of("A", 3, "K", 1, "Q", 1)),
+			argumentsForType(Day07.HandType.TWO_PAIR, Map.of("A", 2, "K", 2, "Q", 1)),
+			argumentsForType(Day07.HandType.ONE_PAIR, Map.of("A", 2, "K", 1, "Q", 1, "9", 1)),
+			argumentsForType(Day07.HandType.HIGH, Map.of("A", 1, "K", 1, "Q", 1, "9", 1, "8", 1))
+		);
 	}
 
-	private static Stream<Arguments> argumentsForTypeP2(Day07.HandType expectedType, Map<String, Integer> cards) {
-		return argumentsForType(expectedType, cards, true);
+	private static Stream<Arguments> jokerHandsP1() {
+		//noinspection unchecked
+		return FunctionalUtil.concat(
+			argumentsForType(Day07.HandType.FIVE, Map.of("J", 5)),
+			argumentsForType(Day07.HandType.FOUR, Map.of("J", 4, "K", 1)),
+			argumentsForType(Day07.HandType.FULL, Map.of("J", 3, "K", 2)),
+			argumentsForType(Day07.HandType.FULL, Map.of("J", 2, "K", 3)),
+			argumentsForType(Day07.HandType.FOUR, Map.of("J", 1, "K", 4)),
+			argumentsForType(Day07.HandType.THREE, Map.of("A", 3, "K", 1, "J", 1)),
+			argumentsForType(Day07.HandType.TWO_PAIR, Map.of("A", 2, "K", 1, "J", 2)),
+			argumentsForType(Day07.HandType.THREE, Map.of("A", 1, "K", 1, "J", 3)),
+			argumentsForType(Day07.HandType.TWO_PAIR, Map.of("A", 2, "K", 2, "J", 1)),
+			argumentsForType(Day07.HandType.ONE_PAIR, Map.of("A", 2, "K", 1, "Q", 1, "J", 1)),
+			argumentsForType(Day07.HandType.ONE_PAIR, Map.of("A", 1, "K", 1, "Q", 1, "J", 2)),
+			argumentsForType(Day07.HandType.HIGH, Map.of("A", 1, "K", 1, "Q", 1, "1", 1, "J", 1))
+		);
+	}
+
+	private static Stream<Arguments> jokerHandsP2() {
+		//noinspection unchecked
+		return FunctionalUtil.concat(
+			argumentsForType(Day07.HandType.FIVE, Map.of("J", 5)),
+			argumentsForType(Day07.HandType.FIVE, Map.of("J", 4, "K", 1)),
+			argumentsForType(Day07.HandType.FIVE, Map.of("J", 3, "K", 2)),
+			argumentsForType(Day07.HandType.FIVE, Map.of("J", 2, "K", 3)),
+			argumentsForType(Day07.HandType.FIVE, Map.of("J", 1, "K", 4)),
+			argumentsForType(Day07.HandType.FOUR, Map.of("A", 3, "K", 1, "J", 1)),
+			argumentsForType(Day07.HandType.FOUR, Map.of("A", 2, "K", 1, "J", 2)),
+			argumentsForType(Day07.HandType.FOUR, Map.of("A", 1, "K", 1, "J", 3)),
+			argumentsForType(Day07.HandType.FULL, Map.of("A", 2, "K", 2, "J", 1)),
+			argumentsForType(Day07.HandType.THREE, Map.of("A", 2, "K", 1, "Q", 1, "J", 1)),
+			argumentsForType(Day07.HandType.THREE, Map.of("A", 1, "K", 1, "Q", 1, "J", 2)),
+			argumentsForType(Day07.HandType.ONE_PAIR, Map.of("A", 1, "K", 1, "Q", 1, "1", 1, "J", 1))
+		);
 	}
 
 	static Stream<Arguments> getHandTypeP1() {
-		return FunctionalUtil.concat(
-			argumentsForTypeP1(Day07.HandType.FIVE, Map.of("A", 5)),
-			argumentsForTypeP1(Day07.HandType.FOUR, Map.of("A", 4, "K", 1)),
-			argumentsForTypeP1(Day07.HandType.FULL, Map.of("A", 3, "K", 2)),
-			argumentsForTypeP1(Day07.HandType.THREE, Map.of("A", 3, "K", 1, "Q", 1)),
-			argumentsForTypeP1(Day07.HandType.TWO_PAIR, Map.of("A", 2, "K", 2, "Q", 1)),
-			argumentsForTypeP1(Day07.HandType.ONE_PAIR, Map.of("A", 2, "K", 1, "Q", 1, "J", 1)),
-			argumentsForTypeP1(Day07.HandType.HIGH, Map.of("A", 1, "K", 1, "Q", 1, "J", 1, "T", 1))
-		);
+		//noinspection unchecked
+		return FunctionalUtil.concat(jokerlessHands(), jokerHandsP1());
 	}
 
 	static Stream<Arguments> getHandTypeP2() {
-		return FunctionalUtil.concat(
-			argumentsForTypeP2(Day07.HandType.FIVE, Map.of("A", 5)),
-			argumentsForTypeP2(Day07.HandType.FOUR, Map.of("A", 4, "K", 1)),
-			argumentsForTypeP2(Day07.HandType.FULL, Map.of("A", 3, "K", 2)),
-			argumentsForTypeP2(Day07.HandType.THREE, Map.of("A", 3, "K", 1, "Q", 1)),
-			argumentsForTypeP2(Day07.HandType.TWO_PAIR, Map.of("A", 2, "K", 2, "Q", 1)),
-			argumentsForTypeP2(Day07.HandType.ONE_PAIR, Map.of("A", 2, "K", 1, "Q", 1, "1", 1)),
-			argumentsForTypeP2(Day07.HandType.HIGH, Map.of("A", 1, "K", 1, "Q", 1, "1", 1, "T", 1))
-		);
+		//noinspection unchecked
+		return FunctionalUtil.concat(jokerlessHands(), jokerHandsP2());
 	}
 
 	@ParameterizedTest
 	@MethodSource
 	void getHandTypeP1(String input, Day07.HandType expected) {
+		assertThat(input).hasSize(Day07.HAND_SIZE); // meta
 		assertThat(Day07.getHandTypeP1(input)).isEqualTo(expected);
 	}
 
 	@ParameterizedTest
-//	@MethodSource // TODO these generated tests aren't correct at all! A joker can upgrade the class (obviously)
-	@CsvSource({
-		"32T3K, ONE_PAIR",
-		"KK677, TWO_PAIR",
-		"T55J5, FOUR",
-		"KTJJT, FOUR",
-		"QQQJA, FOUR",
-	})
+	@MethodSource
 	void getHandTypeP2(String input, Day07.HandType expected) {
+		assertThat(input).hasSize(Day07.HAND_SIZE); // meta
 		assertThat(Day07.getHandTypeP2(input)).isEqualTo(expected);
 	}
 
@@ -154,42 +168,5 @@ QQQJA 483
 		} else {
 			assertThat(actual).isGreaterThan(0);
 		}
-	}
-
-	private static Stream<List<String>> putJokersIn(List<String> hand) {
-		// TODO stream-based version
-		assert !hand.contains(Day07.STRING_JOKER);
-		val handSize = hand.size();
-		val handCount = 1 << handSize;
-		val hands = new ArrayList<List<String>>(handCount);
-		for (var i = 0; i < handCount; i++) {
-			val newHand = new ArrayList<>(hand);
-			for (var j = 0; j < handSize; j++) {
-				if ((i & (1 << j)) != 0) {
-					newHand.set(j, Day07.STRING_JOKER);
-				}
-			}
-			hands.add(newHand);
-		}
-		return hands.stream();
-	}
-
-	@Test
-	void putJokersInMetaTest() {
-		val input = StringUtil.charStream("AAB").map(character -> "" + character).toList();
-		val expected = Stream.of(
-			"AAB",
-			"AAJ",
-			"AJB",
-			"AJJ",
-			"JAB",
-			"JAJ",
-			"JJB",
-			"JJJ"
-		)
-			.map(string -> StringUtil.charStream(string).map(character -> "" + character).toList())
-			.toList();
-		val actual = putJokersIn(input).toList();
-		assertThat(actual).containsExactlyInAnyOrderElementsOf(expected);
 	}
 }
