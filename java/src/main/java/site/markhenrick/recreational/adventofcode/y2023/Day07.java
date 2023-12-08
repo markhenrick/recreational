@@ -12,6 +12,7 @@ import java.util.stream.IntStream;
 import static site.markhenrick.recreational.common.StringUtil.LINE_SPLITTER;
 
 public class Day07 {
+	// TODO Still not really satisfied with the amount of duplication here. Needs refactoring
 	public static final int HAND_SIZE = 5;
 	public static final char JOKER = 'J';
 	public static final Map.Entry<Character, Integer> DEFAULT_ENTRY = Map.entry('A', 0);
@@ -27,14 +28,22 @@ public class Day07 {
 			.thenComparing((x, y) -> compareHandsLexicographically(CARD_COMPARATOR_P2, x, y));
 
 	static long part1(String input) {
+		return processInput(HAND_COMPARATOR_P1, input);
+	}
+
+	static long part2(String input) {
+		return processInput(HAND_COMPARATOR_P2, input);
+	}
+
+	private static long processInput(Comparator<String> handComparator, String input) {
 		// really need that zip/enumerate now
 		// TODO rewrite with streams when it exists
 		// just like .map((i, rank) -> i * rank).sum()
 		val hands = LINE_SPLITTER.apply(input)
-			.map(Day07::parseLine)
-			.sorted(Comparator.comparing(FunctionalUtil.Pair::l, HAND_COMPARATOR_P1))
-			.map(FunctionalUtil.Pair::r)
-			.toList();
+				.map(Day07::parseLine)
+				.sorted(Comparator.comparing(FunctionalUtil.Pair::l, handComparator))
+				.map(FunctionalUtil.Pair::r)
+				.toList();
 		long total = 0;
 		for (var i = 0; i < hands.size(); i++) {
 			// explicit cast to suppress warning

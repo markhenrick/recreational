@@ -20,6 +20,7 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static site.markhenrick.recreational.common.CollectionUtil.mutableListOf;
 
 public class Day07Test {
+	// TODO Still not really satisfied with the amount of duplication here. Needs refactoring
 	private static final String SAMPLE_INPUT = """
 32T3K 765
 T55J5 684
@@ -40,6 +41,20 @@ QQQJA 483
 	void part1(int expected, String input)
 	{
 		assertThat(Day07.part1(input)).isEqualTo(expected);
+	}
+
+	static Stream<Arguments> part2() {
+		return Stream.of(
+				arguments(5905, SAMPLE_INPUT),
+				arguments(248750248, TestUtil.getResourceAsString("AoC/input/2023/day07.txt"))
+		);
+	}
+
+	@ParameterizedTest
+	@MethodSource
+	void part2(int expected, String input)
+	{
+		assertThat(Day07.part2(input)).isEqualTo(expected);
 	}
 
 	@Test
