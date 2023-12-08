@@ -16,7 +16,7 @@ public class Day07 {
 	public static final String CARD_STRENGTH_ASC = "23456789TJQKA";
 	// String is too small for anything other than a linear search to be worth it
 	public static Comparator<Character> CARD_COMPARATOR = Comparator.comparing(CARD_STRENGTH_ASC::indexOf);
-	public static Comparator<String> HAND_COMPARATOR = Comparator.comparing(Day07::getHandType)
+	public static Comparator<String> HAND_COMPARATOR = Comparator.comparing(Day07::getHandTypeP1)
 			.thenComparing(Day07::compareHandsLexicographically);
 
 	static long part1(String input) {
@@ -40,7 +40,7 @@ public class Day07 {
 	// to have a comparator chain that does that first, and only looks deeper for FOUR/FULL and THREE/TWO_PAIR, but the
 	// optimisation would be tiny (quite possible negative), and require more complex effort to avoid building `cardCounts`
 	// twice (could do it by mapping to a LinkedHashMap early)
-	static HandType getHandType(String hand) {
+	static HandType getHandTypeP1(String hand) {
 		assert hand.length() == HAND_SIZE;
 		val cardCounts = new HashMap<Character, Integer>(HAND_SIZE);
 		// TODO probably a stdlib function for this. Write one if not
@@ -72,6 +72,11 @@ public class Day07 {
 			default:
 				throw new AssertionError("Unexpected uniqueCardCount = " + uniqueCardCount);
 		}
+	}
+
+	static HandType getHandTypeP2(String hand) {
+		// TODO
+		return getHandTypeP1(hand);
 	}
 
 	static int compareHandsLexicographically(String hand0, String hand1) {

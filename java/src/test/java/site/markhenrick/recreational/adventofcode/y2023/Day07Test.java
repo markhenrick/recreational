@@ -52,30 +52,61 @@ QQQJA 483
 	}
 
 	// Using String instead of Character to make joining easier
-	private static Stream<Arguments> argumentsForType(Day07.HandType expectedType, Map<String, Integer> cards) {
+	private static Stream<Arguments> argumentsForType(Day07.HandType expectedType, Map<String, Integer> cards, boolean withJokers) {
 		assert cards.keySet().stream().allMatch(string -> string.length() == 1);
 		assert cards.values().stream().mapToInt(x -> x).sum() == Day07.HAND_SIZE;
-		return Permutator.uniquePermutations(cards)
+		var stream = Permutator.uniquePermutations(cards);
+		if (withJokers) {
+			stream = stream.flatMap(Day07Test::putJokersIn);
+		}
+		return stream
 			.map(list -> String.join("", list))
 			.map(permutation -> Arguments.of(permutation, expectedType));
 	}
 
-	static Stream<Arguments> getHandType() {
+
+	private static Stream<Arguments> argumentsForTypeP1(Day07.HandType expectedType, Map<String, Integer> cards) {
+		return argumentsForType(expectedType, cards, false);
+	}
+
+	private static Stream<Arguments> argumentsForTypeP2(Day07.HandType expectedType, Map<String, Integer> cards) {
+		return argumentsForType(expectedType, cards, true);
+	}
+
+	static Stream<Arguments> getHandTypeP1() {
 		return FunctionalUtil.concat(
-			argumentsForType(Day07.HandType.FIVE, Map.of("A", 5)),
-			argumentsForType(Day07.HandType.FOUR, Map.of("A", 4, "K", 1)),
-			argumentsForType(Day07.HandType.FULL, Map.of("A", 3, "K", 2)),
-			argumentsForType(Day07.HandType.THREE, Map.of("A", 3, "K", 1, "Q", 1)),
-			argumentsForType(Day07.HandType.TWO_PAIR, Map.of("A", 2, "K", 2, "Q", 1)),
-			argumentsForType(Day07.HandType.ONE_PAIR, Map.of("A", 2, "K", 1, "Q", 1, "J", 1)),
-			argumentsForType(Day07.HandType.HIGH, Map.of("A", 1, "K", 1, "Q", 1, "J", 1, "T", 1))
+			argumentsForTypeP1(Day07.HandType.FIVE, Map.of("A", 5)),
+			argumentsForTypeP1(Day07.HandType.FOUR, Map.of("A", 4, "K", 1)),
+			argumentsForTypeP1(Day07.HandType.FULL, Map.of("A", 3, "K", 2)),
+			argumentsForTypeP1(Day07.HandType.THREE, Map.of("A", 3, "K", 1, "Q", 1)),
+			argumentsForTypeP1(Day07.HandType.TWO_PAIR, Map.of("A", 2, "K", 2, "Q", 1)),
+			argumentsForTypeP1(Day07.HandType.ONE_PAIR, Map.of("A", 2, "K", 1, "Q", 1, "J", 1)),
+			argumentsForTypeP1(Day07.HandType.HIGH, Map.of("A", 1, "K", 1, "Q", 1, "J", 1, "T", 1))
+		);
+	}
+
+	static Stream<Arguments> getHandTypeP2() {
+		return FunctionalUtil.concat(
+			argumentsForTypeP2(Day07.HandType.FIVE, Map.of("A", 5)),
+			argumentsForTypeP2(Day07.HandType.FOUR, Map.of("A", 4, "K", 1)),
+			argumentsForTypeP2(Day07.HandType.FULL, Map.of("A", 3, "K", 2)),
+			argumentsForTypeP2(Day07.HandType.THREE, Map.of("A", 3, "K", 1, "Q", 1)),
+			argumentsForTypeP2(Day07.HandType.TWO_PAIR, Map.of("A", 2, "K", 2, "Q", 1)),
+			argumentsForTypeP2(Day07.HandType.ONE_PAIR, Map.of("A", 2, "K", 1, "Q", 1, "1", 1)),
+			argumentsForTypeP2(Day07.HandType.HIGH, Map.of("A", 1, "K", 1, "Q", 1, "1", 1, "T", 1))
 		);
 	}
 
 	@ParameterizedTest
 	@MethodSource
-	void getHandType(String input, Day07.HandType expected) {
-		assertThat(Day07.getHandType(input)).isEqualTo(expected);
+	void getHandTypeP1(String input, Day07.HandType expected) {
+		assertThat(Day07.getHandTypeP1(input)).isEqualTo(expected);
+	}
+
+	@ParameterizedTest
+	@MethodSource
+	void getHandTypeP2(String input, Day07.HandType expected) {
+		assertThat(Day07.getHandTypeP2(input)).isEqualTo(expected);
 	}
 
 	@ParameterizedTest
@@ -118,17 +149,18 @@ QQQJA 483
 		}
 	}
 
-	private static Stream<List<Character>> putJokersIn(List<Character> hand) {
+	private static Stream<List<String>> putJokersIn(List<String> hand) {
 		// TODO stream-based version
-		assert !hand.contains(Day07.JOKER);
+		val stringJoker = "" + Day07.JOKER;
+		assert !hand.contains(stringJoker);
 		val handSize = hand.size();
 		val handCount = 1 << handSize;
-		val hands = new ArrayList<List<Character>>(handCount);
+		val hands = new ArrayList<List<String>>(handCount);
 		for (var i = 0; i < handCount; i++) {
 			val newHand = new ArrayList<>(hand);
 			for (var j = 0; j < handSize; j++) {
 				if ((i & (1 << j)) != 0) {
-					newHand.set(j, Day07.JOKER);
+					newHand.set(j, stringJoker);
 				}
 			}
 			hands.add(newHand);
@@ -138,7 +170,7 @@ QQQJA 483
 
 	@Test
 	void putJokersInMetaTest() {
-		val input = StringUtil.charStream("AAB").toList();
+		val input = StringUtil.charStream("AAB").map(character -> "" + character).toList();
 		val expected = Stream.of(
 			"AAB",
 			"AAJ",
@@ -149,7 +181,7 @@ QQQJA 483
 			"JJB",
 			"JJJ"
 		)
-			.map(string -> StringUtil.charStream(string).toList())
+			.map(string -> StringUtil.charStream(string).map(character -> "" + character).toList())
 			.toList();
 		val actual = putJokersIn(input).toList();
 		assertThat(actual).containsExactlyInAnyOrderElementsOf(expected);
