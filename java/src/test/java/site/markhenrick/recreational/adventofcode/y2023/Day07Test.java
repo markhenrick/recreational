@@ -104,7 +104,14 @@ QQQJA 483
 	}
 
 	@ParameterizedTest
-	@MethodSource
+//	@MethodSource // TODO these generated tests aren't correct at all! A joker can upgrade the class (obviously)
+	@CsvSource({
+		"32T3K, ONE_PAIR",
+		"KK677, TWO_PAIR",
+		"T55J5, FOUR",
+		"KTJJT, FOUR",
+		"QQQJA, FOUR",
+	})
 	void getHandTypeP2(String input, Day07.HandType expected) {
 		assertThat(Day07.getHandTypeP2(input)).isEqualTo(expected);
 	}
@@ -151,8 +158,7 @@ QQQJA 483
 
 	private static Stream<List<String>> putJokersIn(List<String> hand) {
 		// TODO stream-based version
-		val stringJoker = "" + Day07.JOKER;
-		assert !hand.contains(stringJoker);
+		assert !hand.contains(Day07.STRING_JOKER);
 		val handSize = hand.size();
 		val handCount = 1 << handSize;
 		val hands = new ArrayList<List<String>>(handCount);
@@ -160,7 +166,7 @@ QQQJA 483
 			val newHand = new ArrayList<>(hand);
 			for (var j = 0; j < handSize; j++) {
 				if ((i & (1 << j)) != 0) {
-					newHand.set(j, stringJoker);
+					newHand.set(j, Day07.STRING_JOKER);
 				}
 			}
 			hands.add(newHand);

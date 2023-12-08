@@ -5,6 +5,7 @@ import site.markhenrick.recreational.common.FunctionalUtil;
 
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.IntStream;
 
 import static site.markhenrick.recreational.common.StringUtil.LINE_SPLITTER;
@@ -12,6 +13,8 @@ import static site.markhenrick.recreational.common.StringUtil.LINE_SPLITTER;
 public class Day07 {
 	public static final int HAND_SIZE = 5;
 	public static final Character JOKER = 'J';
+	public static final String STRING_JOKER = "" + JOKER;
+	public static final Character ACE = 'A';
 	@SuppressWarnings("SpellCheckingInspection")
 	public static final String CARD_STRENGTH_ASC = "23456789TJQKA";
 	// String is too small for anything other than a linear search to be worth it
@@ -75,8 +78,22 @@ public class Day07 {
 	}
 
 	static HandType getHandTypeP2(String hand) {
-		// TODO
-		return getHandTypeP1(hand);
+		// TODO temporary code to prove a concept, which hence includes duplication and extreme inefficiency
+		var mutableHand = hand;
+		if (hand.contains(STRING_JOKER)) {
+			val cardCounts = new HashMap<Character, Integer>(HAND_SIZE);
+			for (var j = 0; j < hand.length(); j++) {
+				cardCounts.merge(hand.charAt(j), 1, Integer::sum);
+			}
+			cardCounts.remove(JOKER);
+			val modalCard = cardCounts.entrySet().stream()
+				.max(Map.Entry.comparingByValue())
+				.map(Map.Entry::getKey)
+				.orElse(ACE);
+			mutableHand = hand.replaceAll(STRING_JOKER, "" + modalCard);
+			System.out.println("Transformed " + hand + " to " + mutableHand);
+		}
+		return getHandTypeP1(mutableHand);
 	}
 
 	static int compareHandsLexicographically(String hand0, String hand1) {
