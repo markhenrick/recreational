@@ -1,13 +1,14 @@
 package site.markhenrick.recreational.adventofcode.y2023;
 
 import lombok.val;
+import org.javatuples.Triplet;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
-import site.markhenrick.recreational.common.FunctionalUtil;
 import site.markhenrick.recreational.common.Permutator;
+import site.markhenrick.recreational.common.StringUtil;
 import site.markhenrick.recreational.common.TestUtil;
 
 import java.util.Map;
@@ -48,72 +49,46 @@ QQQJA 483
 		assertThat(hands).containsExactly("32T3K", "KTJJT", "KK677", "T55J5", "QQQJA");
 	}
 
-	// Using String instead of Character to make joining easier
-	private static Stream<Arguments> argumentsForType(Day07.HandType expectedType, Map<String, Integer> cards) {
+	private static Stream<Arguments> argumentsForType(Map<Character, Integer> cards, Day07.HandType expectedType) {
 		return Permutator.uniquePermutations(cards)
-			.map(list -> String.join("", list))
+			.map(list -> list.stream().collect(new StringUtil.StringCollector()))
 			.map(permutation -> Arguments.of(permutation, expectedType));
 	}
 
-	// TODO merge these with a big method of (hand, p1type, p2type) and map as needed
-	private static Stream<Arguments> jokerlessHands() {
-		// could do pairs and map at the end...
-		//noinspection unchecked
-		return FunctionalUtil.concat(
-			argumentsForType(Day07.HandType.FIVE, Map.of("A", 5)),
-			argumentsForType(Day07.HandType.FOUR, Map.of("A", 4, "K", 1)),
-			argumentsForType(Day07.HandType.FULL, Map.of("A", 3, "K", 2)),
-			argumentsForType(Day07.HandType.THREE, Map.of("A", 3, "K", 1, "Q", 1)),
-			argumentsForType(Day07.HandType.TWO_PAIR, Map.of("A", 2, "K", 2, "Q", 1)),
-			argumentsForType(Day07.HandType.ONE_PAIR, Map.of("A", 2, "K", 1, "Q", 1, "9", 1)),
-			argumentsForType(Day07.HandType.HIGH, Map.of("A", 1, "K", 1, "Q", 1, "9", 1, "8", 1))
-		);
-	}
-
-	private static Stream<Arguments> jokerHandsP1() {
-		//noinspection unchecked
-		return FunctionalUtil.concat(
-			argumentsForType(Day07.HandType.FIVE, Map.of("J", 5)),
-			argumentsForType(Day07.HandType.FOUR, Map.of("J", 4, "K", 1)),
-			argumentsForType(Day07.HandType.FULL, Map.of("J", 3, "K", 2)),
-			argumentsForType(Day07.HandType.FULL, Map.of("J", 2, "K", 3)),
-			argumentsForType(Day07.HandType.FOUR, Map.of("J", 1, "K", 4)),
-			argumentsForType(Day07.HandType.THREE, Map.of("A", 3, "K", 1, "J", 1)),
-			argumentsForType(Day07.HandType.TWO_PAIR, Map.of("A", 2, "K", 1, "J", 2)),
-			argumentsForType(Day07.HandType.THREE, Map.of("A", 1, "K", 1, "J", 3)),
-			argumentsForType(Day07.HandType.TWO_PAIR, Map.of("A", 2, "K", 2, "J", 1)),
-			argumentsForType(Day07.HandType.ONE_PAIR, Map.of("A", 2, "K", 1, "Q", 1, "J", 1)),
-			argumentsForType(Day07.HandType.ONE_PAIR, Map.of("A", 1, "K", 1, "Q", 1, "J", 2)),
-			argumentsForType(Day07.HandType.HIGH, Map.of("A", 1, "K", 1, "Q", 1, "1", 1, "J", 1))
-		);
-	}
-
-	private static Stream<Arguments> jokerHandsP2() {
-		//noinspection unchecked
-		return FunctionalUtil.concat(
-			argumentsForType(Day07.HandType.FIVE, Map.of("J", 5)),
-			argumentsForType(Day07.HandType.FIVE, Map.of("J", 4, "K", 1)),
-			argumentsForType(Day07.HandType.FIVE, Map.of("J", 3, "K", 2)),
-			argumentsForType(Day07.HandType.FIVE, Map.of("J", 2, "K", 3)),
-			argumentsForType(Day07.HandType.FIVE, Map.of("J", 1, "K", 4)),
-			argumentsForType(Day07.HandType.FOUR, Map.of("A", 3, "K", 1, "J", 1)),
-			argumentsForType(Day07.HandType.FOUR, Map.of("A", 2, "K", 1, "J", 2)),
-			argumentsForType(Day07.HandType.FOUR, Map.of("A", 1, "K", 1, "J", 3)),
-			argumentsForType(Day07.HandType.FULL, Map.of("A", 2, "K", 2, "J", 1)),
-			argumentsForType(Day07.HandType.THREE, Map.of("A", 2, "K", 1, "Q", 1, "J", 1)),
-			argumentsForType(Day07.HandType.THREE, Map.of("A", 1, "K", 1, "Q", 1, "J", 2)),
-			argumentsForType(Day07.HandType.ONE_PAIR, Map.of("A", 1, "K", 1, "Q", 1, "1", 1, "J", 1))
-		);
+	private static Stream<Triplet<Map<Character, Integer>, Day07.HandType, Day07.HandType>> hands() {
+		return Stream.of(
+				// hand, P1 type, P2 type
+				// jokerless - P1 == P2
+				Triplet.with("AAAAA", Day07.HandType.FIVE, Day07.HandType.FIVE),
+				Triplet.with("AAAAK", Day07.HandType.FOUR, Day07.HandType.FOUR),
+				Triplet.with("AAAKK", Day07.HandType.FULL, Day07.HandType.FULL),
+				Triplet.with("AAAKQ", Day07.HandType.THREE, Day07.HandType.THREE),
+				Triplet.with("AAKKQ", Day07.HandType.TWO_PAIR, Day07.HandType.TWO_PAIR),
+				Triplet.with("AAKQ9", Day07.HandType.ONE_PAIR, Day07.HandType.ONE_PAIR),
+				Triplet.with("AKQ98", Day07.HandType.HIGH, Day07.HandType.HIGH),
+				// jokers
+				Triplet.with("JJJJJ", Day07.HandType.FIVE, Day07.HandType.FIVE),
+				Triplet.with("JJJJK", Day07.HandType.FOUR, Day07.HandType.FIVE),
+				Triplet.with("JJJKK", Day07.HandType.FULL, Day07.HandType.FIVE),
+				Triplet.with("JJKKK", Day07.HandType.FULL, Day07.HandType.FIVE),
+				Triplet.with("JKKKK", Day07.HandType.FOUR, Day07.HandType.FIVE),
+				Triplet.with("AAAKJ", Day07.HandType.THREE, Day07.HandType.FOUR),
+				Triplet.with("AAKJJ", Day07.HandType.TWO_PAIR, Day07.HandType.FOUR),
+				Triplet.with("AKJJJ", Day07.HandType.THREE, Day07.HandType.FOUR),
+				Triplet.with("AAKKJ", Day07.HandType.TWO_PAIR, Day07.HandType.FULL),
+				Triplet.with("AAKQJ", Day07.HandType.ONE_PAIR, Day07.HandType.THREE),
+				Triplet.with("AKQJJ", Day07.HandType.ONE_PAIR, Day07.HandType.THREE),
+				Triplet.with("AKQ1J", Day07.HandType.HIGH, Day07.HandType.ONE_PAIR)
+		)
+				.map(triplet -> Triplet.with(Day07.countCards(triplet.getValue0()), triplet.getValue1(), triplet.getValue2()));
 	}
 
 	static Stream<Arguments> getHandTypeP1() {
-		//noinspection unchecked
-		return FunctionalUtil.concat(jokerlessHands(), jokerHandsP1());
+		return hands().flatMap(triple -> argumentsForType(triple.getValue0(), triple.getValue1()));
 	}
 
 	static Stream<Arguments> getHandTypeP2() {
-		//noinspection unchecked
-		return FunctionalUtil.concat(jokerlessHands(), jokerHandsP2());
+		return hands().flatMap(triple -> argumentsForType(triple.getValue0(), triple.getValue2()));
 	}
 
 	@ParameterizedTest
