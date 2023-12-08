@@ -95,14 +95,14 @@ QQQJA 483
 	@MethodSource
 	void getHandTypeP1(String input, Day07.HandType expected) {
 		assertThat(input).hasSize(Day07.HAND_SIZE); // meta
-		assertThat(Day07.getHandTypeP1(input)).isEqualTo(expected);
+		assertThat(Day07.getHandType(input, false)).isEqualTo(expected);
 	}
 
 	@ParameterizedTest
 	@MethodSource
 	void getHandTypeP2(String input, Day07.HandType expected) {
 		assertThat(input).hasSize(Day07.HAND_SIZE); // meta
-		assertThat(Day07.getHandTypeP2(input)).isEqualTo(expected);
+		assertThat(Day07.getHandType(input, true)).isEqualTo(expected);
 	}
 
 	@ParameterizedTest

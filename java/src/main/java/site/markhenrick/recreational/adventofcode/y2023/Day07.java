@@ -5,6 +5,7 @@ import site.markhenrick.recreational.common.FunctionalUtil;
 
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
 
@@ -12,14 +13,13 @@ import static site.markhenrick.recreational.common.StringUtil.LINE_SPLITTER;
 
 public class Day07 {
 	public static final int HAND_SIZE = 5;
-	public static final Character JOKER = 'J';
-	public static final String STRING_JOKER = "" + JOKER;
+	public static final char JOKER = 'J';
 	public static final Map.Entry<Character, Integer> DEFAULT_ENTRY = Map.entry('A', 0);
 	@SuppressWarnings("SpellCheckingInspection")
 	public static final String CARD_STRENGTH_ASC = "23456789TJQKA";
 	// String is too small for anything other than a linear search to be worth it
 	public static Comparator<Character> CARD_COMPARATOR = Comparator.comparing(CARD_STRENGTH_ASC::indexOf);
-	public static Comparator<String> HAND_COMPARATOR = Comparator.comparing(Day07::getHandTypeP1)
+	public static Comparator<String> HAND_COMPARATOR = Comparator.comparing((String hand) -> getHandType(hand, false))
 			.thenComparing(Day07::compareHandsLexicographically);
 
 	static long part1(String input) {
@@ -48,7 +48,6 @@ public class Day07 {
 		return counts;
 	}
 
-	// TODO actually use this
 	/** Mutates input in place, but also returns it for convenience in streams */
 	static Map<Character, Integer> replaceJokersWithModalCard(Map<Character, Integer> counts) {
 		assert mapSumsToFive(counts);
@@ -71,25 +70,29 @@ public class Day07 {
 				.sum() == HAND_SIZE;
 	}
 
-	// So the invariant that x.uniqueCardCount() > y.uniqueCardCount() <=> x > y does hold, meaning it would be possible
-	// to have a comparator chain that does that first, and only looks deeper for FOUR/FULL and THREE/TWO_PAIR, but the
-	// optimisation would be tiny (quite possible negative), and require more complex effort to avoid building `cardCounts`
-	// twice (could do it by mapping to a LinkedHashMap early)
-	static HandType getHandTypeP1(String hand) {
-		assert hand.length() == HAND_SIZE;
-		val counts = countCards(hand);
+	static HandType getHandType(String hand, boolean considerJokers) {
+		val countMap = countCards(hand);
+		if (considerJokers) {
+			replaceJokersWithModalCard(countMap);
+		}
+		val counts = countMap.values().stream().toList();
+		return getHandType(counts);
+	}
+
+	static HandType getHandType(List<Integer> counts) {
+		assert counts.stream().mapToInt(x -> x).sum() == HAND_SIZE;
 		val uniqueCardCount = counts.size();
 		switch (uniqueCardCount) {
 			case 1:
 				return HandType.FIVE;
 			case 2: {
-				val countOfOneType = counts.get(hand.charAt(0));
+				val countOfOneType = counts.get(0);
 				return countOfOneType == 1 || countOfOneType == 4 ? HandType.FOUR : HandType.FULL;
 			}
 			case 3: {
-				var countOfOneType = counts.get(hand.charAt(0));
+				var countOfOneType = counts.get(0);
 				if (countOfOneType == 1) {
-					countOfOneType = counts.get(hand.charAt(1));
+					countOfOneType = counts.get(1);
 				}
 				return countOfOneType == 3 || countOfOneType == 1 ? HandType.THREE : HandType.TWO_PAIR;
 			}
@@ -100,21 +103,6 @@ public class Day07 {
 			default:
 				throw new AssertionError("Unexpected uniqueCardCount = " + uniqueCardCount);
 		}
-	}
-
-	static HandType getHandTypeP2(String hand) {
-		// TODO temporary code to prove a concept, which hence includes duplication and extreme inefficiency
-		var mutableHand = hand;
-		if (hand.contains(STRING_JOKER)) {
-			val counts = countCards(hand);
-			counts.remove(JOKER);
-			val modalCard = counts.entrySet().stream()
-				.max(Map.Entry.comparingByValue())
-				.orElse(DEFAULT_ENTRY)
-				.getKey();
-			mutableHand = hand.replaceAll(STRING_JOKER, "" + modalCard);
-		}
-		return getHandTypeP1(mutableHand);
 	}
 
 	static int compareHandsLexicographically(String hand0, String hand1) {
