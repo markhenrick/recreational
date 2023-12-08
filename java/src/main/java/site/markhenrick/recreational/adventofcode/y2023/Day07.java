@@ -16,11 +16,15 @@ public class Day07 {
 	public static final char JOKER = 'J';
 	public static final Map.Entry<Character, Integer> DEFAULT_ENTRY = Map.entry('A', 0);
 	@SuppressWarnings("SpellCheckingInspection")
-	public static final String CARD_STRENGTH_ASC = "23456789TJQKA";
+	public static final String CARD_STRENGTH_P1 = "23456789TJQKA";
+	public static final String CARD_STRENGTH_P2 = "J23456789TQKA";
 	// String is too small for anything other than a linear search to be worth it
-	public static Comparator<Character> CARD_COMPARATOR = Comparator.comparing(CARD_STRENGTH_ASC::indexOf);
-	public static Comparator<String> HAND_COMPARATOR = Comparator.comparing((String hand) -> getHandType(hand, false))
-			.thenComparing(Day07::compareHandsLexicographically);
+	public static Comparator<Character> CARD_COMPARATOR_P1 = Comparator.comparing(CARD_STRENGTH_P1::indexOf);
+	public static Comparator<Character> CARD_COMPARATOR_P2 = Comparator.comparing(CARD_STRENGTH_P2::indexOf);
+	public static Comparator<String> HAND_COMPARATOR_P1 = Comparator.comparing((String hand) -> getHandType(hand, false))
+			.thenComparing((x, y) -> compareHandsLexicographically(CARD_COMPARATOR_P1, x, y));
+	public static Comparator<String> HAND_COMPARATOR_P2 = Comparator.comparing((String hand) -> getHandType(hand, true))
+			.thenComparing((x, y) -> compareHandsLexicographically(CARD_COMPARATOR_P2, x, y));
 
 	static long part1(String input) {
 		// really need that zip/enumerate now
@@ -28,7 +32,7 @@ public class Day07 {
 		// just like .map((i, rank) -> i * rank).sum()
 		val hands = LINE_SPLITTER.apply(input)
 			.map(Day07::parseLine)
-			.sorted(Comparator.comparing(FunctionalUtil.Pair::l, HAND_COMPARATOR))
+			.sorted(Comparator.comparing(FunctionalUtil.Pair::l, HAND_COMPARATOR_P1))
 			.map(FunctionalUtil.Pair::r)
 			.toList();
 		long total = 0;
@@ -105,12 +109,12 @@ public class Day07 {
 		}
 	}
 
-	static int compareHandsLexicographically(String hand0, String hand1) {
+	static int compareHandsLexicographically(Comparator<Character> cardComparator, String hand0, String hand1) {
 		assert hand0.length() == hand1.length();
 		// This is a really stupid way to do it versus just a for loop
 		// TODO still need that zip(with) function
 		return IntStream.range(0, hand0.length())
-				.map(i -> CARD_COMPARATOR.compare(hand0.charAt(i), hand1.charAt(i)))
+				.map(i -> cardComparator.compare(hand0.charAt(i), hand1.charAt(i)))
 				.filter(x -> x != 0)
 				.findFirst()
 				.getAsInt();

@@ -43,10 +43,17 @@ QQQJA 483
 	}
 
 	@Test
-	void handComparator() {
+	void handComparatorP1() {
 		val hands = mutableListOf("32T3K", "T55J5", "KK677", "KTJJT", "QQQJA");
-		hands.sort(Day07.HAND_COMPARATOR);
+		hands.sort(Day07.HAND_COMPARATOR_P1);
 		assertThat(hands).containsExactly("32T3K", "KTJJT", "KK677", "T55J5", "QQQJA");
+	}
+
+	@Test
+	void handComparatorP2() {
+		val hands = mutableListOf("32T3K", "T55J5", "KK677", "KTJJT", "QQQJA");
+		hands.sort(Day07.HAND_COMPARATOR_P2);
+		assertThat(hands).containsExactly("32T3K", "KK677", "T55J5", "QQQJA", "KTJJT");
 	}
 
 	private static Stream<Arguments> argumentsForType(Map<Character, Integer> cards, Day07.HandType expectedType) {
@@ -115,24 +122,57 @@ QQQJA 483
 			"KTJJT,	KK677,	-1",
 			"T55J5,	QQQJA,	-1",
 			"QQQJA,	T55J5,	1",
+			"JJJJJ,	22222,	1,",
+			"22222,	JJJJJ,	-1,",
 	})
-	void compareHandsLexicographically(String hand0, String hand1, int expectedComparison) {
-		assertComparisonsEqual(Day07.compareHandsLexicographically(hand0, hand1), expectedComparison);
+	void compareHandsLexicographicallyP1(String hand0, String hand1, int expectedComparison) {
+		assertComparisonsEqual(Day07.compareHandsLexicographically(Day07.CARD_COMPARATOR_P1, hand0, hand1), expectedComparison);
 	}
 
-	static Stream<Arguments> compareCard() {
-		val numberOfCards = Day07.CARD_STRENGTH_ASC.length();
+	@ParameterizedTest
+	@CsvSource({
+			"33332,	2AAAA,	1",
+			"2AAAA,	33332,	-1",
+			"77888,	77788,	1",
+			"77788,	77888,	-1",
+			"KK677,	KTJJT,	1",
+			"KTJJT,	KK677,	-1",
+			"T55J5,	QQQJA,	-1",
+			"QQQJA,	T55J5,	1",
+			"JJJJJ,	22222,	-1,",
+			"22222,	JJJJJ,	1,",
+	})
+	void compareHandsLexicographicallyP2(String hand0, String hand1, int expectedComparison) {
+		assertComparisonsEqual(Day07.compareHandsLexicographically(Day07.CARD_COMPARATOR_P2, hand0, hand1), expectedComparison);
+	}
+
+	static Stream<Arguments> cardsForComparison(String strengths) {
+		val numberOfCards = strengths.length();
 		return IntStream.range(0, numberOfCards)
 				.boxed()
 				.flatMap(i -> IntStream.range(0, numberOfCards)
-						.mapToObj(j -> Arguments.of(Day07.CARD_STRENGTH_ASC.charAt(i), Day07.CARD_STRENGTH_ASC.charAt(j), Integer.compare(i, j)))
+						.mapToObj(j -> Arguments.of(strengths.charAt(i), strengths.charAt(j), Integer.compare(i, j)))
 				);
+	}
+
+	static Stream<Arguments> compareCardP1() {
+		return cardsForComparison(Day07.CARD_STRENGTH_P1);
 	}
 
 	@ParameterizedTest
 	@MethodSource
-	void compareCard(char card0, char card1, int expectedComparison) {
-		assertComparisonsEqual(Day07.CARD_COMPARATOR.compare(card0, card1), expectedComparison);
+	void compareCardP1(char card0, char card1, int expectedComparison) {
+		assertComparisonsEqual(Day07.CARD_COMPARATOR_P1.compare(card0, card1), expectedComparison);
+	}
+
+	static Stream<Arguments> compareCardP2() {
+		return cardsForComparison(Day07.CARD_STRENGTH_P2);
+	}
+
+	@ParameterizedTest
+	@MethodSource
+	void compareCardP2(char card0, char card1, int expectedComparison) {
+		assertComparisonsEqual(Day07.CARD_COMPARATOR_P2.compare(card0, card1), expectedComparison);
 	}
 
 	private void assertComparisonsEqual(int actual, int expected) {
