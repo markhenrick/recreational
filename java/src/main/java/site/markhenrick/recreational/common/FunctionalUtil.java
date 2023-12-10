@@ -14,6 +14,10 @@ public class FunctionalUtil {
 		return a -> value;
 	}
 
+	public static <T> Predicate<T> negate(Predicate<T> p) {
+		return x -> !p.test(x);
+	}
+
 	public static <A> BinaryOperator<A> applyAndReturnLeft(final BiConsumer<? super A, ? super A> mutatingOperator) {
 		return (l, r) -> {
 			mutatingOperator.accept(l, r);

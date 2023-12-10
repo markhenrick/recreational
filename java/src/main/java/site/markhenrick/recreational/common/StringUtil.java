@@ -15,6 +15,8 @@ import java.util.stream.Collector;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import static site.markhenrick.recreational.common.FunctionalUtil.negate;
+
 @UtilityClass
 public class StringUtil {
 	public static final Function<String, Stream<String>> LINE_SPLITTER = splitToStream("\n");
@@ -25,7 +27,7 @@ public class StringUtil {
 
 	public static Function<String, Stream<String>> splitToStream(final String regex) {
 		final var pattern = Pattern.compile(regex);
-		return input -> Arrays.stream(pattern.split(input));
+		return input -> Arrays.stream(pattern.split(input)).filter(negate(String::isBlank));
 	}
 
 	public static Stream<Character> charStream(final CharSequence input) {
