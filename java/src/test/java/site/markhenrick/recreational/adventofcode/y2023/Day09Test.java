@@ -34,16 +34,42 @@ public class Day09Test {
 		assertThat(Day09.part1(input)).isEqualTo(expected);
 	}
 
+	static Stream<Arguments> part2() {
+		return Stream.of(
+			arguments(2, SAMPLE_INPUT),
+			arguments(1012, TestUtil.getResourceAsString("AoC/input/2023/day09.txt"))
+		);
+	}
+
+	@ParameterizedTest
+	@MethodSource
+	void part2(int expected, String input)
+	{
+		assertThat(Day09.part2(input)).isEqualTo(expected);
+	}
+
 	@ParameterizedTest
 	@CsvSource({
 		"0 3 6 9 12 15, 18",
 		"1 3 6 10 15 21, 28",
 		"10 13 16 21 30 45, 68",
 	})
-	void extrapolate(String inputRaw, int expected) {
+	void extrapolateForwards(String inputRaw, int expected) {
 		val input = Day09.parseLine(inputRaw);
 		val triangle = Day09.recursiveDeltas(input);
-		assertThat(Day09.extrapolate(triangle)).isEqualTo(expected);
+		assertThat(Day09.extrapolateForwards(triangle)).isEqualTo(expected);
+	}
+
+	@ParameterizedTest
+	@CsvSource({
+		"0 3 6 9 12 15, -3",
+		"1 3 6 10 15 21, 0",
+		"10 13 16 21 30 45, 5",
+	})
+	void extrapolateBackwards(String inputRaw, int expected) {
+		val input = Day09.parseLine(inputRaw);
+		val triangle = Day09.recursiveDeltas(input);
+		assertThat(Day09.extrapolateBackwards(triangle)).isEqualTo(expected);
 	}
 
 	@ParameterizedTest
