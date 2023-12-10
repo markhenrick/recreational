@@ -1,11 +1,13 @@
 package site.markhenrick.recreational.common;
 
 import lombok.experimental.UtilityClass;
+import site.markhenrick.recreational.common.data.ZipSpliterator;
 
 import java.util.Arrays;
 import java.util.function.*;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 @UtilityClass
 public class FunctionalUtil {
@@ -66,5 +68,9 @@ public class FunctionalUtil {
 		return Arrays.stream(streams)
 			.reduce(Stream::concat)
 			.get();
+	}
+
+	public static <A, B, X> Stream<X> zipWith(BiFunction<A, B, X> zipper, Stream<A> aStream, Stream<B> bStream) {
+		return StreamSupport.stream(new ZipSpliterator<>(zipper, aStream, bStream), aStream.isParallel() || bStream.isParallel());
 	}
 }
