@@ -15,7 +15,7 @@ public class ZipSpliterator<A, B, X> extends Spliterators.AbstractSpliterator<X>
 
 	public ZipSpliterator(BiFunction<A, B, X> zipper, Stream<A> aStream, Stream<B> bStream) {
 		// A bit stuck here. We can only call spliterator() once, but must call super first, so we just have to give a pessimistic size estimate and characteristics
-		super(0, 0);
+		super(Long.MAX_VALUE, 0);
 		this.zipper = zipper;
 		this.aSpliterator = aStream.spliterator();
 		this.bSpliterator = bStream.spliterator();
