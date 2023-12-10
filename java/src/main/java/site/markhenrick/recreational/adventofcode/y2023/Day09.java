@@ -1,6 +1,7 @@
 package site.markhenrick.recreational.adventofcode.y2023;
 
 import lombok.val;
+import site.markhenrick.recreational.common.FunctionalUtil;
 
 import java.util.Collections;
 import java.util.List;
@@ -38,11 +39,10 @@ public class Day09 {
 	}
 
 	static int extrapolateBackwards(Stream<List<Integer>> triangle) {
-		// TODO. Of all the functions that need zip/with, this one needs it the most
-		// Zip with IntStream.iterate(1, Integer::negate)
-		val list = triangle.toList();
-		return IntStream.range(0, list.size())
-			.map(i -> (i % 2 == 0 ? 1 : -1) * list.get(i).get(0))
+		val alternatingSigns = IntStream.iterate(1, x -> -x).boxed();
+		val firstColumn = triangle.map(list -> list.get(0));
+		return FunctionalUtil.zipWith((x, y) -> x * y, alternatingSigns, firstColumn)
+			.mapToInt(x -> x)
 			.sum();
 	}
 
@@ -55,10 +55,7 @@ public class Day09 {
 	}
 
 	static List<Integer> deltas(List<Integer> input) {
-		// TODO another one that will be easier when I finish zip/with
-		return IntStream.range(0, input.size() - 1)
-			.map(i -> input.get(i + 1) - input.get(i))
-			.boxed()
+		return FunctionalUtil.zipWith((x, y) -> x - y, input.stream().skip(1), input.stream())
 			.toList();
 	}
 

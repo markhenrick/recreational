@@ -73,4 +73,21 @@ public class FunctionalUtil {
 	public static <A, B, X> Stream<X> zipWith(BiFunction<A, B, X> zipper, Stream<A> aStream, Stream<B> bStream) {
 		return StreamSupport.stream(new ZipSpliterator<>(zipper, aStream, bStream), aStream.isParallel() || bStream.isParallel());
 	}
+
+	public static <T> Stream<Pair<Integer, T>> enumerate(Stream<T> stream) {
+		return enumerate(stream, 0);
+	}
+
+	public static <T> Stream<Pair<Integer, T>> enumerate(Stream<T> stream, int from) {
+		return zipWith(Pair::new, infiniteInts(from).boxed(), stream);
+	}
+
+	public static IntStream infiniteInts(int from) {
+		return IntStream.iterate(from, x -> true, x -> {
+			if (x == Integer.MAX_VALUE) {
+				throw new RuntimeException("Stream is larger than Integer.MAX_VALUE bruh");
+			}
+			return x + 1;
+		});
+	}
 }
