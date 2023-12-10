@@ -13,8 +13,24 @@ import static site.markhenrick.recreational.common.StringUtil.LINE_SPLITTER;
 import static site.markhenrick.recreational.common.StringUtil.WORD_SPLITTER;
 
 public class Day09 {
-	// TODO probably a more efficient way than the method described in the problem descr
-	// i.e. not O(n^2)
+	/*
+	 TODO probably a more efficient way than the method described in the problem descr
+	 i.e. not O(n^2)
+
+	 Recurrence relations:
+	 L_0 = input list, |L_0| = n
+	 L_{i, j} = L_{i-1, j+1} - L_{i-1, j}
+	 |L_i| = |L_{i-1}|-1 = n-i
+	 |L| = n, with the last list being a singleton
+	 L_{i, -1} = L_{i, |L_i|-1} = L_{i, n-i-1}
+	 forward extrapolation, L_{0, n} = sum_{i = 0..n-1} L_{i, -1} = sum_{i = 0..n-1} L_{i, n-i-1}
+	 	= L_{n-1, 0} + L_{n-2, 1} + L_{n-3, 3} ... L_{0, n-1}
+	 	= (L_{n-2, 1} - L_{n-2, 0}) + L_{n-2, 1} + L_{n-3, 3} ... L_{0, n-1}
+	 	= 2L_{n-2, 1} - L_{n-2, 0} + L_{n-3, 3} ... L_{0, n-1}
+	 	= 2(L_{n-3, 2} - L_{n-3, 1}) - (L_{n-3, 1} - L_{n-3, 0}) + L_{n-3, 3} ... L_{0, n-1}
+	 	= 2L_{n-3, 2} - 3L_{n-3, 1} + L_{n-3, 0} + L_{n-3, 3} ... L_{0, n-1}
+	 Can we work out the vector to multiply L_0 by, when we reach L_{n-n}?
+	*/
 
 	static int part1(String input) {
 		return extrapolationSum(input, Day09::extrapolateForwards);
