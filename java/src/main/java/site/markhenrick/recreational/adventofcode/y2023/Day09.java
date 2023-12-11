@@ -6,6 +6,7 @@ import site.markhenrick.recreational.common.StatUtil;
 import site.markhenrick.recreational.common.StringUtil;
 
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 import static site.markhenrick.recreational.common.StringUtil.LINE_SPLITTER;
@@ -22,11 +23,12 @@ public class Day09 {
 	}
 
 	public static long extrapolate(Function<Integer, List<Long>> coefficientGenerator, String input) {
-		// TODO so there's a hidden constraint here - every row has the same length (in terms of numbers). So I only need to find the coefficients once
+		// In practice every line has the same number of integers in, so this should never exceed one
+		val coefficientCache = new ConcurrentHashMap<Integer, List<Long>>(1);
 		return LINE_SPLITTER.apply(input)
 			.map(input1 -> StringUtil.spaceSeparatedInts(input1).mapToLong(x -> x).boxed().toList())
 			.map(FunctionalUtil.zipApply(List::size))
-			.map(FunctionalUtil.Pair.rightMapper(coefficientGenerator))
+			.map(FunctionalUtil.Pair.rightMapper(r -> coefficientCache.compute(r, (unused1, unused2) -> coefficientGenerator.apply(r))))
 			.map(FunctionalUtil.Pair.curry(Day09::dotProduct))
 			.mapToLong(x -> x)
 			.sum();
