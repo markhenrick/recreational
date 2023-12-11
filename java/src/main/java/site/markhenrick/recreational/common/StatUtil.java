@@ -94,4 +94,9 @@ public class StatUtil {
 		}
 		return longs.stream().mapToLong(x -> x);
 	}
+
+	/** positive first */
+	public static IntStream alternatingSigns() {
+		return IntStream.iterate(1, x -> -x);
+	}
 }

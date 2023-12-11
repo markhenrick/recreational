@@ -1,7 +1,6 @@
 package site.markhenrick.recreational.adventofcode.y2023;
 
 import lombok.val;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -51,49 +50,27 @@ public class Day09Test {
 
 	@ParameterizedTest
 	@CsvSource({
-		"0 3 6 9 12 15, 18",
-		"1 3 6 10 15 21, 28",
-		"10 13 16 21 30 45, 68",
+		"1, 1",
+		"2, -1 2",
+		"3, 1 -3 3",
+		"4, -1 4 -6 4",
+		"5, 1 -5 10 -10 5",
 	})
-	void extrapolateForwards(String inputRaw, int expected) {
-		val input = StringUtil.spaceSeparatedInts(inputRaw).boxed().toList();
-		val triangle = Day09.recursiveDeltas(input);
-		assertThat(Day09.extrapolateForwards(triangle)).isEqualTo(expected);
+	void getCoefficientsP1(int n, String expectedRaw) {
+		val expected = StringUtil.spaceSeparatedInts(expectedRaw).mapToLong(x -> x).boxed().toList();
+		assertThat(Day09.getCoefficientsP1(n)).isEqualTo(expected);
 	}
 
 	@ParameterizedTest
 	@CsvSource({
-		"0 3 6 9 12 15, -3",
-		"1 3 6 10 15 21, 0",
-		"10 13 16 21 30 45, 5",
+		"1, 1",
+		"2, 2 -1",
+		"3, 3 -3 1",
+		"4, 4 -6 4 -1",
+		"5, 5 -10 10 -5 1",
 	})
-	void extrapolateBackwards(String inputRaw, int expected) {
-		val input = StringUtil.spaceSeparatedInts(inputRaw).boxed().toList();
-		val triangle = Day09.recursiveDeltas(input);
-		assertThat(Day09.extrapolateBackwards(triangle)).isEqualTo(expected);
-	}
-
-	@ParameterizedTest
-	@CsvSource({
-		"'',''",
-		"5,''",
-		"5 7, 2",
-		"5 7 3, 2 -4",
-		"10  13  16  21  30  45  68, 3   3   5   9  15  23",
-		"3   3   5   9  15  23, 0   2   4   6   8",
-		"0   2   4   6   8, 2   2   2   2",
-		"2   2   2   2, 0   0   0",
-		"0   0   0, 0   0",
-		"0   0, 0",
-		"0, ''",
-	})
-	void deltas(String inputRaw, String expectedRaw) {
-		assertThat(Day09.deltas(StringUtil.spaceSeparatedInts(inputRaw).boxed().toList())).isEqualTo(StringUtil.spaceSeparatedInts(expectedRaw).boxed().toList());
-	}
-
-	@Test
-	void parseLine() {
-		assertThat(StringUtil.spaceSeparatedInts("10 13  16  21  30  45  68").boxed().toList())
-			.containsExactly(10, 13, 16, 21, 30, 45, 68);
+	void getCoefficientsP2(int n, String expectedRaw) {
+		val expected = StringUtil.spaceSeparatedInts(expectedRaw).mapToLong(x -> x).boxed().toList();
+		assertThat(Day09.getCoefficientsP2(n)).isEqualTo(expected);
 	}
 }
