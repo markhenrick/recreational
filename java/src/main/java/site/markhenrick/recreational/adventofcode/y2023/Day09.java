@@ -2,15 +2,14 @@ package site.markhenrick.recreational.adventofcode.y2023;
 
 import lombok.val;
 import site.markhenrick.recreational.common.FunctionalUtil;
+import site.markhenrick.recreational.common.StringUtil;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.function.ToIntFunction;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static site.markhenrick.recreational.common.StringUtil.LINE_SPLITTER;
-import static site.markhenrick.recreational.common.StringUtil.WORD_SPLITTER;
 
 public class Day09 {
 	/*
@@ -42,7 +41,7 @@ public class Day09 {
 
 	static int extrapolationSum(String input, ToIntFunction<Stream<List<Integer>>> extrapolator) {
 		return LINE_SPLITTER.apply(input)
-			.map(Day09::parseLine)
+			.map(input1 -> StringUtil.spaceSeparatedInts(input1).boxed().toList())
 			.map(Day09::recursiveDeltas)
 			.mapToInt(extrapolator)
 			.sum();
@@ -75,9 +74,4 @@ public class Day09 {
 			.toList();
 	}
 
-	static List<Integer> parseLine(String input) {
-		return input.isBlank() ? Collections.emptyList() : WORD_SPLITTER.apply(input)
-			.map(Integer::parseInt)
-			.toList();
-	}
 }

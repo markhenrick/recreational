@@ -30,9 +30,14 @@ public class StringUtil {
 		return input -> Arrays.stream(pattern.split(input)).filter(negate(String::isBlank));
 	}
 
-	public static Stream<Character> charStream(final CharSequence input) {
+	public static Stream<Character> charStream(CharSequence input) {
 		return IntStream.range(0, input.length())
 			.mapToObj(input::charAt);
+	}
+
+	public static IntStream spaceSeparatedInts(String input) {
+		return input.isBlank() ? IntStream.empty() : WORD_SPLITTER.apply(input)
+			.mapToInt(Integer::parseInt);
 	}
 
 	// like String.substring().equals() but without all the allocation

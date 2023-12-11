@@ -1,16 +1,14 @@
 package site.markhenrick.recreational.adventofcode.y2023;
 
+import lombok.val;
 import site.markhenrick.recreational.common.FunctionalUtil;
+import site.markhenrick.recreational.common.StatUtil;
+import site.markhenrick.recreational.common.StringUtil;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
-import static site.markhenrick.recreational.common.FunctionalUtil.negate;
 import static site.markhenrick.recreational.common.StringUtil.LINE_SPLITTER;
-import static site.markhenrick.recreational.common.StringUtil.WORD_SPLITTER;
 
 /**
  * Alternative implementation of day 9 that generates a coefficient vector first, then computes the dot at the end.
@@ -24,7 +22,7 @@ public class Day09Alt {
 
 	public static int part1(String input) {
 		return LINE_SPLITTER.apply(input)
-			.map(Day09Alt::parseLine)
+			.map(input1 -> StringUtil.spaceSeparatedInts(input1).boxed().toList())
 			.map(FunctionalUtil.zipApply(List::size))
 			.map(FunctionalUtil.Pair.rightMapper(Day09Alt::getCoefficients))
 			.map(FunctionalUtil.Pair.curry(Day09Alt::dotProduct))
@@ -32,50 +30,12 @@ public class Day09Alt {
 			.sum();
 	}
 
-	public static List<Integer> getCoefficients(int n) {
-		return extrapolateForwards(recursiveDeltas(createInitialSequence(n)));
-	}
-
-	private static List<List<Integer>> createInitialSequence(int n) {
-		return IntStream.range(0, n)
-			.mapToObj(i -> unitVector(n, i))
+	static List<Integer> getCoefficients(int n) {
+		val pascal = StatUtil.pascalRow(n).limit(n);
+		val signs = IntStream.iterate(1, x -> -x).skip(n % 2 + 1);
+		// TODO zipWith(IntStream)
+		return FunctionalUtil.zipWith((x, y) -> x * y, pascal.boxed(), signs.boxed())
 			.toList();
-	}
-
-	private static List<Integer> extrapolateForwards(Stream<List<List<Integer>>> triangle) {
-		return triangle
-			.map(list -> list.get(list.size() - 1))
-			.reduce(Day09Alt::add)
-			.get();
-	}
-
-	private static Stream<List<List<Integer>>> recursiveDeltas(List<List<Integer>> sequence) {
-		return Stream.iterate(sequence, negate(List::isEmpty), Day09Alt::delta);
-	}
-
-	private static List<List<Integer>> delta(List<List<Integer>> sequence) {
-		return FunctionalUtil.zipWith(Day09Alt::subtract, sequence.stream().skip(1), sequence.stream())
-			.toList();
-	}
-
-	private static List<Integer> unitVector(int order, int dimension) {
-		return IntStream.range(0, order)
-			.map(i -> i == dimension ? 1 : 0)
-			.boxed()
-			.toList();
-	}
-
-	// Simpler to just have these two rather than implementing and composing -1*
-	private static List<Integer> add(List<Integer> a, List<Integer> b) {
-		assert a.size() == b.size();
-		return FunctionalUtil.zipWith(Integer::sum, a.stream(), b.stream())
-			.collect(Collectors.toList());
-	}
-
-	private static List<Integer> subtract(List<Integer> a, List<Integer> b) {
-		assert a.size() == b.size();
-		return FunctionalUtil.zipWith((x, y) -> x - y, a.stream(), b.stream())
-			.collect(Collectors.toList());
 	}
 
 	private static int dotProduct(List<Integer> a, List<Integer> b) {
@@ -83,11 +43,5 @@ public class Day09Alt {
 		return FunctionalUtil.zipWith((x, y) -> x * y, a.stream(), b.stream())
 			.mapToInt(x -> x)
 			.sum();
-	}
-
-	static List<Integer> parseLine(String input) {
-		return input.isBlank() ? Collections.emptyList() : WORD_SPLITTER.apply(input)
-			.map(Integer::parseInt)
-			.toList();
 	}
 }

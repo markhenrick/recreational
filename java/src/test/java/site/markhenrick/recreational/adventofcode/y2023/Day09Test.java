@@ -6,6 +6,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
+import site.markhenrick.recreational.common.StringUtil;
 import site.markhenrick.recreational.common.TestUtil;
 
 import java.util.stream.Stream;
@@ -55,7 +56,7 @@ public class Day09Test {
 		"10 13 16 21 30 45, 68",
 	})
 	void extrapolateForwards(String inputRaw, int expected) {
-		val input = Day09.parseLine(inputRaw);
+		val input = StringUtil.spaceSeparatedInts(inputRaw).boxed().toList();
 		val triangle = Day09.recursiveDeltas(input);
 		assertThat(Day09.extrapolateForwards(triangle)).isEqualTo(expected);
 	}
@@ -67,7 +68,7 @@ public class Day09Test {
 		"10 13 16 21 30 45, 5",
 	})
 	void extrapolateBackwards(String inputRaw, int expected) {
-		val input = Day09.parseLine(inputRaw);
+		val input = StringUtil.spaceSeparatedInts(inputRaw).boxed().toList();
 		val triangle = Day09.recursiveDeltas(input);
 		assertThat(Day09.extrapolateBackwards(triangle)).isEqualTo(expected);
 	}
@@ -87,12 +88,12 @@ public class Day09Test {
 		"0, ''",
 	})
 	void deltas(String inputRaw, String expectedRaw) {
-		assertThat(Day09.deltas(Day09.parseLine(inputRaw))).isEqualTo(Day09.parseLine(expectedRaw));
+		assertThat(Day09.deltas(StringUtil.spaceSeparatedInts(inputRaw).boxed().toList())).isEqualTo(StringUtil.spaceSeparatedInts(expectedRaw).boxed().toList());
 	}
 
 	@Test
 	void parseLine() {
-		assertThat(Day09.parseLine("10 13  16  21  30  45  68"))
+		assertThat(StringUtil.spaceSeparatedInts("10 13  16  21  30  45  68").boxed().toList())
 			.containsExactly(10, 13, 16, 21, 30, 45, 68);
 	}
 }

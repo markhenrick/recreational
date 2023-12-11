@@ -3,6 +3,7 @@ package site.markhenrick.recreational.common;
 import lombok.experimental.UtilityClass;
 
 import java.util.Arrays;
+import java.util.stream.IntStream;
 
 @UtilityClass
 public class StatUtil {
@@ -64,5 +65,23 @@ public class StatUtil {
 		var tmp = arr[i];
 		arr[i] = arr[j];
 		arr[j] = tmp;
+	}
+
+	// Expressivity over performance here
+	public static int factorial(int n) {
+		return IntStream.rangeClosed(1, n)
+			.reduce(1, (x, y) -> x * y);
+	}
+
+	// TODO more efficient method that ideally doesn't overflow so much
+	public static int binomialCoefficient(int n, int k) {
+		return factorial(n) / (factorial(k) * factorial(n - k));
+	}
+
+	// TODO test
+	/** size = n + 1 */
+	public static IntStream pascalRow(int n) {
+		return IntStream.rangeClosed(0, n)
+			.map(k -> binomialCoefficient(n, k));
 	}
 }

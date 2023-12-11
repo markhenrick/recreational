@@ -5,6 +5,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
+import site.markhenrick.recreational.common.StringUtil;
 import site.markhenrick.recreational.common.TestUtil;
 
 import java.util.stream.Stream;
@@ -42,7 +43,7 @@ public class Day09AltTest {
 		"5, 1 -5 10 -10 5",
 	})
 	void getCoefficients(int n, String expectedRaw) {
-		val expected = Day09Alt.parseLine(expectedRaw);
+		val expected = StringUtil.spaceSeparatedInts(expectedRaw).boxed().toList();
 		assertThat(Day09Alt.getCoefficients(n)).isEqualTo(expected);
 	}
 }
