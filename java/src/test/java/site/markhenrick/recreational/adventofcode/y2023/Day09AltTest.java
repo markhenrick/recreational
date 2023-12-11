@@ -43,7 +43,7 @@ public class Day09AltTest {
 		"5, 1 -5 10 -10 5",
 	})
 	void getCoefficients(int n, String expectedRaw) {
-		val expected = StringUtil.spaceSeparatedInts(expectedRaw).boxed().toList();
+		val expected = StringUtil.spaceSeparatedInts(expectedRaw).mapToLong(x -> x).boxed().toList();
 		assertThat(Day09Alt.getCoefficients(n)).isEqualTo(expected);
 	}
 }

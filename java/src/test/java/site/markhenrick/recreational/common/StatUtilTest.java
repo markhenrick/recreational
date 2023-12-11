@@ -47,7 +47,7 @@ public class StatUtilTest {
 		"5, 1 5 10 10 5 1",
 	})
 	void pascalRow(int n, String expectedRaw) {
-		val expected = StringUtil.spaceSeparatedInts(expectedRaw).boxed().toList();
+		val expected = StringUtil.spaceSeparatedInts(expectedRaw).mapToLong(x -> x).boxed().toList();
 		assertThat(StatUtil.pascalRow(n)).isEqualTo(expected);
 	}
 }

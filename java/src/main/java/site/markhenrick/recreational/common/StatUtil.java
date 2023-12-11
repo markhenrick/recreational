@@ -1,9 +1,12 @@
 package site.markhenrick.recreational.common;
 
 import lombok.experimental.UtilityClass;
+import lombok.val;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 @UtilityClass
 public class StatUtil {
@@ -68,20 +71,27 @@ public class StatUtil {
 	}
 
 	// Expressivity over performance here
-	public static int factorial(int n) {
+	public static long factorial(int n) {
 		return IntStream.rangeClosed(1, n)
 			.reduce(1, (x, y) -> x * y);
 	}
 
-	// TODO more efficient method that ideally doesn't overflow so much
-	public static int binomialCoefficient(int n, int k) {
+	// TODO any way to make this less likely to overflow? Changing the associativity breaks the int division
+	public static long binomialCoefficient(int n, int k) {
 		return factorial(n) / (factorial(k) * factorial(n - k));
 	}
 
-	// TODO test
 	/** size = n + 1 */
-	public static IntStream pascalRow(int n) {
-		return IntStream.rangeClosed(0, n)
-			.map(k -> binomialCoefficient(n, k));
+	// TODO fully stream-based version of this
+	public static LongStream pascalRow(int n) {
+		val longs = new ArrayList<Long>(n + 1);
+		var previous = 1L;
+		longs.add(previous);
+		for (var denominator = 1; denominator <= n; denominator++) {
+			var numerator = n - denominator + 1;
+			previous = (previous * numerator) / denominator;
+			longs.add(previous);
+		}
+		return longs.stream().mapToLong(x -> x);
 	}
 }

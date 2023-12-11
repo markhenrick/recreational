@@ -20,17 +20,17 @@ import static site.markhenrick.recreational.common.StringUtil.LINE_SPLITTER;
 public class Day09Alt {
 	// TODO this would be enhanced by that TODO in IntVec2/3 about generalising it into IntVecN
 
-	public static int part1(String input) {
+	public static long part1(String input) {
 		return LINE_SPLITTER.apply(input)
-			.map(input1 -> StringUtil.spaceSeparatedInts(input1).boxed().toList())
+			.map(input1 -> StringUtil.spaceSeparatedInts(input1).mapToLong(x -> x).boxed().toList())
 			.map(FunctionalUtil.zipApply(List::size))
 			.map(FunctionalUtil.Pair.rightMapper(Day09Alt::getCoefficients))
 			.map(FunctionalUtil.Pair.curry(Day09Alt::dotProduct))
-			.mapToInt(x -> x)
+			.mapToLong(x -> x)
 			.sum();
 	}
 
-	static List<Integer> getCoefficients(int n) {
+	static List<Long> getCoefficients(int n) {
 		val pascal = StatUtil.pascalRow(n).limit(n);
 		val signs = IntStream.iterate(1, x -> -x).skip(n % 2 + 1);
 		// TODO zipWith(IntStream)
@@ -38,10 +38,10 @@ public class Day09Alt {
 			.toList();
 	}
 
-	private static int dotProduct(List<Integer> a, List<Integer> b) {
+	private static long dotProduct(List<Long> a, List<Long> b) {
 		assert a.size() == b.size();
 		return FunctionalUtil.zipWith((x, y) -> x * y, a.stream(), b.stream())
-			.mapToInt(x -> x)
+			.mapToLong(x -> x)
 			.sum();
 	}
 }
