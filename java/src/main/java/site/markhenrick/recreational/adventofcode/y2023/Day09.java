@@ -33,16 +33,16 @@ public class Day09 {
 	}
 
 	static List<Long> getCoefficientsP1(int n) {
-		val pascal = StatUtil.pascalRow(n).limit(n);
-		val signs = StatUtil.alternatingSigns().skip(n % 2 + 1);
-		// TODO zipWith(IntStream)
-		return FunctionalUtil.zipWith((x, y) -> x * y, pascal.boxed(), signs.boxed())
-			.toList();
+		return getCoefficients(n, 0, n % 2 + 1);
 	}
 
 	static List<Long> getCoefficientsP2(int n) {
-		val pascal = StatUtil.pascalRow(n).skip(1).limit(n);
-		val signs = StatUtil.alternatingSigns();
+		return getCoefficients(n, 1, 0);
+	}
+
+	private static List<Long> getCoefficients(int n, int pascalSkip, int signsSkip) {
+		val pascal = StatUtil.pascalRow(n).skip(pascalSkip).limit(n);
+		val signs = StatUtil.alternatingSigns().skip(signsSkip);
 		return FunctionalUtil.zipWith((x, y) -> x * y, pascal.boxed(), signs.boxed())
 			.toList();
 	}
