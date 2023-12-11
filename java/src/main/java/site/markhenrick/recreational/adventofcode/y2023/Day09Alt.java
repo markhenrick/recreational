@@ -21,6 +21,7 @@ public class Day09Alt {
 	// TODO this would be enhanced by that TODO in IntVec2/3 about generalising it into IntVecN
 
 	public static long part1(String input) {
+		// TODO so there's a hidden constraint here - every row has the same length (in terms of numbers). So I only need to find the coefficients once
 		return LINE_SPLITTER.apply(input)
 			.map(input1 -> StringUtil.spaceSeparatedInts(input1).mapToLong(x -> x).boxed().toList())
 			.map(FunctionalUtil.zipApply(List::size))
