@@ -1,7 +1,9 @@
 package site.markhenrick.recreational.adventofcode.y2023;
 
+import lombok.val;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import site.markhenrick.recreational.common.TestUtil;
 
@@ -29,5 +31,18 @@ public class Day09AltTest {
 	void part1(int expected, String input)
 	{
 		assertThat(Day09Alt.part1(input)).isEqualTo(expected);
+	}
+
+	@ParameterizedTest
+	@CsvSource({
+		"1, 1",
+		"2, -1 2",
+		"3, 1 -3 3",
+		"4, -1 4 -6 4",
+		"5, 1 -5 10 -10 5",
+	})
+	void getCoefficients(int n, String expectedRaw) {
+		val expected = Day09Alt.parseLine(expectedRaw);
+		assertThat(Day09Alt.getCoefficients(n)).isEqualTo(expected);
 	}
 }

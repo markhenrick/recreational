@@ -1,6 +1,5 @@
 package site.markhenrick.recreational.adventofcode.y2023;
 
-import lombok.val;
 import site.markhenrick.recreational.common.FunctionalUtil;
 
 import java.util.Collections;
@@ -26,16 +25,15 @@ public class Day09Alt {
 	public static int part1(String input) {
 		return LINE_SPLITTER.apply(input)
 			.map(Day09Alt::parseLine)
-			.mapToInt(Day09Alt::part1OneLine)
+			.map(FunctionalUtil.zipApply(List::size))
+			.map(FunctionalUtil.Pair.rightMapper(Day09Alt::getCoefficients))
+			.map(FunctionalUtil.Pair.curry(Day09Alt::dotProduct))
+			.mapToInt(x -> x)
 			.sum();
 	}
 
-	public static int part1OneLine(List<Integer> numbers) {
-		val n = numbers.size();
-		val initial = createInitialSequence(n);
-		val triangle = recursiveDeltas(initial);
-		val coefficients = extrapolateForwards(triangle);
-		return dotProduct(numbers, coefficients);
+	public static List<Integer> getCoefficients(int n) {
+		return extrapolateForwards(recursiveDeltas(createInitialSequence(n)));
 	}
 
 	private static List<List<Integer>> createInitialSequence(int n) {
