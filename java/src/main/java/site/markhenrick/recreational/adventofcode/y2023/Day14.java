@@ -3,10 +3,8 @@ package site.markhenrick.recreational.adventofcode.y2023;
 import lombok.val;
 import site.markhenrick.recreational.common.CollectionUtil;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.IntStream;
 
 import static site.markhenrick.recreational.common.CollectionUtil.isRectangular;
 import static site.markhenrick.recreational.common.StringUtil.LINE_SPLITTER;
@@ -15,7 +13,7 @@ import static site.markhenrick.recreational.common.StringUtil.charStream;
 public class Day14 {
 
 	static int part1(String input) {
-		return weigh(roll(parse(input)));
+		return weigh(parse(input));
 	}
 
 	static List<List<Cell>> parse(String input) {
@@ -30,36 +28,6 @@ public class Day14 {
 		return charStream(line).map(Cell::of).toList();
 	}
 
-	static List<List<Cell>> roll(List<List<Cell>> array) {
-		return array.stream()
-			.map(Day14::rollColumn)
-			.toList();
-	}
-
-	static List<Cell> rollColumn(List<Cell> column) {
-		val newColumn = new ArrayList<Cell>(column.size());
-		for (int i = 0; i < column.size(); i++) {
-			val cell = column.get(i);
-			if (cell == Cell.ROUND) {
-				newColumn.add(Cell.ROUND);
-			} else if (cell == Cell.CUBE) {
-				topUpColumn(newColumn, i);
-				newColumn.add(Cell.CUBE);
-			}
-		}
-		topUpColumn(newColumn, column.size());
-		assert newColumn.size() == column.size();
-		return newColumn;
-	}
-
-	private static void topUpColumn(List<Cell> newColumn, int expectedHeight) {
-		val extraSpacesNeeded = expectedHeight - newColumn.size();
-		assert extraSpacesNeeded >= 0;
-		for (int j = 0; j < extraSpacesNeeded; j++) {
-			newColumn.add(Cell.EMPTY);
-		}
-	}
-
 	static int weigh(List<List<Cell>> array) {
 		return array.stream()
 			.mapToInt(Day14::weighColumn)
@@ -67,13 +35,18 @@ public class Day14 {
 	}
 
 	static int weighColumn(List<Cell> column) {
-		return IntStream.range(0, column.size())
-			.map(i -> {
-				val cell = column.get(i);
-				if (cell != Cell.ROUND) return 0;
-				return column.size() - i;
-			})
-			.sum();
+		var total = 0;
+		var whereItShouldBe = 0;
+		for (int actualPosition = 0; actualPosition < column.size(); actualPosition++) {
+			val cell = column.get(actualPosition);
+			if (cell == Cell.ROUND) {
+				total += column.size() - whereItShouldBe;
+				whereItShouldBe++;
+			} else if (cell == Cell.CUBE) {
+				whereItShouldBe = actualPosition + 1;
+			}
+		}
+		return total;
 	}
 
 	private enum Cell {
