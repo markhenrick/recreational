@@ -4,6 +4,7 @@ import lombok.experimental.UtilityClass;
 import lombok.val;
 
 import java.util.*;
+import java.util.stream.IntStream;
 
 import static site.markhenrick.recreational.common.FunctionalUtil.applyAndReturnLeft;
 
@@ -34,9 +35,32 @@ public final class CollectionUtil {
 		return set;
 	}
 
-	public static  <T> List<T> mutableListOf(T... values) {
+	public static <T> List<T> mutableListOf(T... values) {
 		val list = new ArrayList<T>(values.length);
 		list.addAll(Arrays.asList(values));
 		return list;
+	}
+
+	public static <T> boolean isRectangular(List<List<T>> array) {
+		if (array.isEmpty()) return true;
+		val width = array.get(0).size();
+		return array.stream().allMatch(list -> list.size() == width);
+	}
+
+	public static <T> boolean isRectangular(T[][] array) {
+		if (array.length == 0) return true;
+		val width = array[0].length;
+		return Arrays.stream(array).allMatch(list -> list.length == width);
+	}
+
+	public static <T> List<List<T>> transpose(List<List<T>> array) {
+		assert isRectangular(array);
+		if (array.isEmpty()) return Collections.emptyList();
+		return IntStream.range(0, array.get(0).size())
+			.mapToObj(i -> array.stream()
+				.map(ts -> ts.get(i))
+				.toList()
+			)
+			.toList();
 	}
 }
