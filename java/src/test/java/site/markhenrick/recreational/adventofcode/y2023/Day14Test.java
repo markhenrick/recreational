@@ -56,15 +56,14 @@ O..#.OO...
 		assertThat(Day14.part1(input)).isEqualTo(expected);
 	}
 
-	// TODO swap args
 	@ParameterizedTest
 	@CsvSource({
-		"OO.O.O..##,OOOO....##",
-		"...OO....O,OOO.......",
-		".O...#O..O,O....#OO..",
-		".O.#......,O..#......",
+		"OOOO....##,OO.O.O..##",
+		"OOO.......,...OO....O",
+		"O....#OO..,.O...#O..O",
+		"O..#......,.O.#......",
 	})
-	void rollColumn(String input, String expected) {
+	void rollColumn(String expected, String input) {
 		val parsedInput = Day14.parseLine(input);
 		val parsedExpected = Day14.parseLine(expected);
 		val actual = Day14.rollColumn(parsedInput);
@@ -79,15 +78,14 @@ O..#.OO...
 		assertThat(actual).isEqualTo(parsedExpected);
 	}
 
-	// TODO swap args
 	@ParameterizedTest
 	@CsvSource({
-		"OOOO....##,34",
-		"OOO.......,27",
-		"O....#OO..,17",
-		"O..#......,10",
+		"34,OOOO....##",
+		"27,OOO.......",
+		"17,O....#OO..",
+		"10,O..#......",
 	})
-	void weighColumn(String input, int expected) {
+	void weighColumn(int expected, String input) {
 		val parsedInput = Day14.parseLine(input);
 		val actual = Day14.weighColumn(parsedInput);
 		assertThat(actual).isEqualTo(expected);
