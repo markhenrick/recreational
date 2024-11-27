@@ -11,13 +11,14 @@ import site.markhenrick.recreational.common.wrapMod
 private val COMPASS = listOf(UNIT_Y, UNIT_X, -UNIT_Y, -UNIT_X)
 
 // TODO oh dear this is in the top-level package namespace. Will have to decide what to do about that before day 2
-fun solvePart1(input: String): Int = walk(input).metricSize()
+fun solvePart1(input: String): Int = walk(input).last().metricSize()
 
 // TODO consider parsing the input up front
 
-fun walk(input: String): IntVec2 {
+fun walk(input: String): Sequence<IntVec2> = sequence {
     var location = ORIGIN
     var headingIndex = 0
+    yield(location)
     for (instruction in input.splitToSequence(", ")) {
         if (instruction[0] == 'L') {
             headingIndex = (headingIndex - 1 ) wrapMod COMPASS.size
@@ -27,7 +28,6 @@ fun walk(input: String): IntVec2 {
         }
         val stepCount = instruction.substring(1).toInt()
         location += COMPASS[headingIndex] * stepCount
+        yield(location)
     }
-    return location
-
 }

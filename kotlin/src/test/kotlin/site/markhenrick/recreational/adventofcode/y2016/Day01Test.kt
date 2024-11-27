@@ -5,9 +5,10 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import site.markhenrick.recreational.common.IntVec2
+import site.markhenrick.recreational.common.ORIGIN
 import java.util.stream.Stream
 
-class Day02Test {
+class Day01Test {
     @ParameterizedTest
     @MethodSource
     fun part1(input: String, expected: Int) {
@@ -16,8 +17,8 @@ class Day02Test {
 
     @ParameterizedTest
     @MethodSource
-    fun walk(input: String, expected: IntVec2) {
-        assertThat(walk(input)).isEqualTo(expected)
+    fun walk(input: String, expected: List<IntVec2>) {
+        assertThat(walk(input).toList()).isEqualTo(expected)
     }
 
     companion object {
@@ -32,9 +33,33 @@ class Day02Test {
 
         @JvmStatic
         fun walk(): Stream<Arguments> = Stream.of(
-            Arguments.of("R2, L3", IntVec2(2, 3)),
-            Arguments.of("R2, R2, R2", IntVec2(0, -2)),
-            Arguments.of("R5, L5, R5, R3", IntVec2(10, 2)),
+            Arguments.of(
+                "R2, L3",
+                listOf(
+                    ORIGIN,
+                    IntVec2(2, 0),
+                    IntVec2(2, 3),
+                )
+            ),
+            Arguments.of(
+                "R2, R2, R2",
+                listOf(
+                    ORIGIN,
+                    IntVec2(2, 0),
+                    IntVec2(2, -2),
+                    IntVec2(0, -2),
+                )
+            ),
+            Arguments.of(
+                "R5, L5, R5, R3",
+                listOf(
+                    ORIGIN,
+                    IntVec2(5, 0),
+                    IntVec2(5, 5),
+                    IntVec2(10, 5),
+                    IntVec2(10, 2),
+                )
+            ),
         )
     }
 }
