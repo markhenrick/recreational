@@ -5,6 +5,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import site.markhenrick.recreational.adventofcode.y2016.Day02.solvePart1
+import site.markhenrick.recreational.adventofcode.y2016.Day02.solvePart2
 import site.markhenrick.recreational.getChallengeInput
 import java.util.stream.Stream
 
@@ -15,11 +16,11 @@ class Day02Test {
         assertThat(solvePart1(input)).isEqualTo(expected)
     }
 
-//    @ParameterizedTest
-//    @MethodSource
-//    fun part2(input: String, expected: String) {
-//        assertThat(solvePart2(input)).isEqualTo(expected)
-//    }
+    @ParameterizedTest
+    @MethodSource
+    fun part2(input: String, expected: String) {
+        assertThat(solvePart2(input)).isEqualTo(expected)
+    }
 
     companion object {
         private val sampleInput = """
@@ -36,8 +37,10 @@ class Day02Test {
             Arguments.of(challengeInput, "82958"),
         )
 
-//        @JvmStatic
-//        fun part2(): Stream<Arguments> = Stream.of(
-//        )
+        @JvmStatic
+        fun part2(): Stream<Arguments> = Stream.of(
+            Arguments.of(sampleInput, "5DB3"),
+            Arguments.of(challengeInput, "B3DB8"),
+        )
     }
 }
