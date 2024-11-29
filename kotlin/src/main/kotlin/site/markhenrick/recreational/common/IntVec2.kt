@@ -4,18 +4,18 @@ import kotlin.math.abs
 import kotlin.math.sqrt
 
 data class IntVec2(
-    val x: Int,
-    val y: Int,
+    val i: Int,
+    val j: Int,
 ) {
-    operator fun plus(other: IntVec2): IntVec2 = IntVec2(x + other.x, y + other.y)
-    operator fun times(scalar: Int): IntVec2 = IntVec2(scalar * x, scalar * y)
+    operator fun plus(other: IntVec2): IntVec2 = IntVec2(i + other.i, j + other.j)
+    operator fun times(scalar: Int): IntVec2 = IntVec2(scalar * i, scalar * j)
 
     operator fun unaryMinus(): IntVec2 = this * -1
     operator fun minus(other: IntVec2): IntVec2 = this + -other
 
     // size = distance from origin
-    fun metricSize(): Int = abs(x) + abs(y)
-    fun euclideanSize(): Double = sqrt((x * x + y * y).toDouble())
+    fun metricSize(): Int = abs(i) + abs(j)
+    fun euclideanSize(): Double = sqrt((i * i + j * j).toDouble())
 
     fun metricDistance(other: IntVec2): Int = (this - other).metricSize()
     fun euclideanDistance(other: IntVec2): Double = (this - other).euclideanSize()
