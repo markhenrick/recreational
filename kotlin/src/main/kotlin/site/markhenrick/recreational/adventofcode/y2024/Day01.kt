@@ -21,7 +21,6 @@ object Day01 {
         val right = mutableListOf<Int>()
         for (line in input.lineSequence()) {
             val parts = line.splitToSequence(WHITESPACE_REGEX)
-                .filter { it.isNotBlank() }
                 .map { it.toInt() }
                 .toList()
             assert(parts.size == 2)
