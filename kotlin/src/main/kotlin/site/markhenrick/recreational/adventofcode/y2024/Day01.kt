@@ -10,6 +10,11 @@ object Day01 {
         return computePart1(left, right)
     }
 
+    fun solvePart2(input: String): Int {
+        val (left, right) = parseInput(input)
+        return computePart2(left, right)
+    }
+
     // We do have to eagerly parse and sort everything first, so we can find each ordinal
     fun parseInput(input: String): Pair<List<Int>, List<Int>> {
         val left = mutableListOf<Int>()
@@ -31,4 +36,11 @@ object Day01 {
         .zip(right.asSequence().sorted())
         .map { (x, y) -> abs(x - y) }
         .sum()
+
+    fun computePart2(left: List<Int>, right: List<Int>): Int {
+        val occurrences = right.groupingBy { it }.eachCount()
+        return left.asSequence()
+            .map { it * occurrences.getOrDefault(it, 0) }
+            .sum()
+    }
 }
