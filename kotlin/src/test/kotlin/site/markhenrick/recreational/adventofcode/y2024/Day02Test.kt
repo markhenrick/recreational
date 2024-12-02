@@ -47,7 +47,7 @@ class Day02Test {
     @ParameterizedTest
     @MethodSource
     fun reallyBadBruteForcePart2ShimTest(input: List<Int>, expected: List<List<Int>>) {
-        assertThat(reallyBadBruteForcePart2Shim(input.asSequence()).toList()).isEqualTo(expected)
+        assertThat(reallyBadBruteForcePart2Shim(input).toList()).isEqualTo(expected)
     }
 
     companion object {

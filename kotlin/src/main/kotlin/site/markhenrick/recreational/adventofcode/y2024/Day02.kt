@@ -10,7 +10,7 @@ object Day02 {
         .count()
 
     fun solvePart2(input: String): Int = parseInput(input)
-        .map { reallyBadBruteForcePart2Shim(it) }
+        .map { reallyBadBruteForcePart2Shim(it.toList()) }
         .filter { it.any { lit -> isValidReport(lit) } }
         .count()
 
@@ -32,7 +32,7 @@ object Day02 {
     }
 
     // Given here as an example of how *not* to do anything right, except get a gold star quickly
-    fun reallyBadBruteForcePart2Shim(seq: Sequence<Int>): Sequence<List<Int>> = sequence {
+    fun reallyBadBruteForcePart2Shim(seq: List<Int>): Sequence<List<Int>> = sequence {
         val asList = seq.toList()
         yield(asList)
         for (i in asList.indices) {
