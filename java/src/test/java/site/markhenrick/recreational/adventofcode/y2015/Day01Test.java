@@ -32,7 +32,7 @@ class Day01Test {
 
 	@ParameterizedTest
 	@CsvSource({
-		"),		1",
+		"),		2",
 		"()()),	5",
 	})
 	void solvePart2Samples(final CharSequence input, final int expected) {

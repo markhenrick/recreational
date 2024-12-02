@@ -37,7 +37,7 @@ class Day01Test {
 
         @JvmStatic
         fun part1(): Stream<Arguments> = Stream.of(
-            Arguments.of("R2, L3", 5),
+            Arguments.of("R2, L3", 4),
             Arguments.of("R2, R2, R2", 2),
             Arguments.of("R5, L5, R5, R3", 12),
             Arguments.of(challengeInput, 332),
