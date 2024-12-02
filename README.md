@@ -18,12 +18,12 @@ Each year has 50 stars available, two parts for each day of advent.
 
 |Language|2015|2016|2017|2018|2019|2020|2021|2022|2023|2024|
 |:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-|Java*|10|-|-|-|-|14|16|14|8|:-:|
-|Kotlin*|-|2|-|-|-|14|16|14|8|:-:|
-|Haskell|-|-|-|-|-|-|2|-|-|:-:|
-|Python|-|-|-|-|-|-|-|-|-|:-:|
-|Typescript|-|-|-|-|-|-|-|-|-|:-:|
-|C|-|-|-|-|-|-|2|-|-|:-:|
+|Java*|10|-|-|-|-|14|16|14|8|-|
+|Kotlin*|-|6|-|-|-|-|-|-|-|4|
+|Haskell|-|-|-|-|-|-|2|-|-|-|
+|Python|-|-|-|-|-|-|-|-|-|-|
+|Typescript|-|-|-|-|-|-|-|-|-|-|
+|C|-|-|-|-|-|-|2|-|-|-|
 
 * I decided to start a fresh pure-Kotlin Gradle project rather than having Java and Kotlin in the same project. Old Java coded will be migrated over slowly... eventually...
 
