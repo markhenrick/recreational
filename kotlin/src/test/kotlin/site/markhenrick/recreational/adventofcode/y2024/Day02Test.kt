@@ -6,7 +6,9 @@ import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import site.markhenrick.recreational.adventofcode.y2024.Day02.isValidReport
 import site.markhenrick.recreational.adventofcode.y2024.Day02.parseInput
+import site.markhenrick.recreational.adventofcode.y2024.Day02.reallyBadBruteForcePart2Shim
 import site.markhenrick.recreational.adventofcode.y2024.Day02.solvePart1
+import site.markhenrick.recreational.adventofcode.y2024.Day02.solvePart2
 import site.markhenrick.recreational.getChallengeInput
 import java.util.stream.Stream
 
@@ -19,20 +21,33 @@ class Day02Test {
 
     @ParameterizedTest
     @MethodSource
+    fun part2(input: String, expected: Int) {
+        assertThat(solvePart2(input)).isEqualTo(expected)
+    }
+
+    @ParameterizedTest
+    @MethodSource
     fun parse(input: String, expected: List<List<Int>>) {
         val output = parseInput(input).map { it.toList() }.toList()
+        assertThat(output).isEqualTo(expected)
     }
 
     @ParameterizedTest
     @MethodSource
     fun recogniseValidReports(input: List<Int>) {
-        assertThat(isValidReport(input.asSequence())).isTrue()
+        assertThat(isValidReport(input)).isTrue()
     }
 
     @ParameterizedTest
     @MethodSource
     fun recogniseInvalidReports(input: List<Int>) {
-        assertThat(isValidReport(input.asSequence())).isFalse()
+        assertThat(isValidReport(input)).isFalse()
+    }
+
+    @ParameterizedTest
+    @MethodSource
+    fun reallyBadBruteForcePart2ShimTest(input: List<Int>, expected: List<List<Int>>) {
+        assertThat(reallyBadBruteForcePart2Shim(input.asSequence()).toList()).isEqualTo(expected)
     }
 
     companion object {
@@ -50,6 +65,12 @@ class Day02Test {
         fun part1(): Stream<Arguments> = Stream.of(
             Arguments.of(sampleInput, 2),
             Arguments.of(challengeInput, 371),
+        )
+
+        @JvmStatic
+        fun part2(): Stream<Arguments> = Stream.of(
+            Arguments.of(sampleInput, 4),
+            Arguments.of(challengeInput, 426),
         )
 
         @JvmStatic
@@ -79,6 +100,21 @@ class Day02Test {
             listOf(9, 7, 6, 2, 1),
             listOf(1, 3, 2, 4, 5),
             listOf(8, 6, 4, 4, 1),
+        )
+
+        @JvmStatic
+        fun reallyBadBruteForcePart2ShimTest(): Stream<Arguments> = Stream.of(
+            Arguments.of(
+                listOf(7, 6, 4, 2, 1),
+                listOf(
+                    listOf(7, 6, 4, 2, 1),
+                    listOf(6, 4, 2, 1),
+                    listOf(7, 4, 2, 1),
+                    listOf(7, 6, 2, 1),
+                    listOf(7, 6, 4, 1),
+                    listOf(7, 6, 4, 2),
+                )
+            )
         )
     }
 }
