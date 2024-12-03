@@ -10,13 +10,14 @@ object Day02 {
         .count()
 
     fun solvePart2(input: String): Int = parseInput(input)
-        .map { reallyBadBruteForcePart2Shim(it.toList()) }
+        .map { removedLevelVariants(it.toList()) }
         .filter { it.any { lit -> isValidReport(lit) } }
         .count()
 
     fun parseInput(input: String): Sequence<Sequence<Int>> = input.lineSequence()
-        .map { it.splitToSequence(WHITESPACE_REGEX).filter(String::isNotBlank).map(String::toInt) }
+        .map { it.splitToSequence(WHITESPACE_REGEX).map(String::toInt) }
 
+    // Alternative idea: Test report || report.reversed()
     fun isValidReport(report: List<Int>): Boolean {
         // Hard to do Sequence.any due to this bit
         var isIncreasing: Boolean? = null
@@ -32,9 +33,11 @@ object Day02 {
     }
 
     // Given here as an example of how *not* to do anything right, except get a gold star quickly
-    fun reallyBadBruteForcePart2Shim(seq: List<Int>): Sequence<List<Int>> = sequence {
+    // Edit: OK it seems this *is* what 95% of others' solutions do -
+    // I'd still like to replace it in the future with something smarter
+    fun removedLevelVariants(seq: List<Int>): Sequence<List<Int>> = sequence {
         val asList = seq.toList()
-        yield(asList)
+        yield(asList) // Still need the original
         for (i in asList.indices) {
             val newList = mutableListOf<Int>()
             for (j in asList.indices) {

@@ -6,7 +6,7 @@ import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import site.markhenrick.recreational.adventofcode.y2024.Day02.isValidReport
 import site.markhenrick.recreational.adventofcode.y2024.Day02.parseInput
-import site.markhenrick.recreational.adventofcode.y2024.Day02.reallyBadBruteForcePart2Shim
+import site.markhenrick.recreational.adventofcode.y2024.Day02.removedLevelVariants
 import site.markhenrick.recreational.adventofcode.y2024.Day02.solvePart1
 import site.markhenrick.recreational.adventofcode.y2024.Day02.solvePart2
 import site.markhenrick.recreational.getChallengeInput
@@ -46,8 +46,8 @@ class Day02Test {
 
     @ParameterizedTest
     @MethodSource
-    fun reallyBadBruteForcePart2ShimTest(input: List<Int>, expected: List<List<Int>>) {
-        assertThat(reallyBadBruteForcePart2Shim(input).toList()).isEqualTo(expected)
+    fun removedLevelVariantsTest(input: List<Int>, expected: List<List<Int>>) {
+        assertThat(removedLevelVariants(input).toList()).isEqualTo(expected)
     }
 
     companion object {
@@ -103,7 +103,7 @@ class Day02Test {
         )
 
         @JvmStatic
-        fun reallyBadBruteForcePart2ShimTest(): Stream<Arguments> = Stream.of(
+        fun removedLevelVariantsTest(): Stream<Arguments> = Stream.of(
             Arguments.of(
                 listOf(7, 6, 4, 2, 1),
                 listOf(
