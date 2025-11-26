@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - "java/**"
+      - ".github/workflows/java*"
 
 permissions:
   contents: read

@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - "kotlin/**"
+      - ".github/workflows/kotlin*"
 
 permissions:
   contents: read
