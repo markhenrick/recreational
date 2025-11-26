@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "2.1.0"
+    kotlin("jvm") version "2.2.21"
 }
 
 kotlin {
@@ -15,8 +15,8 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
-    testImplementation("org.junit.jupiter:junit-jupiter-params:5.11.3")
-    testImplementation("org.assertj:assertj-core:3.26.3")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:6.0.1")
+    testImplementation("org.assertj:assertj-core:3.27.6")
     // TODO consider moving to Kotest in the future
 }
 
