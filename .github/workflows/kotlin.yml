@@ -2,27 +2,34 @@ name: Test Kotlin
 
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+    paths:
+      - "kotlin/**"
+
+permissions:
+  contents: read
+  pull-requests: read
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
 
     steps:
-    - name: Checkout code
+    - name: Checkout
       uses: actions/checkout@v4
+      with:
+        persist-credentials: false
     
-    - name: Set up JDK 21
+    # I've found the cache in this to be a better fit for this simple project than gradle/actions/setup-gradle
+    - name: Setup JDK
       uses: actions/setup-java@v4
       with:
-        java-version: '21'
-        distribution: 'temurin'
+        java-version: 21
+        distribution: temurin
+        cache: gradle
+        cache-dependency-path: |
+          kotlin/*.gradle*
+          kotlin/**/gradle-wrapper.properties
 
-    - name: Build with Gradle Wrapper
+    - name: Build
       working-directory: kotlin
-      run: ./gradlew build
+      run: ./gradlew build --no-daemon

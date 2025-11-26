@@ -2,25 +2,31 @@ name: Test Java
 
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+    paths:
+      - "java/**"
+
+permissions:
+  contents: read
+  pull-requests: read
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up JDK 17
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        persist-credentials: false
+
+    - name: Set up JDK
       uses: actions/setup-java@v4
       with:
-        java-version: '17'
-        distribution: 'temurin'
+        java-version: 17
+        distribution: temurin
         cache: maven
+        cache-dependency-path: "java/pom.xml"
         
     - name: Build with Maven
-      run: |
-        cd java
-        ./mvnw -B test
+      working-directory: java
+      run: ./mvnw -B test
