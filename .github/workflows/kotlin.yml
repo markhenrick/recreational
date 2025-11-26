@@ -30,6 +30,6 @@ jobs:
           kotlin/*.gradle*
           kotlin/**/gradle-wrapper.properties
 
-    - name: Build
+    - name: Test
       working-directory: kotlin
-      run: ./gradlew build --no-daemon
+      run: ./gradlew test --no-daemon
