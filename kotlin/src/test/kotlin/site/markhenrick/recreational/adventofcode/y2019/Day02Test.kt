@@ -10,6 +10,11 @@ class Day02Test {
         assertThat(Day02.part1(challengeInput)).isEqualTo(2894520)
     }
 
+    @Test
+    fun part2() {
+        assertThat(Day02.part2(challengeInput)).isEqualTo(9342)
+    }
+
     companion object {
         private val challengeInput = getChallengeInput(2019, 2)
     }
