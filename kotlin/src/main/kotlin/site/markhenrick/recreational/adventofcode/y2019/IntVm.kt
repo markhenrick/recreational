@@ -10,41 +10,44 @@ class IntVm {
     }
 
     fun step() {
-        val opcode = memory[pc]
-        val arg1 = memory[(pc + 1) % memory.size]
-        val arg2 = memory[(pc + 2) % memory.size]
-        val arg3 = memory[(pc + 3) % memory.size]
-
         try {
-            when (opcode) {
-                99 -> throw HaltedException()
-                1 -> add(arg1, arg2, arg3)
-                2 -> mult(arg1, arg2, arg3)
+            when (val opcode = memory[pc]) {
+                1 -> add()
+                2 -> mult()
+                99 -> halt()
                 else -> throw InvalidOpCodeException(opcode)
             }
         } catch (e: ArrayIndexOutOfBoundsException) {
             throw OOBMemoryAccessException(e)
         }
-
-        pc = (pc + 4) % memory.size
     }
 
     fun runUntilHalt() {
         while(true) {
             try {
                 step()
-            } catch (e: HaltedException) {
+            } catch (_: HaltedException) {
                 break
             }
         }
     }
 
-    private fun add(leftA: Int, rightA: Int, destA: Int) {
+    private fun halt(): Nothing = throw HaltedException()
+
+    private fun add() {
+        val leftA = memory[pc + 1]
+        val rightA = memory[pc + 2]
+        val destA = memory[pc + 3]
         memory[destA] = memory[leftA] + memory[rightA]
+        pc += 4
     }
 
-    private fun mult(leftA: Int, rightA: Int, destA: Int) {
+    private fun mult() {
+        val leftA = memory[pc + 1]
+        val rightA = memory[pc + 2]
+        val destA = memory[pc + 3]
         memory[destA] = memory[leftA] * memory[rightA]
+        pc += 4
     }
 }
 
