@@ -8,4 +8,6 @@ Kotlin is my preferred language. Previously, this repo had C and Haskell in it t
 
 TODO: Put a star completion table here. Ideally automatically updated by an Action
 
+The actual execution of the challenges is done via automated tests, affirmed via Github Actions. There are no plain executables or entry points
+
 I also did the 2017 event live, though never finished, and got 29 stars. I don't still have the source but I recall using both Haskell and Python
