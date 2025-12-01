@@ -1,6 +1,6 @@
 This repository for little things I coded just for the sake of it, most notable **Advent of Code solutions**
 
-I've deliberately written a lot of the code in a deliberately convoluted or unusual style to make it more interesting, so it's very far removed from code I'd ever write for production or for other people to work on. This includes both making stupidly excessive performance optimisations when a simpler solution is plenty fast, and going the other way and using a higher-order functional style to the point of performance sacrifices
+I've deliberately written a lot of the code in a deliberately convoluted or unusual style to make it more interesting, so it's very far removed from code I'd ever write for production or for other people to work on. This includes both making stupidly excessive performance optimisations when a simpler solution is plenty fast, and going the other way and using a higher-order functional style to the point of performance sacrifices. Error handling is limited to blowing up with assertion errors rather than attempting to gracefully handle bad input
 
 Kotlin is my preferred language. Previously, this repo had C and Haskell in it too, but these are now abandoned. See the `archive` branch if you're interested. I'm slowly migrating all of the Java code to Kotlin, and the `kotlin/` dir will eventually be promoted to root
 
