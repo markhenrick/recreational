@@ -1,5 +1,8 @@
 package site.markhenrick.recreational.adventofcode.y2025
 
+import site.markhenrick.recreational.common.base10DigitCount
+import site.markhenrick.recreational.common.intPow
+
 object Day02 {
     private val squarePattern = Regex("(.+)\\1")
 
@@ -7,8 +10,12 @@ object Day02 {
         .filter { !isValid(it) }
         .sum()
 
-    // TODO temporary String-based version
-    internal fun isValid(id: Long): Boolean = !squarePattern.matches(id.toString())
+    internal fun isValid(id: Long): Boolean {
+        val digitCount = base10DigitCount(id)
+        if (digitCount % 2 == 1) return true
+        val divisor = intPow(10, digitCount / 2)
+        return id / divisor != id % divisor
+    }
 
     private fun getIds(input: String): Sequence<Long> = input.splitToSequence(',')
         .flatMap {
