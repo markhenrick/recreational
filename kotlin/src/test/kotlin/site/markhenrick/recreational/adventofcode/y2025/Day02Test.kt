@@ -16,6 +16,12 @@ class Day02Test {
     }
 
     @ParameterizedTest
+    @MethodSource
+    fun part2(input: String, expected: Long) {
+        assertThat(Day02.solvePart2(input)).isEqualTo(expected)
+    }
+
+    @ParameterizedTest
     @ValueSource(longs = [
         1,
         12,
@@ -23,8 +29,8 @@ class Day02Test {
         1221,
         101,
     ])
-    fun validIds(id: Long) {
-        assertThat(Day02.isValid(id)).isTrue
+    fun validIds1(id: Long) {
+        assertThat(Day02.isValid1(id)).isTrue
     }
 
     @ParameterizedTest
@@ -38,8 +44,40 @@ class Day02Test {
         446446,
         38593859,
     ])
-    fun invalidIds(id: Long) {
-        assertThat(Day02.isValid(id)).isFalse
+    fun invalidIds1(id: Long) {
+        assertThat(Day02.isValid1(id)).isFalse
+    }
+
+    @ParameterizedTest
+    @ValueSource(longs = [
+        1,
+        12,
+        123,
+        1221,
+        101,
+    ])
+    fun validIds2(id: Long) {
+        assertThat(Day02.isValid2(id)).isTrue
+    }
+
+    @ParameterizedTest
+    @ValueSource(longs = [
+        11,
+        22,
+        99,
+        111,
+        999,
+        1010,
+        1188511885,
+        222222,
+        446446,
+        38593859,
+        565656,
+        824824824,
+        2121212121
+    ])
+    fun invalidIds2(id: Long) {
+        assertThat(Day02.isValid2(id)).isFalse
     }
 
     companion object {
@@ -50,6 +88,12 @@ class Day02Test {
         fun part1(): Stream<Arguments> = Stream.of(
             Arguments.of(sampleInput, 1227775554),
             Arguments.of(challengeInput, 34826702005)
+        )
+
+        @JvmStatic
+        fun part2(): Stream<Arguments> = Stream.of(
+            Arguments.of(sampleInput, 4174379265),
+            Arguments.of(challengeInput, 43287141963L)
         )
     }
 }
