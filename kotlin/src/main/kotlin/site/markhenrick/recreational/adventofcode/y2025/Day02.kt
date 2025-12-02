@@ -4,8 +4,6 @@ import site.markhenrick.recreational.common.base10DigitCount
 import site.markhenrick.recreational.common.intPow
 
 object Day02 {
-    private val squarePattern = Regex("(.+)\\1")
-
     fun solvePart1(input: String): Long = getIds(input)
         .filter { !isValid(it) }
         .sum()
