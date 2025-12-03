@@ -17,7 +17,7 @@ object Day02 {
 
     internal fun isValid1(id: Long): Boolean {
         val digitCount = base10DigitCount(id)
-        if (digitCount % 2 == 1) return true
+        if (digitCount % 2 == 1L) return true
         val divisor = intPow(10, digitCount / 2)
         return id / divisor != id % divisor
     }

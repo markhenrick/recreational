@@ -18,7 +18,7 @@ class NumUtilTest {
         "100, 3",
         "0, 0",
     )
-    fun base10DigitCount(input: Long, expected: Int) {
+    fun base10DigitCount(input: Long, expected: Long) {
         assertThat(base10DigitCount(input)).isEqualTo(expected)
     }
 
@@ -36,7 +36,7 @@ class NumUtilTest {
         "-1, 1, -1",
         "-1, 2, 1",
     )
-    fun intPow(base: Int, exponent: Int, result: Long) {
+    fun intPow(base: Long, exponent: Long, result: Long) {
         assertThat(intPow(base, exponent)).isEqualTo(result)
     }
 }
