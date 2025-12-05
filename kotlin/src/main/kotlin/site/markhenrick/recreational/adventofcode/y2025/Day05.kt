@@ -23,6 +23,7 @@ object Day05 {
 
     // Not the best code here
     // TODO allocate less
+    // TODO wait why am I even realising the merged intervals if I only need their total imprint
     tailrec fun mergeIntervals(intervals: MutableList<LongRange>): MutableList<LongRange> {
         if (intervals.size <= 1) return intervals
         // TODO use a heap or something rather than this hackiness
