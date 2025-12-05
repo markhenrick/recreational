@@ -20,6 +20,12 @@ class Day05Test {
         assertThat(Day05.part2(input)).isEqualTo(expected)
     }
 
+    @ParameterizedTest
+    @MethodSource
+    fun mergeIntervals(input: MutableList<LongRange>, expected: List<LongRange>) {
+        assertThat(Day05.mergeIntervals(input)).isEqualTo(expected)
+    }
+
     companion object {
         private val sampleInput = """
             3-5
@@ -45,7 +51,23 @@ class Day05Test {
         @JvmStatic
         fun part2(): Stream<Arguments> = Stream.of(
             Arguments.of(sampleInput, 14),
-//            Arguments.of(challengeInput, 1) // It was worth a try
+            Arguments.of(challengeInput, 353507173555373)
+        )
+
+        @JvmStatic
+        fun mergeIntervals(): Stream<Arguments> = Stream.of(
+            Arguments.of(
+                mutableListOf(
+                    LongRange(3, 5),
+                    LongRange(10, 14),
+                    LongRange(12, 18),
+                    LongRange(16, 20),
+                ),
+                mutableListOf(
+                    LongRange(3, 5),
+                    LongRange(10, 20),
+                ),
+            ),
         )
     }
 }
