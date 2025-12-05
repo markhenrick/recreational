@@ -8,6 +8,10 @@ object Day03 {
         .map { findMaximalJoltage(it, 2) }
         .sum()
 
+    fun solvePart2(input: String): Long = input.lineSequence()
+        .map { findMaximalJoltage(it, 12) }
+        .sum()
+
     internal fun findMaximalJoltage(input: String, digits: Int): Long = findMaximalJoltageInternal(input, 0, digits - 1)
 
     // No this isn't tail recursive, but we know the stack depth will only be 12 at most
