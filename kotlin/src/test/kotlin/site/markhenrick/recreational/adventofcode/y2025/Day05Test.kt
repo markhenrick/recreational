@@ -14,6 +14,12 @@ class Day05Test {
         assertThat(Day05.part1(input)).isEqualTo(expected)
     }
 
+    @ParameterizedTest
+    @MethodSource
+    fun part2(input: String, expected: Long) {
+        assertThat(Day05.part2(input)).isEqualTo(expected)
+    }
+
     companion object {
         private val sampleInput = """
             3-5
@@ -34,6 +40,12 @@ class Day05Test {
         fun part1(): Stream<Arguments> = Stream.of(
             Arguments.of(sampleInput, 3),
             Arguments.of(challengeInput, 623)
+        )
+
+        @JvmStatic
+        fun part2(): Stream<Arguments> = Stream.of(
+            Arguments.of(sampleInput, 14),
+//            Arguments.of(challengeInput, 1) // It was worth a try
         )
     }
 }
