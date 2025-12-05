@@ -14,13 +14,13 @@ class Day03Test {
 
     @ParameterizedTest
     @CsvSource(
-        "987654321111111, 98",
-        "811111111111119, 89",
-        "234234234234278, 78",
-        "818181911112111, 92",
+        "987654321111111, 2, 98",
+        "811111111111119, 2, 89",
+        "234234234234278, 2, 78",
+        "818181911112111, 2, 92",
     )
-    fun findMaximalJoltage(input: String, expected: Int) {
-        assertThat(Day03.findMaximalJoltage(input)).isEqualTo(expected)
+    fun findMaximalJoltage(input: String, digitCount: Int, expected: Long) {
+        assertThat(Day03.findMaximalJoltage(input, digitCount)).isEqualTo(expected)
     }
 
     companion object {
