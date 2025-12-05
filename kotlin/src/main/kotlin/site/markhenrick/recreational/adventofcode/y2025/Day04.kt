@@ -51,7 +51,7 @@ object Day04 {
     }
 
     private fun createEmptyBoard(height: Int, width: Int): Board = IntRange(1, height)
-        .map { i -> IntRange(1, width).map { j -> false }.toMutableList() }
+        .map { _ -> IntRange(1, width).map { _ -> false }.toMutableList() }
         .toMutableList()
 
     private fun parseInput(input: String): Board {
